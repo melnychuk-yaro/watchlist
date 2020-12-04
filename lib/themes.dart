@@ -1,20 +1,25 @@
 import 'package:flutter/material.dart';
 
 class DefautTheme {
+  final Color color = Colors.deepOrangeAccent;
+
   ThemeData get theme => ThemeData.dark().copyWith(
-        primaryColor: Colors.blueAccent[200],
-        accentColor: Colors.blueAccent[200],
-        toggleableActiveColor: Colors.blueAccent[200],
-        textSelectionHandleColor: Colors.blueAccent[200],
+        primaryColor: color,
+        accentColor: color,
+        toggleableActiveColor: color,
+        textSelectionHandleColor: color,
         elevatedButtonTheme: ElevatedButtonThemeData(
           style: ElevatedButton.styleFrom(
+            elevation: 0,
+            primary: color,
             padding: EdgeInsets.symmetric(horizontal: 24.0, vertical: 8.0),
-            textStyle: TextStyle(fontSize: 18.0),
+            textStyle: TextStyle(fontSize: 16.0),
           ),
         ),
         textButtonTheme: TextButtonThemeData(
           style: TextButton.styleFrom(
-            textStyle: TextStyle(fontSize: 18.0),
+            primary: color,
+            textStyle: TextStyle(fontSize: 16.0),
           ),
         ),
         inputDecorationTheme: InputDecorationTheme(
@@ -29,8 +34,8 @@ class DefautTheme {
           border: OutlineInputBorder(
             borderRadius: BorderRadius.circular(24.0),
             borderSide: BorderSide(
-              color: Colors.blueAccent[200],
-              width: 3,
+              color: color,
+              width: 2,
             ),
           ),
         ),

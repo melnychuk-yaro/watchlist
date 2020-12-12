@@ -3,8 +3,11 @@ import 'package:flutter/material.dart';
 class Favorites extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    return Center(
-      child: Text('Favorites'),
+    return Padding(
+      padding: const EdgeInsets.all(4.0),
+      child: Center(
+        child: Text('Favs'),
+      ),
     );
   }
 }

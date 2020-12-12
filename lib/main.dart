@@ -1,11 +1,13 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:firebase_core/firebase_core.dart';
-import 'package:watchlist/screens/app-screen.dart';
+import 'package:watchlist/screens/home-screen.dart';
 import 'package:watchlist/screens/login-screen.dart';
 import 'package:watchlist/themes.dart';
+import 'package:flutter_dotenv/flutter_dotenv.dart';
 
-void main() {
+Future<void> main() async {
+  await DotEnv().load('.env');
   runApp(WatchListApp());
 }
 
@@ -38,7 +40,7 @@ class WatchListApp extends StatelessWidget {
                   if (snapshot.data == null) {
                     return LoginScreen();
                   } else {
-                    return AppScreen();
+                    return HomeScreen();
                   }
                 },
               );

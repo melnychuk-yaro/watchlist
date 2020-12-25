@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 
 class DefautTheme {
-  final Color color = Colors.deepOrangeAccent;
+  final Color color = Colors.indigoAccent[100];
 
   ThemeData get theme => ThemeData.dark().copyWith(
         primaryColor: color,
@@ -12,7 +12,8 @@ class DefautTheme {
           style: ElevatedButton.styleFrom(
             elevation: 0,
             primary: color,
-            padding: EdgeInsets.symmetric(horizontal: 24.0, vertical: 8.0),
+            padding:
+                const EdgeInsets.symmetric(horizontal: 24.0, vertical: 8.0),
             textStyle: TextStyle(fontSize: 16.0),
           ),
         ),
@@ -25,14 +26,14 @@ class DefautTheme {
         inputDecorationTheme: InputDecorationTheme(
           hintStyle: TextStyle(fontSize: 16),
           enabledBorder: OutlineInputBorder(
-            borderRadius: BorderRadius.circular(24.0),
+            borderRadius: BorderRadius.circular(8.0),
             borderSide: BorderSide(
-              color: Color(0xFF666666),
+              color: const Color(0xFF666666),
               width: 2,
             ),
           ),
           border: OutlineInputBorder(
-            borderRadius: BorderRadius.circular(24.0),
+            borderRadius: BorderRadius.circular(8.0),
             borderSide: BorderSide(
               color: color,
               width: 2,

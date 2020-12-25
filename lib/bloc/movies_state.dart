@@ -3,14 +3,18 @@ part of 'movies_bloc.dart';
 @immutable
 abstract class MoviesState {}
 
-class MoviesInitialState extends MoviesState {}
+class MoviesInitial extends MoviesState {}
 
-class MoviesLoadingState extends MoviesState {}
+class MoviesLoading extends MoviesState {}
 
-class MoviesLoadedState extends MoviesState {
+class MoviesLoaded extends MoviesState {
   final List<dynamic> loadedMovies;
-  MoviesLoadedState({@required this.loadedMovies})
-      : assert(loadedMovies != null);
+  MoviesLoaded({@required this.loadedMovies}) : assert(loadedMovies != null);
 }
 
-class MoviesErrorState extends MoviesState {}
+class SearchLoaded extends MoviesState {
+  final List<dynamic> loadedMovies;
+  SearchLoaded({@required this.loadedMovies}) : assert(loadedMovies != null);
+}
+
+class MoviesError extends MoviesState {}

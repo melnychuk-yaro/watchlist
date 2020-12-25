@@ -10,30 +10,40 @@ part 'movies_state.dart';
 
 class MoviesBloc extends Bloc<MoviesEvent, MoviesState> {
   final MoviesRepository moviesRepository;
-  MoviesBloc(this.moviesRepository) : super(MoviesInitialState());
+  MoviesBloc(this.moviesRepository) : super(MoviesInitial());
 
   @override
   Stream<MoviesState> mapEventToState(
     MoviesEvent event,
   ) async* {
     if (event is TopMoviesLoadEvent) {
-      yield MoviesLoadingState();
+      yield MoviesLoading();
       try {
         final List<Movie> _loadedMoviesList =
             await moviesRepository.getTopMovies();
-        yield MoviesLoadedState(loadedMovies: _loadedMoviesList);
+        yield MoviesLoaded(loadedMovies: _loadedMoviesList);
       } catch (e) {
-        yield MoviesErrorState();
+        yield MoviesError();
       }
     }
     if (event is NewMoviesLoadEvent) {
-      yield MoviesLoadingState();
+      yield MoviesLoading();
       try {
         final List<Movie> _loadedMoviesList =
             await moviesRepository.getNewMovies();
-        yield MoviesLoadedState(loadedMovies: _loadedMoviesList);
+        yield MoviesLoaded(loadedMovies: _loadedMoviesList);
       } catch (e) {
-        yield MoviesErrorState();
+        yield MoviesError();
+      }
+    }
+    if (event is SearchMoviesLoadEvent) {
+      yield MoviesLoading();
+      try {
+        final List<Movie> _loadedSearchList =
+            await moviesRepository.searchMovies(event.query);
+        yield SearchLoaded(loadedMovies: _loadedSearchList);
+      } catch (e) {
+        yield MoviesError();
       }
     }
   }

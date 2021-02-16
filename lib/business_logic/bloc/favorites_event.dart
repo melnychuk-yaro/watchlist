@@ -6,11 +6,11 @@ abstract class FavoritesEvent {}
 class FavoritesLoad extends FavoritesEvent {}
 
 class FavoritesAdd extends FavoritesEvent {
-  Movie movie;
+  final Movie movie;
   FavoritesAdd(this.movie);
 }
 
 class FavoritesDelete extends FavoritesEvent {
-  int movieId;
+  final int movieId;
   FavoritesDelete(this.movieId);
 }

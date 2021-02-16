@@ -22,8 +22,6 @@ class FavoritesBloc extends Bloc<FavoritesEvent, FavoritesState> {
       try {
         final List<Movie> _loadedMoviesList =
             await moviesRepository.getFavMovies();
-        print(_loadedMoviesList);
-
         yield FavoritesLoaded(loadedMovies: _loadedMoviesList);
       } catch (e) {
         yield FavoritesError();

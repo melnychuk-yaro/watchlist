@@ -28,7 +28,6 @@ class _PagedMoviesGridViewState extends State<PagedMoviesGridView> {
   void initState() {
     super.initState();
 
-    widget.resetMovies();
     _pagingController.addPageRequestListener((pageKey) {
       widget.loadMovies(1);
     });
@@ -47,6 +46,7 @@ class _PagedMoviesGridViewState extends State<PagedMoviesGridView> {
   @override
   void dispose() {
     super.dispose();
+    widget.resetMovies();
     _pagingController.dispose();
     _streamSubscription.cancel();
   }

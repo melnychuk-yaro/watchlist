@@ -13,6 +13,7 @@ abstract class TopMoviesState {
   final int nextPageKey;
 }
 
+@immutable
 class TopMoviesInitial extends TopMoviesState {
   TopMoviesInitial({
     @required this.moviesPage,
@@ -27,6 +28,7 @@ class TopMoviesInitial extends TopMoviesState {
 
 class TopMoviesLoading extends TopMoviesState {}
 
+@immutable
 class TopMoviesLoaded extends TopMoviesState {
   TopMoviesLoaded({
     @required this.moviesPage,
@@ -39,6 +41,7 @@ class TopMoviesLoaded extends TopMoviesState {
   final int nextPageKey;
 }
 
+@immutable
 class TopMoviesError extends TopMoviesState {
   TopMoviesError({
     @required this.moviesPage,

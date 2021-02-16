@@ -1,13 +1,14 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:watchlist/bloc/movies_bloc.dart';
-import 'package:watchlist/bloc/search_bloc.dart';
-import 'package:watchlist/screens/favorites.dart';
-import 'package:watchlist/screens/search.dart';
-import 'package:watchlist/screens/top-rated.dart';
-import 'package:watchlist/screens/now-playing.dart';
-import 'package:watchlist/services/movies_repository.dart';
+import 'package:watchlist/business_logic/bloc/search_bloc.dart';
+import 'package:watchlist/business_logic/cubit/now_playing_cubit.dart';
+import 'package:watchlist/business_logic/cubit/top_movies_cubit.dart';
+import 'package:watchlist/presentation/screens/favorites.dart';
+import 'package:watchlist/presentation/screens/search.dart';
+import 'package:watchlist/presentation/screens/top-rated.dart';
+import 'package:watchlist/presentation/screens/now-playing.dart';
+import 'package:watchlist/data/repositories/movies_repository.dart';
 
 class HomeScreen extends StatefulWidget {
   @override
@@ -28,11 +29,14 @@ class _HomeScreenState extends State<HomeScreen> {
   Widget build(BuildContext context) {
     return MultiBlocProvider(
       providers: [
-        BlocProvider<MoviesBloc>(
-          create: (context) => MoviesBloc(MoviesRepository()),
-        ),
         BlocProvider<SearchBloc>(
           create: (context) => SearchBloc(MoviesRepository()),
+        ),
+        BlocProvider<TopMoviesCubit>(
+          create: (context) => TopMoviesCubit(MoviesRepository()),
+        ),
+        BlocProvider<NowPlayingCubit>(
+          create: (context) => NowPlayingCubit(MoviesRepository()),
         ),
       ],
       child: Scaffold(

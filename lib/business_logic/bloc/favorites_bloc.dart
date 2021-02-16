@@ -3,8 +3,8 @@ import 'dart:async';
 import 'package:bloc/bloc.dart';
 import 'package:meta/meta.dart';
 
-import 'package:watchlist/models/movie.dart';
-import 'package:watchlist/services/movies_repository.dart';
+import 'package:watchlist/data/models/movie.dart';
+import 'package:watchlist/data/repositories/movies_repository.dart';
 
 part 'favorites_event.dart';
 part 'favorites_state.dart';
@@ -20,9 +20,9 @@ class FavoritesBloc extends Bloc<FavoritesEvent, FavoritesState> {
     if (event is FavoritesLoad) {
       yield FavoritesLoading();
       try {
-        final List<Movie> _loadedMoviesList =
-            await moviesRepository.getFavMovies();
-        yield FavoritesLoaded(loadedMovies: _loadedMoviesList);
+        // final List<Movie> _loadedMoviesList =
+        //     await moviesRepository.getFavMovies();
+        // yield FavoritesLoaded(loadedMovies: _loadedMoviesList);
       } catch (e) {
         yield FavoritesError();
       }
@@ -31,10 +31,10 @@ class FavoritesBloc extends Bloc<FavoritesEvent, FavoritesState> {
     if (event is FavoritesAdd) {
       yield FavoritesAdding();
       try {
-        final List<Movie> _loadedMoviesList =
-            await moviesRepository.getFavMovies();
+        // final List<Movie> _loadedMoviesList =
+        //     await moviesRepository.getFavMovies();
         yield FavoritesAdded(
-          loadedMovies: _loadedMoviesList,
+          loadedMovies: [],
           newFavMovie: event.movie,
         );
       } catch (e) {

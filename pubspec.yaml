@@ -33,6 +33,8 @@ dependencies:
   flutter_signin_button: ^1.1.0
   cloud_firestore: ^0.14.4
   flutter_dotenv: ^2.1.0
+  infinite_scroll_pagination: ^2.3.0
+  equatable: ^1.2.5
 
 dev_dependencies:
   flutter_test:

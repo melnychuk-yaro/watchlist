@@ -1,5 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:flutter_signin_button/button_view.dart';
+import 'package:flutter_signin_button/flutter_signin_button.dart';
+import 'package:watchlist/data/repositories/auth_repository.dart';
 
 class LoginForm extends StatefulWidget {
   @override
@@ -8,8 +11,8 @@ class LoginForm extends StatefulWidget {
 
 class _LoginFormState extends State<LoginForm> {
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
-  var auth = FirebaseAuth.instance;
   FocusNode passwordFocusNode;
+  var authRepository = AuthenticationRepository();
   var _isLogin = true;
   var _email = '';
   var _password = '';
@@ -77,7 +80,7 @@ class _LoginFormState extends State<LoginForm> {
   Future<void> _register() async {
     setState(() => _loading = true);
     try {
-      await auth.createUserWithEmailAndPassword(
+      await authRepository.signUp(
         email: _email,
         password: _password,
       );
@@ -97,7 +100,7 @@ class _LoginFormState extends State<LoginForm> {
   Future<void> _login() async {
     setState(() => _loading = true);
     try {
-      await auth.signInWithEmailAndPassword(
+      await authRepository.logInWithEmailAndPassword(
         email: _email,
         password: _password,
       );
@@ -182,13 +185,17 @@ class _LoginFormState extends State<LoginForm> {
                   child: CircularProgressIndicator(),
                 )
               : _isLogin
-                  ? ElevatedButton(
-                      onPressed: () {
-                        if (_formKey.currentState.validate()) {
-                          _login();
-                        }
-                      },
-                      child: Text('Login'),
+                  ? Column(
+                      children: [
+                        ElevatedButton(
+                          onPressed: () {
+                            if (_formKey.currentState.validate()) {
+                              _login();
+                            }
+                          },
+                          child: Text('Login'),
+                        ),
+                      ],
                     )
                   : ElevatedButton(
                       onPressed: () {
@@ -198,6 +205,10 @@ class _LoginFormState extends State<LoginForm> {
                       },
                       child: Text('Sign Up'),
                     ),
+          SignInButton(
+            Buttons.GoogleDark,
+            onPressed: () => authRepository.logInWithGoogle(),
+          ),
           SizedBox(height: 16),
           Row(
             children: <Widget>[

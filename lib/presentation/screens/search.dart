@@ -2,8 +2,8 @@ import 'dart:async';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:watchlist/bloc/search_bloc.dart';
-import 'package:watchlist/widgets/movie-card.dart';
+import 'package:watchlist/business_logic/bloc/search_bloc.dart';
+import 'package:watchlist/presentation/widgets/movie-card.dart';
 
 class Search extends StatefulWidget {
   @override
@@ -41,13 +41,13 @@ class _SearchState extends State<Search> {
     return Column(
       children: [
         Padding(
-          padding: const EdgeInsets.all(8.0),
+          padding: const EdgeInsets.fromLTRB(8.0, 12.0, 8.0, 4.0),
           child: TextField(
             controller: _searchQuery,
             decoration: InputDecoration(hintText: 'Search'),
           ),
         ),
-        SizedBox(height: 8.0),
+        // SizedBox(height: 8.0),
         Expanded(
           child: BlocBuilder<SearchBloc, SearchState>(
             builder: (context, state) {
@@ -61,17 +61,22 @@ class _SearchState extends State<Search> {
               }
               if (state is SearchError) {
                 return Center(
-                  child: Text(
-                    'Something went wrong. Please try again later.',
-                    style: TextStyle(
-                      fontSize: 20.0,
-                      color: Theme.of(context).errorColor,
+                  child: Padding(
+                    padding: const EdgeInsets.all(8.0),
+                    child: Text(
+                      'Something went wrong. Please try again later.',
+                      textAlign: TextAlign.center,
+                      style: TextStyle(
+                        fontSize: 20.0,
+                        color: Theme.of(context).errorColor,
+                      ),
                     ),
                   ),
                 );
               }
               if (state is SearchLoaded) {
                 return GridView.builder(
+                  padding: const EdgeInsets.all(4.0),
                   itemCount: state.loadedMovies.length,
                   gridDelegate: SliverGridDelegateWithMaxCrossAxisExtent(
                     maxCrossAxisExtent: 300.0,

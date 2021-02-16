@@ -4,7 +4,7 @@ import 'package:firebase_auth/firebase_auth.dart' as firebase_auth;
 import 'package:google_sign_in/google_sign_in.dart';
 import 'package:meta/meta.dart';
 
-import 'package:watchlist/models/user.dart';
+import 'package:watchlist/data/models/user.dart';
 
 /// Thrown if during the sign up process if a failure occurs.
 class SignUpFailure implements Exception {}
@@ -40,6 +40,10 @@ class AuthenticationRepository {
     return _firebaseAuth.authStateChanges().map((firebaseUser) {
       return firebaseUser == null ? User.empty : firebaseUser.toUser;
     });
+  }
+
+  User get currentUser {
+    return _firebaseAuth.currentUser.toUser;
   }
 
   /// Creates a new user with the provided [email] and [password].

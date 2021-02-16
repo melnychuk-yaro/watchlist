@@ -1,3 +1,6 @@
+import 'package:flutter/material.dart';
+
+@immutable
 class Movie {
   final int id;
   final String title;
@@ -21,7 +24,7 @@ class Movie {
       releaseDate: movieMap['release_date'] ?? '',
       poster:
           movieMap['poster_path'] == null || movieMap['poster_path'] == 'null'
-              ? 'https://critics.io/img/movies/poster-placeholder.png'
+              ? Placeholder()
               : imgPath + movieMap['poster_path'],
       rating:
           movieMap['vote_average'] == null || movieMap['vote_average'] == 'null'
@@ -29,5 +32,15 @@ class Movie {
               : movieMap['vote_average'].toDouble(),
     );
     return movie;
+  }
+
+  Map<String, dynamic> toMap() {
+    return {
+      'id': this.id,
+      'title': this.title,
+      'release_date': this.releaseDate,
+      'poster': this.poster,
+      'rating': this.rating
+    };
   }
 }

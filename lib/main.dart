@@ -1,52 +1,38 @@
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:firebase_core/firebase_core.dart';
-import 'package:watchlist/screens/home-screen.dart';
-import 'package:watchlist/screens/login-screen.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:watchlist/business_logic/cubit/auth_cubit.dart';
+import 'package:watchlist/data/repositories/auth_repository.dart';
+import 'package:watchlist/presentation/screens/home-screen.dart';
+import 'package:watchlist/presentation/screens/login-screen.dart';
 import 'package:watchlist/themes.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 
 Future<void> main() async {
   await DotEnv().load('.env');
+  WidgetsFlutterBinding.ensureInitialized();
+  await Firebase.initializeApp();
   runApp(WatchListApp());
 }
 
 class WatchListApp extends StatelessWidget {
-  // This widget is the root of your application.
+  final AuthenticationRepository _authenticationRepository =
+      AuthenticationRepository();
+
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
       title: 'Watchlist',
       theme: DefautTheme().theme,
-      home: FutureBuilder<Object>(
-          future: Firebase.initializeApp(),
-          builder: (context, snapshot) {
-            // Check for errors
-            if (snapshot.hasError) {
-              return ErrorText();
-            }
-            if (snapshot.connectionState == ConnectionState.done) {
-              return StreamBuilder<Object>(
-                stream: FirebaseAuth.instance.authStateChanges(),
-                builder: (context, snapshot) {
-                  if (snapshot.hasError) {
-                    return ErrorText();
-                  }
-
-                  if (snapshot.connectionState == ConnectionState.waiting) {
-                    return Center(child: CircularProgressIndicator());
-                  }
-
-                  if (snapshot.data == null) {
-                    return LoginScreen();
-                  } else {
-                    return HomeScreen();
-                  }
-                },
-              );
-            }
+      home: BlocBuilder<AuthCubit, AuthState>(
+        cubit: AuthCubit(_authenticationRepository),
+        builder: (context, state) {
+          if (state is AuthInitial) {
             return Center(child: CircularProgressIndicator());
-          }),
+          }
+          return state is AuthLoggedIn ? HomeScreen() : LoginScreen();
+        },
+      ),
     );
   }
 }

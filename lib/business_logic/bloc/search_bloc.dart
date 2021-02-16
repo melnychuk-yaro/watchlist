@@ -2,8 +2,8 @@ import 'dart:async';
 
 import 'package:bloc/bloc.dart';
 import 'package:meta/meta.dart';
-import 'package:watchlist/models/movie.dart';
-import 'package:watchlist/services/movies_repository.dart';
+import 'package:watchlist/data/models/movie.dart';
+import 'package:watchlist/data/repositories/movies_repository.dart';
 
 part 'search_event.dart';
 part 'search_state.dart';

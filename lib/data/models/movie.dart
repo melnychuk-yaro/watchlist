@@ -25,7 +25,7 @@ class Movie {
       releaseDate: movieMap['release_date'] ?? '',
       poster:
           movieMap['poster_path'] == null || movieMap['poster_path'] == 'null'
-              ? Placeholder()
+              ? ''
               : imgPath + movieMap['poster_path'],
       rating:
           movieMap['vote_average'] == null || movieMap['vote_average'] == 'null'

@@ -16,7 +16,9 @@ class MovieCard extends StatelessWidget {
         child: Container(
           decoration: BoxDecoration(
             image: DecorationImage(
-              image: NetworkImage(movie.poster),
+              image: movie.poster == ''
+                  ? AssetImage('assets/images/dark-gray-bg.jpg')
+                  : NetworkImage(movie.poster),
               fit: BoxFit.cover,
             ),
           ),

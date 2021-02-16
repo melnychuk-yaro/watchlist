@@ -9,34 +9,53 @@ class MovieCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Card(
-      clipBehavior: Clip.antiAlias,
-      child: InkWell(
-        onLongPress: () => moviesRepository.saveFavMovie(movie),
-        child: Container(
-          decoration: BoxDecoration(
-            image: DecorationImage(
-              image: movie.poster == ''
-                  ? AssetImage('assets/images/dark-gray-bg.jpg')
-                  : NetworkImage(movie.poster),
-              fit: BoxFit.cover,
+    return Stack(
+      children: [
+        Card(
+          clipBehavior: Clip.antiAlias,
+          child: Container(
+            decoration: BoxDecoration(
+              image: DecorationImage(
+                image: movie.posterFileName == ''
+                    ? AssetImage('assets/images/dark-gray-bg.jpg')
+                    : NetworkImage(movie.fullPosterPath),
+                fit: BoxFit.cover,
+              ),
             ),
-          ),
-          child: GridTile(
-            child: Center(),
-            footer: Container(
-              color: Color(0xAA000000),
-              padding:
-                  const EdgeInsets.symmetric(horizontal: 8.0, vertical: 8.0),
-              child: Text(
-                movie.title,
-                textAlign: TextAlign.center,
-                style: TextStyle(fontSize: 16.0),
+            child: GridTile(
+              child: Center(),
+              footer: Container(
+                color: Color(0xAA000000),
+                padding:
+                    const EdgeInsets.symmetric(horizontal: 8.0, vertical: 8.0),
+                child: Text(
+                  movie.title,
+                  textAlign: TextAlign.center,
+                  style: TextStyle(fontSize: 16.0),
+                ),
               ),
             ),
           ),
         ),
-      ),
+        Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 8.0),
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              Chip(
+                label: Text('${movie.rating}'),
+              ),
+              IconButton(
+                onPressed: () => moviesRepository.saveFavMovie(movie),
+                icon: Icon(
+                  movie.isFavorite ? Icons.favorite : Icons.favorite_border,
+                  color: Colors.red,
+                ),
+              ),
+            ],
+          ),
+        ),
+      ],
     );
   }
 }

@@ -1,3 +1,4 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 
 @immutable
@@ -10,15 +11,15 @@ class Movie {
   static const imgPath = 'https://image.tmdb.org/t/p/w500';
 
   Movie({
-    this.id,
-    this.title,
-    this.releaseDate,
-    this.poster,
-    this.rating,
+    @required this.id,
+    @required this.title,
+    @required this.releaseDate,
+    @required this.poster,
+    @required this.rating,
   });
 
   factory Movie.fromMap(Map<String, dynamic> movieMap) {
-    Movie movie = Movie(
+    return Movie(
       id: movieMap['id'],
       title: movieMap['title'],
       releaseDate: movieMap['release_date'] ?? '',
@@ -31,7 +32,22 @@ class Movie {
               ? 0.0
               : movieMap['vote_average'].toDouble(),
     );
-    return movie;
+  }
+
+  factory Movie.fromSnapshot(QueryDocumentSnapshot movieSnapshot) {
+    return Movie(
+      id: movieSnapshot['id'],
+      title: movieSnapshot['title'],
+      releaseDate: movieSnapshot['release_date'] ?? '',
+      poster:
+          movieSnapshot['poster'] == null || movieSnapshot['poster'] == 'null'
+              ? Placeholder()
+              : movieSnapshot['poster'],
+      rating:
+          movieSnapshot['rating'] == null || movieSnapshot['rating'] == 'null'
+              ? 0.0
+              : movieSnapshot['rating'].toDouble(),
+    );
   }
 
   Map<String, dynamic> toMap() {

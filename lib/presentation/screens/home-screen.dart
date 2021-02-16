@@ -1,6 +1,7 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:watchlist/business_logic/bloc/favorites_bloc.dart';
 import 'package:watchlist/business_logic/bloc/search_bloc.dart';
 import 'package:watchlist/business_logic/cubit/now_playing_cubit.dart';
 import 'package:watchlist/business_logic/cubit/top_movies_cubit.dart';
@@ -29,6 +30,9 @@ class _HomeScreenState extends State<HomeScreen> {
   Widget build(BuildContext context) {
     return MultiBlocProvider(
       providers: [
+        BlocProvider<FavoritesBloc>(
+          create: (context) => FavoritesBloc(MoviesRepository()),
+        ),
         BlocProvider<SearchBloc>(
           create: (context) => SearchBloc(MoviesRepository()),
         ),

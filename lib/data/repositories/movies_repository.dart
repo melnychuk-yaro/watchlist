@@ -78,10 +78,18 @@ class MoviesRepository {
     }
   }
 
-  Stream<DocumentSnapshot> getFavMovies() {
-    return firestore
-        .collection('users')
-        .doc(authenticationRepository.currentUser.id)
-        .snapshots();
+  Future<List<Movie>> getFavMovies() async {
+    try {
+      final snapshot = await firestore
+          .collection('users')
+          .doc(authenticationRepository.currentUser.id)
+          .collection('fav_movies')
+          .get();
+      return snapshot.docs.map((doc) {
+        return Movie.fromSnapshot(doc);
+      }).toList();
+    } catch (e) {
+      print(e);
+    }
   }
 }

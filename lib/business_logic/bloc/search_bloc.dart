@@ -20,7 +20,7 @@ class SearchBloc extends Bloc<SearchEvent, SearchState> {
       yield SearchLoading();
       try {
         final List<Movie> _loadedSearchList =
-            await moviesRepository.searchMovies(event.query);
+            await moviesRepository.searchMovies(query: event.query);
         yield SearchLoaded(loadedMovies: _loadedSearchList);
       } catch (e) {
         yield SearchError();

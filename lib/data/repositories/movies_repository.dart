@@ -49,9 +49,9 @@ class MoviesRepository {
     }
   }
 
-  Future<List<Movie>> searchMovies(String query) async {
+  Future<List<Movie>> searchMovies({String query, int page = 1}) async {
     final response = await http.get(
-        '$apiUri/search/movie?api_key=$apiKey&language=$language&query=$query&page=1&include_adult=$includeAdult');
+        '$apiUri/search/movie?api_key=$apiKey&language=$language&query=$query&page=$page&include_adult=$includeAdult');
     if (response.statusCode == 200) {
       List results = json.decode(response.body)['results'];
       return results.map((movieMap) {
@@ -79,17 +79,11 @@ class MoviesRepository {
   }
 
   Future<List<Movie>> getFavMovies() async {
-    try {
-      final snapshot = await firestore
-          .collection('users')
-          .doc(authenticationRepository.currentUser.id)
-          .collection('fav_movies')
-          .get();
-      return snapshot.docs.map((doc) {
-        return Movie.fromSnapshot(doc);
-      }).toList();
-    } catch (e) {
-      print(e);
-    }
+    final snapshot = await firestore
+        .collection('users')
+        .doc(authenticationRepository.currentUser.id)
+        .collection('fav_movies')
+        .get();
+    return snapshot.docs.map((doc) => Movie.fromMap(doc.data())).toList();
   }
 }

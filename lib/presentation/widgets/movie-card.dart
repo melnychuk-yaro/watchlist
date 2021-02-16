@@ -43,6 +43,7 @@ class MovieCard extends StatelessWidget {
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
               Chip(
+                visualDensity: VisualDensity.compact,
                 label: Text('${movie.rating}'),
               ),
               IconButton(

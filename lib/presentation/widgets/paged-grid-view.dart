@@ -2,9 +2,7 @@ import 'dart:async';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:watchlist/business_logic/cubit/top_movies_cubit.dart';
 import 'package:watchlist/data/models/movie.dart';
-import 'package:watchlist/data/repositories/movies_repository.dart';
 import 'package:watchlist/presentation/widgets/movie-card.dart';
 import 'package:infinite_scroll_pagination/infinite_scroll_pagination.dart';
 

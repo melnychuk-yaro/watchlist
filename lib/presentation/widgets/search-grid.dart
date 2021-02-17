@@ -3,7 +3,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:infinite_scroll_pagination/infinite_scroll_pagination.dart';
 import 'package:watchlist/business_logic/bloc/search_bloc.dart';
 import 'package:watchlist/data/models/movie.dart';
-import 'package:watchlist/presentation/widgets/movies-grid.dart';
+import 'package:watchlist/presentation/widgets/movies-paginated-grid.dart';
 
 class SearchGrid extends StatefulWidget {
   @override
@@ -47,7 +47,7 @@ class _SearchGridState extends State<SearchGrid> {
             child: CircularProgressIndicator(),
           );
         }
-        return MoviesGrid(pagingController: _pagingController);
+        return MoviesPaginatedGrid(pagingController: _pagingController);
       },
     );
   }

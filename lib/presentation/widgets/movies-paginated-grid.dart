@@ -3,8 +3,8 @@ import 'package:infinite_scroll_pagination/infinite_scroll_pagination.dart';
 import 'package:watchlist/data/models/movie.dart';
 import 'package:watchlist/presentation/widgets/movie-card.dart';
 
-class MoviesGrid extends StatelessWidget {
-  const MoviesGrid({
+class MoviesPaginatedGrid extends StatelessWidget {
+  const MoviesPaginatedGrid({
     Key key,
     @required PagingController<int, Movie> pagingController,
   })  : _pagingController = pagingController,

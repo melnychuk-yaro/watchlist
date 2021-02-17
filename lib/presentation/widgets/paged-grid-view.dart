@@ -3,8 +3,8 @@ import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:watchlist/data/models/movie.dart';
-import 'package:watchlist/presentation/widgets/movie-card.dart';
 import 'package:infinite_scroll_pagination/infinite_scroll_pagination.dart';
+import 'package:watchlist/presentation/widgets/movies-paginated-grid.dart';
 
 class PagedMoviesGridView extends StatefulWidget {
   final Cubit movCubit;
@@ -52,18 +52,6 @@ class _PagedMoviesGridViewState extends State<PagedMoviesGridView> {
   }
 
   build(context) {
-    return PagedGridView<int, Movie>(
-      pagingController: _pagingController,
-      padding: const EdgeInsets.all(4.0),
-      gridDelegate: SliverGridDelegateWithMaxCrossAxisExtent(
-        maxCrossAxisExtent: 300.0,
-        childAspectRatio: 0.75,
-      ),
-      builderDelegate: PagedChildBuilderDelegate(
-        itemBuilder: (context, movie, index) {
-          return MovieCard(movie: movie);
-        },
-      ),
-    );
+    return MoviesPaginatedGrid(pagingController: _pagingController);
   }
 }

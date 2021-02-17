@@ -39,8 +39,6 @@ class SearchBloc extends Bloc<SearchEvent, SearchState> {
     }
 
     if (event is SearchNextPageLoadEvent) {
-      // print()
-      // yield SearchLoading();
       try {
         final MoviesPage _moviesPage = await moviesRepository.searchMovies(
             query: state.query, page: state.nextPageKey);

@@ -7,6 +7,7 @@ class DefautTheme {
         primaryColor: color,
         accentColor: color,
         toggleableActiveColor: color,
+        textSelectionColor: color,
         textSelectionHandleColor: color,
         elevatedButtonTheme: ElevatedButtonThemeData(
           style: ElevatedButton.styleFrom(

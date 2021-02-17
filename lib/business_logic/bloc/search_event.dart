@@ -5,5 +5,7 @@ abstract class SearchEvent {}
 
 class SearchLoadEvent extends SearchEvent {
   final String query;
-  SearchLoadEvent(this.query);
+  SearchLoadEvent([this.query]);
 }
+
+class SearchNextPageLoadEvent extends SearchEvent {}

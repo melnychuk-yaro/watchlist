@@ -3,7 +3,7 @@ import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:watchlist/business_logic/bloc/search_bloc.dart';
-import 'package:watchlist/presentation/widgets/movie-card.dart';
+import 'package:watchlist/presentation/widgets/search-grid.dart';
 
 class Search extends StatefulWidget {
   @override
@@ -47,50 +47,8 @@ class _SearchState extends State<Search> {
             decoration: InputDecoration(hintText: 'Search'),
           ),
         ),
-        // SizedBox(height: 8.0),
         Expanded(
-          child: BlocBuilder<SearchBloc, SearchState>(
-            builder: (context, state) {
-              if (state is SearchInitial) {
-                return Center(
-                  child: Text(
-                    'Search films',
-                    style: TextStyle(fontSize: 20.0),
-                  ),
-                );
-              }
-              if (state is SearchError) {
-                return Center(
-                  child: Padding(
-                    padding: const EdgeInsets.all(8.0),
-                    child: Text(
-                      'Something went wrong. Please try again later.',
-                      textAlign: TextAlign.center,
-                      style: TextStyle(
-                        fontSize: 20.0,
-                        color: Theme.of(context).errorColor,
-                      ),
-                    ),
-                  ),
-                );
-              }
-              if (state is SearchLoaded) {
-                return GridView.builder(
-                  padding: const EdgeInsets.all(4.0),
-                  itemCount: state.loadedMovies.length,
-                  gridDelegate: SliverGridDelegateWithMaxCrossAxisExtent(
-                    maxCrossAxisExtent: 300.0,
-                    childAspectRatio: 0.75,
-                  ),
-                  itemBuilder: (context, index) {
-                    return MovieCard(movie: state.loadedMovies[index]);
-                  },
-                );
-              }
-
-              return Center(child: CircularProgressIndicator());
-            },
-          ),
+          child: SearchGrid(),
         ),
       ],
     );

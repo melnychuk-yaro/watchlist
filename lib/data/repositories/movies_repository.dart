@@ -1,7 +1,6 @@
 import 'dart:convert';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:http/http.dart' as http;
-import 'package:http/http.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:watchlist/data/models/movie.dart';
 import 'package:watchlist/data/models/moviesPage.dart';
@@ -16,17 +15,13 @@ class MoviesRepository {
   final AuthenticationRepository authenticationRepository =
       AuthenticationRepository();
 
-  _getMoviesPage(Response response) {
+  _getMoviesPage(http.Response response) {
     Map<String, dynamic> body = json.decode(response.body);
     bool isLastPage = body['page'] < body['total_pages'] ? false : true;
     List results = body['results'];
     return MoviesPage(
         isLastPage: isLastPage,
-        itemList: results.map(
-          (movieMap) {
-            return Movie.fromMap(movieMap);
-          },
-        ).toList());
+        itemList: results.map((movieMap) => Movie.fromMap(movieMap)).toList());
   }
 
   Future<MoviesPage> getTopRatedMovies({page = 1}) async {
@@ -49,16 +44,13 @@ class MoviesRepository {
     }
   }
 
-  Future<List<Movie>> searchMovies({String query, int page = 1}) async {
+  Future<MoviesPage> searchMovies({String query, int page = 1}) async {
     final response = await http.get(
         '$apiUri/search/movie?api_key=$apiKey&language=$language&query=$query&page=$page&include_adult=$includeAdult');
     if (response.statusCode == 200) {
-      List results = json.decode(response.body)['results'];
-      return results.map((movieMap) {
-        return Movie.fromMap(movieMap);
-      }).toList();
+      return _getMoviesPage(response);
     } else if (response.statusCode == 422) {
-      return <Movie>[];
+      return MoviesPage(itemList: [], isLastPage: true);
     } else {
       throw Exception(
           'Error fetching movies. Uri: /search/movie. Query: $query');

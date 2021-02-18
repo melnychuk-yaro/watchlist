@@ -8,7 +8,7 @@ import 'package:watchlist/data/repositories/auth_repository.dart';
 
 class MoviesRepository {
   static const String apiUri = 'https://api.themoviedb.org/3';
-  static const String includeAdult = 'true';
+  static const String includeAdult = 'false';
   static const String language = 'en-US';
   final String apiKey = DotEnv().env['TMDB_API_KEY'];
   final FirebaseFirestore firestore = FirebaseFirestore.instance;

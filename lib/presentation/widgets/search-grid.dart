@@ -12,12 +12,15 @@ class SearchGrid extends StatefulWidget {
 
 class _SearchGridState extends State<SearchGrid> {
   final _pagingController = PagingController<int, Movie>(firstPageKey: 1);
+  SearchBloc _searchBloc;
 
   @override
   void initState() {
     super.initState();
+    _searchBloc = BlocProvider.of<SearchBloc>(context);
     _pagingController.addPageRequestListener((pageKey) {
-      BlocProvider.of<SearchBloc>(context).add(SearchNextPageLoadEvent());
+      print('---LISTEN---$pageKey');
+      _searchBloc.add(SearchNextPageLoadEvent());
     });
   }
 
@@ -25,27 +28,25 @@ class _SearchGridState extends State<SearchGrid> {
   Widget build(BuildContext context) {
     return BlocConsumer<SearchBloc, SearchState>(
       listener: (context, state) {
+        print('current state: $state');
+        if (state is SearchInitial) {
+          _pagingController.refresh();
+        }
         if (state is SearchError) {
           //TODO: handle errors
           _pagingController.error = 'Something went wrong';
         }
         if (state is SearchLoaded) {
-          state.isLastPage
-              ? _pagingController.appendLastPage(state.loadedMovies)
-              : _pagingController.appendPage(
-                  state.loadedMovies, state.nextPageKey);
+          _pagingController.value = PagingState(
+            itemList: state.loadedMovies,
+            error: null,
+            nextPageKey: state.isLastPage ? null : state.nextPageKey,
+          );
         }
       },
       builder: (context, state) {
         if (state is SearchInitial) {
-          return Center(
-            child: Text('Search Movies'),
-          );
-        }
-        if (state is SearchLoading) {
-          return Center(
-            child: CircularProgressIndicator(),
-          );
+          return Center(child: Text('Start searching'));
         }
         return MoviesPaginatedGrid(pagingController: _pagingController);
       },
@@ -55,6 +56,7 @@ class _SearchGridState extends State<SearchGrid> {
   @override
   void dispose() {
     super.dispose();
+    _searchBloc.add(SearchResetEvent());
     _pagingController.dispose();
   }
 }

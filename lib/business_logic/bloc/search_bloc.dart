@@ -18,46 +18,54 @@ class SearchBloc extends Bloc<SearchEvent, SearchState> {
     SearchEvent event,
   ) async* {
     if (event is SearchLoadEvent) {
-      if (event.query.trim() == '') {
-        yield SearchInitial(loadedMovies: List<Movie>());
-      } else if (event.query != state.query) {
-        yield SearchLoading();
-        try {
-          final MoviesPage _moviesPage =
-              await moviesRepository.searchMovies(query: event.query);
-          final List<Movie> oldMovies = state.loadedMovies ?? [];
-          yield SearchLoaded(
-            loadedMovies: oldMovies + _moviesPage.itemList,
-            nextPageKey: state.nextPageKey == null ? 2 : state.nextPageKey + 1,
-            isLastPage: _moviesPage.isLastPage,
-            query: event.query,
-          );
-        } catch (e) {
-          print(e);
-          yield SearchError(e);
-        }
-      }
+      yield* _mapSearchLoadEvent(event);
     }
 
     if (event is SearchNextPageLoadEvent) {
+      yield* _mapSearchNextPageLoadEvent(event);
+    }
+
+    if (event is SearchResetEvent) {
+      yield SearchInitial(loadedMovies: List<Movie>());
+    }
+  }
+
+  Stream<SearchState> _mapSearchLoadEvent(event) async* {
+    if (event.query.trim() == '') {
+      yield SearchInitial(loadedMovies: List<Movie>());
+    } else if (event.query != state.query) {
+      yield SearchLoading();
       try {
-        final MoviesPage _moviesPage = await moviesRepository.searchMovies(
-            query: state.query, page: state.nextPageKey);
+        final MoviesPage _moviesPage =
+            await moviesRepository.searchMovies(query: event.query);
         final List<Movie> oldMovies = state.loadedMovies ?? [];
         yield SearchLoaded(
           loadedMovies: oldMovies + _moviesPage.itemList,
           nextPageKey: state.nextPageKey == null ? 2 : state.nextPageKey + 1,
           isLastPage: _moviesPage.isLastPage,
-          query: state.query,
+          query: event.query,
         );
       } catch (e) {
         print(e);
         yield SearchError(e);
       }
     }
+  }
 
-    if (event is SearchResetEvent) {
-      yield SearchInitial(loadedMovies: List<Movie>());
+  Stream<SearchState> _mapSearchNextPageLoadEvent(event) async* {
+    try {
+      final MoviesPage _moviesPage = await moviesRepository.searchMovies(
+          query: state.query, page: state.nextPageKey);
+      final List<Movie> oldMovies = state.loadedMovies ?? [];
+      yield SearchLoaded(
+        loadedMovies: oldMovies + _moviesPage.itemList,
+        nextPageKey: state.nextPageKey == null ? 2 : state.nextPageKey + 1,
+        isLastPage: _moviesPage.isLastPage,
+        query: state.query,
+      );
+    } catch (e) {
+      print(e);
+      yield SearchError(e);
     }
   }
 }

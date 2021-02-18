@@ -6,7 +6,7 @@ class Movie {
   final String title;
   final String releaseDate;
   final double rating;
-  final bool isFavorite = false;
+  final bool isFavorite;
   final String posterFileName;
   static const posterPath = 'https://image.tmdb.org/t/p/w500';
 
@@ -16,7 +16,7 @@ class Movie {
     @required this.releaseDate,
     @required this.posterFileName,
     @required this.rating,
-    bool isFavorite,
+    this.isFavorite = false,
   });
 
   String get fullPosterPath => posterPath + posterFileName;
@@ -35,6 +35,25 @@ class Movie {
           movieMap['vote_average'] == null || movieMap['vote_average'] == 'null'
               ? 0.0
               : movieMap['vote_average'].toDouble(),
+      isFavorite: false,
+    );
+  }
+
+  factory Movie.favoriteFromMap(Map<String, dynamic> movieMap) {
+    return Movie(
+      id: movieMap['id'],
+      title: movieMap['title'],
+      releaseDate: movieMap['release_date'] ?? '',
+      posterFileName: movieMap['poster_path'] == null ||
+              movieMap['poster_path'] == 'null' ||
+              movieMap['poster_path'] == ''
+          ? ''
+          : movieMap['poster_path'],
+      rating:
+          movieMap['vote_average'] == null || movieMap['vote_average'] == 'null'
+              ? 0.0
+              : movieMap['vote_average'].toDouble(),
+      isFavorite: true,
     );
   }
 
@@ -44,6 +63,7 @@ class Movie {
       'title': this.title,
       'release_date': this.releaseDate,
       'poster_path': this.posterFileName,
+      'isFavorite': this.isFavorite,
       'vote_average': this.rating
     };
   }

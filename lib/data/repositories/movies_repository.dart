@@ -70,12 +70,27 @@ class MoviesRepository {
     }
   }
 
+  Future<void> removeFavMovie(int id) async {
+    try {
+      return await firestore
+          .collection('users')
+          .doc(authenticationRepository.currentUser.id)
+          .collection('fav_movies')
+          .doc(id.toString())
+          .delete();
+    } catch (e) {
+      print(e);
+    }
+  }
+
   Future<List<Movie>> getFavMovies() async {
     final snapshot = await firestore
         .collection('users')
         .doc(authenticationRepository.currentUser.id)
         .collection('fav_movies')
         .get();
-    return snapshot.docs.map((doc) => Movie.fromMap(doc.data())).toList();
+    return snapshot.docs
+        .map((doc) => Movie.favoriteFromMap(doc.data()))
+        .toList();
   }
 }

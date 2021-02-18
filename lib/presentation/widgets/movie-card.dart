@@ -47,7 +47,9 @@ class MovieCard extends StatelessWidget {
                 label: Text('${movie.rating}'),
               ),
               IconButton(
-                onPressed: () => moviesRepository.saveFavMovie(movie),
+                onPressed: () => movie.isFavorite
+                    ? moviesRepository.removeFavMovie(movie.id)
+                    : moviesRepository.saveFavMovie(movie),
                 icon: Icon(
                   movie.isFavorite ? Icons.favorite : Icons.favorite_border,
                   color: Colors.red,

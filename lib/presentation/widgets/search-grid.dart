@@ -19,7 +19,6 @@ class _SearchGridState extends State<SearchGrid> {
     super.initState();
     _searchBloc = BlocProvider.of<SearchBloc>(context);
     _pagingController.addPageRequestListener((pageKey) {
-      print('---LISTEN---$pageKey');
       _searchBloc.add(SearchNextPageLoadEvent());
     });
   }
@@ -28,7 +27,6 @@ class _SearchGridState extends State<SearchGrid> {
   Widget build(BuildContext context) {
     return BlocConsumer<SearchBloc, SearchState>(
       listener: (context, state) {
-        print('current state: $state');
         if (state is SearchInitial) {
           _pagingController.refresh();
         }

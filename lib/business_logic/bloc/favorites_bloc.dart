@@ -31,8 +31,6 @@ class FavoritesBloc extends Bloc<FavoritesEvent, FavoritesState> {
     if (event is FavoritesAdd) {
       yield FavoritesAdding();
       try {
-        // final List<Movie> _loadedMoviesList =
-        //     await moviesRepository.getFavMovies();
         yield FavoritesAdded(
           loadedMovies: [],
           newFavMovie: event.movie,

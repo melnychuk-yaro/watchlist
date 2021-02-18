@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:watchlist/business_logic/bloc/favorites_bloc.dart';
-import 'package:watchlist/data/models/movie.dart';
 import 'package:watchlist/presentation/widgets/movie-card.dart';
 
 class Favorites extends StatefulWidget {

@@ -8,14 +8,14 @@ class FavoritesInitial extends FavoritesState {}
 class FavoritesLoading extends FavoritesState {}
 
 class FavoritesLoaded extends FavoritesState {
-  final List<dynamic> loadedMovies;
+  final List<Movie> loadedMovies;
   FavoritesLoaded({@required this.loadedMovies}) : assert(loadedMovies != null);
 }
 
 class FavoritesAdding extends FavoritesState {}
 
 class FavoritesAdded extends FavoritesState {
-  final List<dynamic> loadedMovies;
+  final List<Movie> loadedMovies;
   final Movie newFavMovie;
   FavoritesAdded({@required this.loadedMovies, @required this.newFavMovie})
       : assert(loadedMovies != null);

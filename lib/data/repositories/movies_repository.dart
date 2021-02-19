@@ -24,8 +24,6 @@ class MoviesRepository {
         itemList: results.map((movieMap) => Movie.fromMap(movieMap)).toList());
   }
 
-  Future<List<String>> _getFavoritesIds() async {}
-
   Future<MoviesPage> getTopRatedMovies({page = 1}) async {
     final response = await http.get(
         '$apiUri/movie/top_rated?api_key=$apiKey&language=$language&page=$page&include_adult=$includeAdult');
@@ -94,5 +92,14 @@ class MoviesRepository {
     return snapshot.docs
         .map((doc) => Movie.favoriteFromMap(doc.data()))
         .toList();
+  }
+
+  Future<List<String>> _getFavoritesIds() async {
+    final snapshot = await firestore
+        .collection('users')
+        .doc(authenticationRepository.currentUser.id)
+        .collection('fav_movies')
+        .get();
+    return snapshot.docs.map((doc) => doc['id']).toList();
   }
 }

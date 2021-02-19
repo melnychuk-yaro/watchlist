@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:watchlist/business_logic/bloc/favorites_bloc.dart';
 import 'package:watchlist/data/models/movie.dart';
 import 'package:watchlist/data/repositories/movies_repository.dart';
 
@@ -74,11 +76,13 @@ class AddToFavButton extends StatefulWidget {
 
 class _AddToFavButtonState extends State<AddToFavButton> {
   bool isFavorite;
+  FavoritesBloc favBloc;
 
   @override
   void initState() {
     super.initState();
     isFavorite = widget.movie.isFavorite;
+    favBloc = BlocProvider.of<FavoritesBloc>(context);
   }
 
   @override
@@ -86,8 +90,8 @@ class _AddToFavButtonState extends State<AddToFavButton> {
     return IconButton(
       onPressed: () {
         isFavorite
-            ? widget.moviesRepository.removeFavMovie(widget.movie.id)
-            : widget.moviesRepository.saveFavMovie(widget.movie);
+            ? favBloc.add(FavoritesDelete(widget.movie.id))
+            : favBloc.add(FavoritesAdd(widget.movie));
         setState(() => isFavorite = !isFavorite);
       },
       icon: Icon(

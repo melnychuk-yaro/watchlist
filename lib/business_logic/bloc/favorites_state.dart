@@ -1,24 +1,36 @@
 part of 'favorites_bloc.dart';
 
 @immutable
-abstract class FavoritesState {}
+abstract class FavoritesState {
+  final List<Movie> loadedMovies;
+  FavoritesState(this.loadedMovies);
+}
 
-class FavoritesInitial extends FavoritesState {}
+class FavoritesInitial extends FavoritesState {
+  FavoritesInitial(loadedMovies) : super(loadedMovies);
+}
 
-class FavoritesLoading extends FavoritesState {}
+class FavoritesLoading extends FavoritesState {
+  FavoritesLoading(loadedMovies) : super(loadedMovies);
+}
 
 class FavoritesLoaded extends FavoritesState {
   final List<Movie> loadedMovies;
-  FavoritesLoaded({@required this.loadedMovies}) : assert(loadedMovies != null);
+  FavoritesLoaded({@required this.loadedMovies}) : super(loadedMovies);
 }
 
-class FavoritesAdding extends FavoritesState {}
+class FavoritesAdding extends FavoritesState {
+  FavoritesAdding(loadedMovies) : super(loadedMovies);
+}
 
 class FavoritesAdded extends FavoritesState {
   final List<Movie> loadedMovies;
   final Movie newFavMovie;
   FavoritesAdded({@required this.loadedMovies, @required this.newFavMovie})
-      : assert(loadedMovies != null);
+      : super(loadedMovies);
 }
 
-class FavoritesError extends FavoritesState {}
+class FavoritesError extends FavoritesState {
+  final List<Movie> loadedMovies;
+  FavoritesError(this.loadedMovies) : super(loadedMovies);
+}

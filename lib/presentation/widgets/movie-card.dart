@@ -46,19 +46,54 @@ class MovieCard extends StatelessWidget {
                 visualDensity: VisualDensity.compact,
                 label: Text('${movie.rating}'),
               ),
-              IconButton(
-                onPressed: () => movie.isFavorite
-                    ? moviesRepository.removeFavMovie(movie.id)
-                    : moviesRepository.saveFavMovie(movie),
-                icon: Icon(
-                  movie.isFavorite ? Icons.favorite : Icons.favorite_border,
-                  color: Colors.red,
-                ),
+              AddToFavButton(
+                movie: movie,
+                moviesRepository: moviesRepository,
               ),
             ],
           ),
         ),
       ],
+    );
+  }
+}
+
+class AddToFavButton extends StatefulWidget {
+  const AddToFavButton({
+    Key key,
+    @required this.movie,
+    @required this.moviesRepository,
+  }) : super(key: key);
+
+  final Movie movie;
+  final MoviesRepository moviesRepository;
+
+  @override
+  _AddToFavButtonState createState() => _AddToFavButtonState();
+}
+
+class _AddToFavButtonState extends State<AddToFavButton> {
+  bool isFavorite;
+
+  @override
+  void initState() {
+    super.initState();
+    isFavorite = widget.movie.isFavorite;
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return IconButton(
+      onPressed: () {
+        isFavorite
+            ? widget.moviesRepository.removeFavMovie(widget.movie.id)
+            : widget.moviesRepository.saveFavMovie(widget.movie);
+        setState(() => isFavorite = !isFavorite);
+      },
+      icon: Icon(
+        isFavorite ? Icons.favorite : Icons.favorite_border,
+        color: Colors.red,
+      ),
     );
   }
 }

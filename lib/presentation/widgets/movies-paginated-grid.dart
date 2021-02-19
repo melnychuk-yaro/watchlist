@@ -5,10 +5,8 @@ import 'package:watchlist/presentation/widgets/movie-card.dart';
 
 class MoviesPaginatedGrid extends StatelessWidget {
   const MoviesPaginatedGrid({
-    Key key,
     @required PagingController<int, Movie> pagingController,
-  })  : _pagingController = pagingController,
-        super(key: key);
+  }) : _pagingController = pagingController;
 
   final PagingController<int, Movie> _pagingController;
 

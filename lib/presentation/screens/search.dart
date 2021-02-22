@@ -22,7 +22,6 @@ class _SearchState extends State<Search> {
 
   @override
   void dispose() {
-    _searchQuery.removeListener(_onSearchChanged);
     _searchQuery.dispose();
     _debounce?.cancel();
     super.dispose();

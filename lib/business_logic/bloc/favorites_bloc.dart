@@ -16,7 +16,7 @@ class FavoritesBloc extends Bloc<FavoritesEvent, FavoritesState> {
   @override
   void onTransition(Transition<FavoritesEvent, FavoritesState> transition) {
     print(transition);
-    print('movies: ${state.loadedMovies}');
+    print('movies loaded: ${state.loadedMovies.length}');
     super.onTransition(transition);
   }
 
@@ -25,42 +25,54 @@ class FavoritesBloc extends Bloc<FavoritesEvent, FavoritesState> {
     FavoritesEvent event,
   ) async* {
     if (event is FavoritesLoad) {
-      yield FavoritesLoading(state.loadedMovies);
-      try {
-        final List<Movie> _loadedMoviesList =
-            await moviesRepository.getFavMovies();
-        yield FavoritesLoaded(loadedMovies: _loadedMoviesList);
-      } catch (e) {
-        yield FavoritesError(state.loadedMovies);
-      }
+      yield* _favoritesLoad();
     }
 
     if (event is FavoritesAdd) {
-      yield FavoritesAdding(state.loadedMovies);
-      try {
-        await moviesRepository.saveFavMovie(event.movie);
-        List<Movie> newMovies = state.loadedMovies + [event.movie];
-        yield FavoritesAdded(
-          loadedMovies: newMovies,
-          newFavMovie: event.movie,
-        );
-      } catch (e) {
-        print(e);
-        yield FavoritesError(state.loadedMovies);
-      }
+      yield* _favoritesAdd(event);
     }
 
     if (event is FavoritesDelete) {
-      yield FavoritesLoading(state.loadedMovies);
-      try {
-        await moviesRepository.removeFavMovie(event.movieId);
-        List<Movie> newMovies = List.from(state.loadedMovies);
-        newMovies.removeWhere((movie) => movie.id == event.movieId);
-        yield FavoritesLoaded(loadedMovies: newMovies);
-      } catch (e) {
-        print(e);
-        yield FavoritesError(state.loadedMovies);
-      }
+      yield* _favoritesDelete(event, state);
+    }
+  }
+
+  Stream<FavoritesState> _favoritesLoad() async* {
+    yield FavoritesLoading(state.loadedMovies);
+    try {
+      final List<Movie> _loadedMoviesList =
+          await moviesRepository.getFavMovies();
+      yield FavoritesLoaded(loadedMovies: _loadedMoviesList);
+    } catch (e) {
+      yield FavoritesError(state.loadedMovies);
+    }
+  }
+
+  Stream<FavoritesState> _favoritesAdd(event) async* {
+    yield FavoritesAdding(state.loadedMovies);
+    try {
+      await moviesRepository.saveFavMovie(event.movie);
+      List<Movie> newMovies = state.loadedMovies + [event.movie];
+      yield FavoritesAdded(
+        loadedMovies: newMovies,
+        newFavMovie: event.movie,
+      );
+    } catch (e) {
+      print(e);
+      yield FavoritesError(state.loadedMovies);
+    }
+  }
+
+  Stream<FavoritesState> _favoritesDelete(event, state) async* {
+    yield FavoritesLoading(state.loadedMovies);
+    try {
+      await moviesRepository.removeFavMovie(event.movieId);
+      List<Movie> newMovies = List.from(state.loadedMovies);
+      newMovies.removeWhere((movie) => movie.id == event.movieId);
+      yield FavoritesLoaded(loadedMovies: newMovies);
+    } catch (e) {
+      print(e);
+      yield FavoritesError(state.loadedMovies);
     }
   }
 }

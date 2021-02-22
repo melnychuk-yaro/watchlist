@@ -28,20 +28,18 @@ class _HomeScreenState extends State<HomeScreen> {
 
   @override
   Widget build(BuildContext context) {
+    final MoviesRepository moviesRepository = MoviesRepository();
+
     return MultiBlocProvider(
       providers: [
         BlocProvider<FavoritesBloc>(
-          create: (context) => FavoritesBloc(MoviesRepository()),
-        ),
+            create: (context) => FavoritesBloc(moviesRepository)),
         BlocProvider<SearchBloc>(
-          create: (context) => SearchBloc(MoviesRepository()),
-        ),
+            create: (context) => SearchBloc(moviesRepository)),
         BlocProvider<TopMoviesCubit>(
-          create: (context) => TopMoviesCubit(MoviesRepository()),
-        ),
+            create: (context) => TopMoviesCubit(moviesRepository)),
         BlocProvider<NowPlayingCubit>(
-          create: (context) => NowPlayingCubit(MoviesRepository()),
-        ),
+            create: (context) => NowPlayingCubit(moviesRepository)),
       ],
       child: Scaffold(
         appBar: AppBar(

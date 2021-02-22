@@ -10,16 +10,9 @@ class User {
   })  : assert(email != null),
         assert(id != null);
 
-  /// The current user's email address.
   final String email;
-
-  /// The current user's id.
   final String id;
-
-  /// The current user's name (display name).
   final String name;
-
-  /// Url for the current user's photo.
   final String photo;
 
   /// Empty user which represents an unauthenticated user.

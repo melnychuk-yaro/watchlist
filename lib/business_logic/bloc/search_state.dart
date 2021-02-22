@@ -1,7 +1,7 @@
 part of 'search_bloc.dart';
 
 @immutable
-abstract class SearchState {
+abstract class SearchState extends Equatable {
   final List<Movie> loadedMovies;
   final int nextPageKey;
   final String query;
@@ -9,17 +9,20 @@ abstract class SearchState {
       {@required this.nextPageKey,
       @required this.query,
       @required this.loadedMovies});
+
+  @override
+  List<Object> get props => [loadedMovies, nextPageKey, query];
 }
 
 class SearchInitial extends SearchState {
   final String query;
   final int nextPageKey;
   final List<Movie> loadedMovies;
-  SearchInitial({
+  const SearchInitial({
     this.query = '',
     this.nextPageKey = 1,
     this.loadedMovies,
-  });
+  }) : super(loadedMovies: loadedMovies, query: query, nextPageKey: 1);
 }
 
 class SearchLoading extends SearchState {}
@@ -29,7 +32,7 @@ class SearchLoaded extends SearchState {
   final bool isLastPage;
   final int nextPageKey;
   final String query;
-  SearchLoaded({
+  const SearchLoaded({
     @required this.loadedMovies,
     @required this.isLastPage,
     @required this.nextPageKey,
@@ -38,6 +41,6 @@ class SearchLoaded extends SearchState {
 }
 
 class SearchError extends SearchState {
-  final error;
-  SearchError(this.error);
+  final String error;
+  const SearchError(this.error);
 }

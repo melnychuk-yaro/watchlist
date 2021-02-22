@@ -59,12 +59,16 @@ class MoviesRepository {
 
   Future<void> saveFavMovie(Movie movie) async {
     try {
+      Map<String, dynamic> movieMap = movie.toMap();
+      movieMap['date_added_to_favorite'] =
+          DateTime.now().millisecondsSinceEpoch;
+
       return await firestore
           .collection('users')
           .doc(authenticationRepository.currentUser.id)
           .collection('fav_movies')
           .doc(movie.id.toString())
-          .set(movie.toMap());
+          .set(movieMap);
     } catch (e) {
       print(e);
     }
@@ -88,9 +92,10 @@ class MoviesRepository {
         .collection('users')
         .doc(authenticationRepository.currentUser.id)
         .collection('fav_movies')
+        .orderBy('date_added_to_favorite', descending: true)
         .get();
     return snapshot.docs
-        .map((doc) => Movie.favoriteFromMap(doc.data()))
+        .map((doc) => Movie.fromMap(doc.data(), isFavorite: true))
         .toList();
   }
 

@@ -16,7 +16,6 @@ abstract class NowPlayingState extends Equatable {
   List<Object> get props => [this.moviesPage, this.error, this.nextPageKey];
 }
 
-@immutable
 class NowPlayingInitial extends NowPlayingState {
   const NowPlayingInitial({
     @required this.moviesPage,
@@ -29,10 +28,8 @@ class NowPlayingInitial extends NowPlayingState {
   final int nextPageKey;
 }
 
-@immutable
 class NowPlayingLoading extends NowPlayingState {}
 
-@immutable
 class NowPlayingLoaded extends NowPlayingState {
   const NowPlayingLoaded({
     @required this.moviesPage,
@@ -45,7 +42,6 @@ class NowPlayingLoaded extends NowPlayingState {
   final int nextPageKey;
 }
 
-@immutable
 class NowPlayingError extends NowPlayingState {
   const NowPlayingError({
     @required this.moviesPage,

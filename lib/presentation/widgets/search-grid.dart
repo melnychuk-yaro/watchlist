@@ -19,13 +19,14 @@ class _SearchGridState extends State<SearchGrid> {
     super.initState();
     _searchBloc = BlocProvider.of<SearchBloc>(context);
     _pagingController.addPageRequestListener((pageKey) {
+      print(pageKey);
       _searchBloc.add(SearchNextPageLoadEvent());
     });
   }
 
   @override
   Widget build(BuildContext context) {
-    return BlocConsumer<SearchBloc, SearchState>(
+    return BlocListener<SearchBloc, SearchState>(
       listener: (context, state) {
         if (state is SearchInitial) {
           _pagingController.refresh();
@@ -42,12 +43,7 @@ class _SearchGridState extends State<SearchGrid> {
           );
         }
       },
-      builder: (context, state) {
-        if (state is SearchInitial) {
-          return Center(child: Text('Start searching'));
-        }
-        return MoviesPaginatedGrid(pagingController: _pagingController);
-      },
+      child: MoviesPaginatedGrid(pagingController: _pagingController),
     );
   }
 

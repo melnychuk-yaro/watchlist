@@ -47,7 +47,32 @@ class _SearchState extends State<Search> {
           ),
         ),
         Expanded(
-          child: SearchGrid(),
+          child: BlocBuilder<SearchBloc, SearchState>(
+            builder: (context, state) {
+              if (state is SearchInitial) {
+                return Center(
+                  child: Column(
+                    mainAxisSize: MainAxisSize.min,
+                    children: [
+                      Icon(
+                        Icons.local_movies,
+                        size: 56,
+                      ),
+                      const SizedBox(height: 8),
+                      Text(
+                        'Start Searching',
+                        style: TextStyle(
+                          fontWeight: FontWeight.bold,
+                          fontSize: 18,
+                        ),
+                      ),
+                    ],
+                  ),
+                );
+              }
+              return SearchGrid();
+            },
+          ),
         ),
       ],
     );

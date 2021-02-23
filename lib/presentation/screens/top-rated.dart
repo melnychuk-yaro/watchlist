@@ -1,18 +1,53 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:infinite_scroll_pagination/infinite_scroll_pagination.dart';
 import 'package:watchlist/business_logic/cubit/top_movies_cubit.dart';
-import 'package:watchlist/presentation/widgets/paged-grid-view.dart';
+import 'package:watchlist/data/models/movie.dart';
+import 'package:watchlist/presentation/widgets/movies-paginated-grid.dart';
 
-class TopRated extends StatelessWidget {
+class TopRated extends StatefulWidget {
+  final PageStorageKey key;
+  TopRated({@required this.key});
+
+  @override
+  _TopRatedState createState() => _TopRatedState();
+}
+
+class _TopRatedState extends State<TopRated> {
+  final _pagingController = PagingController<int, Movie>(firstPageKey: 1);
+
+  @override
+  void initState() {
+    super.initState();
+
+    _pagingController.addPageRequestListener((pageKey) {
+      BlocProvider.of<TopMoviesCubit>(context).loadMovies(pageKey);
+    });
+  }
+
+  @override
+  void dispose() {
+    super.dispose();
+    _pagingController.dispose();
+  }
+
   @override
   Widget build(BuildContext context) {
-    final TopMoviesCubit topMoviesCubit =
-        BlocProvider.of<TopMoviesCubit>(context);
-
-    return PagedMoviesGridView(
-      movCubit: topMoviesCubit,
-      loadMovies: topMoviesCubit.loadMovies,
-      resetMovies: topMoviesCubit.resetMovies,
+    return BlocListener<TopMoviesCubit, TopMoviesState>(
+      listener: (context, state) {
+        if (state is TopMoviesError) {
+          //TODO: handle errors
+          _pagingController.error = state.error;
+        }
+        if (state is TopMoviesLoaded) {
+          _pagingController.value = PagingState(
+            itemList: state.movies,
+            error: null,
+            nextPageKey: state.isLastPage ? null : state.nextPageKey,
+          );
+        }
+      },
+      child: MoviesPaginatedGrid(pagingController: _pagingController),
     );
   }
 }

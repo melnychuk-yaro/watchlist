@@ -14,13 +14,6 @@ class FavoritesBloc extends Bloc<FavoritesEvent, FavoritesState> {
   FavoritesBloc(this.moviesRepository) : super(FavoritesInitial(List<Movie>()));
 
   @override
-  void onTransition(Transition<FavoritesEvent, FavoritesState> transition) {
-    print(transition);
-    print('movies loaded: ${state.loadedMovies.length}');
-    super.onTransition(transition);
-  }
-
-  @override
   Stream<FavoritesState> mapEventToState(
     FavoritesEvent event,
   ) async* {

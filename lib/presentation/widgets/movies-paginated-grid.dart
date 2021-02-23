@@ -4,16 +4,20 @@ import 'package:watchlist/data/models/movie.dart';
 import 'package:watchlist/presentation/widgets/movie-card.dart';
 
 class MoviesPaginatedGrid extends StatelessWidget {
-  const MoviesPaginatedGrid({
-    @required PagingController<int, Movie> pagingController,
-  }) : _pagingController = pagingController;
+  MoviesPaginatedGrid({
+    @required this.pagingController,
+    // this.scrollController,
+  });
 
-  final PagingController<int, Movie> _pagingController;
+  final PagingController<int, Movie> pagingController;
+  // final ScrollController scrollController =
+  //     ScrollController(keepScrollOffset: true);
 
   @override
   Widget build(BuildContext context) {
     return PagedGridView<int, Movie>(
-      pagingController: _pagingController,
+      pagingController: pagingController,
+      // scrollController: scrollController,
       padding: const EdgeInsets.all(4.0),
       gridDelegate: SliverGridDelegateWithMaxCrossAxisExtent(
         maxCrossAxisExtent: 300.0,

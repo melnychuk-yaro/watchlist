@@ -19,7 +19,6 @@ class _SearchGridState extends State<SearchGrid> {
     super.initState();
     _searchBloc = BlocProvider.of<SearchBloc>(context);
     _pagingController.addPageRequestListener((pageKey) {
-      print(pageKey);
       _searchBloc.add(SearchNextPageLoadEvent());
     });
   }

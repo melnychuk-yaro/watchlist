@@ -6,6 +6,9 @@ import 'package:watchlist/business_logic/bloc/search_bloc.dart';
 import 'package:watchlist/presentation/widgets/search-grid.dart';
 
 class Search extends StatefulWidget {
+  final PageStorageKey key;
+  Search({@required this.key});
+
   @override
   _SearchState createState() => _SearchState();
 }

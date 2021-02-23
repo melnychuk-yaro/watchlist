@@ -20,15 +20,16 @@ class _HomeScreenState extends State<HomeScreen> {
   FirebaseAuth auth = FirebaseAuth.instance;
   var _currentIndex = 0;
   final List<Widget> _widgetOptions = <Widget>[
-    Favorites(),
-    Search(),
-    NowPlaying(),
-    TopRated(),
+    Favorites(key: PageStorageKey('Page1')),
+    Search(key: PageStorageKey('Page2')),
+    NowPlaying(key: PageStorageKey('Page3')),
+    TopRated(key: PageStorageKey('Page4')),
   ];
 
   @override
   Widget build(BuildContext context) {
     final MoviesRepository moviesRepository = MoviesRepository();
+    final PageStorageBucket bucket = PageStorageBucket();
 
     return MultiBlocProvider(
       providers: [
@@ -52,7 +53,10 @@ class _HomeScreenState extends State<HomeScreen> {
             )
           ],
         ),
-        body: _widgetOptions.elementAt(_currentIndex),
+        body: PageStorage(
+          bucket: bucket,
+          child: _widgetOptions.elementAt(_currentIndex),
+        ),
         bottomNavigationBar: BottomNavigationBar(
           type: BottomNavigationBarType.fixed,
           currentIndex: _currentIndex,

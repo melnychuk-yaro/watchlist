@@ -4,6 +4,9 @@ import 'package:watchlist/business_logic/bloc/favorites_bloc.dart';
 import 'package:watchlist/presentation/widgets/movie-card.dart';
 
 class Favorites extends StatefulWidget {
+  final PageStorageKey key;
+  Favorites({@required this.key});
+
   @override
   _FavoritesState createState() => _FavoritesState();
 }
@@ -37,7 +40,7 @@ class _FavoritesState extends State<Favorites> {
           );
         }
         return Center(
-          child: CircularProgressIndicator(),
+          child: const CircularProgressIndicator(),
         );
       },
     );

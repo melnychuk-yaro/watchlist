@@ -3,53 +3,64 @@ part of 'now_playing_cubit.dart';
 @immutable
 abstract class NowPlayingState extends Equatable {
   const NowPlayingState({
-    @required this.moviesPage,
+    @required this.movies,
     @required this.error,
     @required this.nextPageKey,
+    @required this.isLastPage,
   });
 
-  final MoviesPage moviesPage;
-  final dynamic error;
+  final List<Movie> movies;
+  final String error;
   final int nextPageKey;
+  final bool isLastPage;
 
   @override
-  List<Object> get props => [this.moviesPage, this.error, this.nextPageKey];
+  List<Object> get props => [
+        this.movies,
+        this.error,
+        this.nextPageKey,
+        this.isLastPage,
+      ];
 }
 
 class NowPlayingInitial extends NowPlayingState {
-  const NowPlayingInitial({
-    @required this.moviesPage,
-    @required this.error,
-    @required this.nextPageKey,
+  NowPlayingInitial({
+    @required this.movies,
+    this.error = '',
+    this.nextPageKey = 1,
+    this.isLastPage = false,
   });
 
-  final MoviesPage moviesPage;
-  final dynamic error;
+  final List<Movie> movies;
+  final String error;
   final int nextPageKey;
+  final bool isLastPage;
 }
-
-class NowPlayingLoading extends NowPlayingState {}
 
 class NowPlayingLoaded extends NowPlayingState {
   const NowPlayingLoaded({
-    @required this.moviesPage,
+    @required this.movies,
     @required this.error,
     @required this.nextPageKey,
+    @required this.isLastPage,
   });
 
-  final MoviesPage moviesPage;
-  final dynamic error;
+  final List<Movie> movies;
+  final String error;
   final int nextPageKey;
+  final bool isLastPage;
 }
 
 class NowPlayingError extends NowPlayingState {
   const NowPlayingError({
-    @required this.moviesPage,
+    @required this.movies,
     @required this.error,
     @required this.nextPageKey,
+    @required this.isLastPage,
   });
 
-  final MoviesPage moviesPage;
-  final dynamic error;
+  final List<Movie> movies;
+  final String error;
   final int nextPageKey;
+  final bool isLastPage;
 }

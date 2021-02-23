@@ -1,6 +1,6 @@
 import 'package:bloc/bloc.dart';
 import 'package:meta/meta.dart';
-import 'package:watchlist/data/models/moviesPage.dart';
+import 'package:watchlist/data/models/movie.dart';
 import 'package:watchlist/data/repositories/movies_repository.dart';
 
 part 'top_movies_state.dart';
@@ -8,18 +8,10 @@ part 'top_movies_state.dart';
 class TopMoviesCubit extends Cubit<TopMoviesState> {
   final MoviesRepository moviesRepository;
   TopMoviesCubit(this.moviesRepository)
-      : super(TopMoviesInitial(
-          moviesPage: MoviesPage(itemList: [], isLastPage: false),
-          error: null,
-          nextPageKey: 1,
-        ));
+      : super(TopMoviesInitial(movies: List<Movie>()));
 
   void resetMovies() {
-    emit(TopMoviesInitial(
-      moviesPage: MoviesPage(itemList: [], isLastPage: false),
-      error: null,
-      nextPageKey: 1,
-    ));
+    emit(TopMoviesInitial(movies: List<Movie>()));
   }
 
   Future<void> loadMovies(int page) async {
@@ -27,16 +19,21 @@ class TopMoviesCubit extends Cubit<TopMoviesState> {
     try {
       final moviesPage =
           await moviesRepository.getTopRatedMovies(page: state.nextPageKey);
+      final List<Movie> updatedMovies = List<Movie>.from(_prevState.movies)
+        ..addAll(moviesPage.itemList);
       emit(TopMoviesLoaded(
-        moviesPage: moviesPage,
-        error: null,
-        nextPageKey: state.nextPageKey + 1,
+        movies: updatedMovies,
+        error: '',
+        nextPageKey: _prevState.nextPageKey + 1,
+        isLastPage: moviesPage.isLastPage,
       ));
     } catch (e) {
       emit(TopMoviesError(
-          moviesPage: _prevState.moviesPage,
-          error: e,
-          nextPageKey: _prevState.nextPageKey));
+        movies: _prevState.movies,
+        error: 'Something went wrong',
+        nextPageKey: _prevState.nextPageKey,
+        isLastPage: _prevState.isLastPage,
+      ));
     }
   }
 }

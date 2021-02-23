@@ -1,6 +1,7 @@
 import 'dart:async';
 
 import 'package:bloc/bloc.dart';
+import 'package:equatable/equatable.dart';
 import 'package:meta/meta.dart';
 import 'package:watchlist/data/models/movie.dart';
 import 'package:watchlist/data/models/moviesPage.dart';
@@ -38,9 +39,12 @@ class SearchBloc extends Bloc<SearchEvent, SearchState> {
       try {
         final MoviesPage _moviesPage =
             await moviesRepository.searchMovies(query: event.query);
-        final List<Movie> oldMovies = state.loadedMovies ?? [];
+
+        final List<Movie> updatedMovies =
+            List<Movie>.from(state.loadedMovies ?? List<Movie>())
+              ..addAll(_moviesPage.itemList);
         yield SearchLoaded(
-          loadedMovies: oldMovies + _moviesPage.itemList,
+          loadedMovies: updatedMovies,
           nextPageKey: state.nextPageKey == null ? 2 : state.nextPageKey + 1,
           isLastPage: _moviesPage.isLastPage,
           query: event.query,

@@ -15,20 +15,11 @@ class MoviesRepository {
   final AuthenticationRepository authenticationRepository =
       AuthenticationRepository();
 
-  _getMoviesPage(http.Response response) {
-    Map<String, dynamic> body = json.decode(response.body);
-    bool isLastPage = body['page'] < body['total_pages'] ? false : true;
-    List results = body['results'];
-    return MoviesPage(
-        isLastPage: isLastPage,
-        itemList: results.map((movieMap) => Movie.fromMap(movieMap)).toList());
-  }
-
   Future<MoviesPage> getTopRatedMovies({page = 1}) async {
     final response = await http.get(
         '$apiUri/movie/top_rated?api_key=$apiKey&language=$language&page=$page&include_adult=$includeAdult');
     if (response.statusCode == 200) {
-      return _getMoviesPage(response);
+      return await _getMoviesPage(response);
     } else {
       throw Exception('Error fetching movies.');
     }
@@ -38,7 +29,7 @@ class MoviesRepository {
     final response = await http.get(
         '$apiUri/movie/now_playing?api_key=$apiKey&language=$language&page=$page&include_adult=$includeAdult');
     if (response.statusCode == 200) {
-      return _getMoviesPage(response);
+      return await _getMoviesPage(response);
     } else {
       throw Exception('Error fetching movies.');
     }
@@ -48,7 +39,7 @@ class MoviesRepository {
     final response = await http.get(
         '$apiUri/search/movie?api_key=$apiKey&language=$language&query=$query&page=$page&include_adult=$includeAdult');
     if (response.statusCode == 200) {
-      return _getMoviesPage(response);
+      return await _getMoviesPage(response);
     } else if (response.statusCode == 422) {
       return MoviesPage(itemList: [], isLastPage: true);
     } else {
@@ -99,12 +90,34 @@ class MoviesRepository {
         .toList();
   }
 
-  Future<List<String>> _getFavoritesIds() async {
-    final snapshot = await firestore
-        .collection('users')
-        .doc(authenticationRepository.currentUser.id)
-        .collection('fav_movies')
-        .get();
-    return snapshot.docs.map((doc) => doc['id']).toList();
+  Future<MoviesPage> _getMoviesPage(http.Response response) async {
+    try {
+      Map<String, dynamic> body = json.decode(response.body);
+      List results = body['results'];
+      List<int> favIds = await _getFavoritesIds();
+      return MoviesPage(
+          isLastPage: body['page'] >= body['total_pages'],
+          itemList: results.map((movieMap) {
+            return Movie.fromMap(
+              movieMap,
+              isFavorite: favIds.contains(movieMap['id']),
+            );
+          }).toList());
+    } catch (e) {
+      print(e);
+    }
+  }
+
+  Future<List<int>> _getFavoritesIds() async {
+    try {
+      final snapshot = await firestore
+          .collection('users')
+          .doc(authenticationRepository.currentUser.id)
+          .collection('fav_movies')
+          .get();
+      return snapshot.docs.map((doc) => doc['id'] as int).toList();
+    } catch (e) {
+      print(e);
+    }
   }
 }

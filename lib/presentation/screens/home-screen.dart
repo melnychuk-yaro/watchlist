@@ -1,15 +1,9 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:watchlist/business_logic/bloc/favorites_bloc.dart';
-import 'package:watchlist/business_logic/bloc/search_bloc.dart';
-import 'package:watchlist/business_logic/cubit/now_playing_cubit.dart';
-import 'package:watchlist/business_logic/cubit/top_movies_cubit.dart';
 import 'package:watchlist/presentation/screens/favorites.dart';
 import 'package:watchlist/presentation/screens/search.dart';
 import 'package:watchlist/presentation/screens/top-rated.dart';
 import 'package:watchlist/presentation/screens/now-playing.dart';
-import 'package:watchlist/data/repositories/movies_repository.dart';
 
 class HomeScreen extends StatefulWidget {
   @override
@@ -17,10 +11,11 @@ class HomeScreen extends StatefulWidget {
 }
 
 class _HomeScreenState extends State<HomeScreen> {
-  FirebaseAuth auth = FirebaseAuth.instance;
-  var _currentIndex = 0;
-  final List<Widget> _widgetOptions = <Widget>[
-    Favorites(key: PageStorageKey('Page1')),
+  final FirebaseAuth _auth = FirebaseAuth.instance;
+  final PageStorageBucket _bucket = PageStorageBucket();
+  int _currentIndex = 0;
+  final List<Widget> _pages = <Widget>[
+    Favorites(key: PageStorageKey('favoritesPage')),
     Search(key: PageStorageKey('Page2')),
     NowPlaying(key: PageStorageKey('Page3')),
     TopRated(key: PageStorageKey('Page4')),
@@ -28,65 +23,50 @@ class _HomeScreenState extends State<HomeScreen> {
 
   @override
   Widget build(BuildContext context) {
-    final MoviesRepository moviesRepository = MoviesRepository();
-    final PageStorageBucket bucket = PageStorageBucket();
-
-    return MultiBlocProvider(
-      providers: [
-        BlocProvider<FavoritesBloc>(
-            create: (context) => FavoritesBloc(moviesRepository)),
-        BlocProvider<SearchBloc>(
-            create: (context) => SearchBloc(moviesRepository)),
-        BlocProvider<TopMoviesCubit>(
-            create: (context) => TopMoviesCubit(moviesRepository)),
-        BlocProvider<NowPlayingCubit>(
-            create: (context) => NowPlayingCubit(moviesRepository)),
-      ],
-      child: Scaffold(
-        appBar: AppBar(
-          title: Text('Watchlist'),
-          backgroundColor: Theme.of(context).cardColor,
-          actions: [
-            IconButton(
-              icon: Icon(Icons.exit_to_app),
-              onPressed: () => auth.signOut(),
-            )
-          ],
-        ),
-        body: PageStorage(
-          bucket: bucket,
-          child: _widgetOptions.elementAt(_currentIndex),
-        ),
-        bottomNavigationBar: BottomNavigationBar(
-          type: BottomNavigationBarType.fixed,
-          currentIndex: _currentIndex,
-          selectedItemColor: Theme.of(context).accentColor,
-          unselectedIconTheme: IconThemeData(color: Colors.white),
-          backgroundColor: Theme.of(context).cardColor,
-          onTap: (index) {
-            setState(() {
-              _currentIndex = index;
-            });
-          },
-          items: [
-            BottomNavigationBarItem(
-              label: 'To Watch',
-              icon: Icon(Icons.favorite_border),
-            ),
-            BottomNavigationBarItem(
-              label: 'Search',
-              icon: Icon(Icons.search),
-            ),
-            BottomNavigationBarItem(
-              label: 'Now Playing',
-              icon: Icon(Icons.fiber_new),
-            ),
-            BottomNavigationBarItem(
-              label: 'Top Rated',
-              icon: Icon(Icons.sort),
-            ),
-          ],
-        ),
+    return Scaffold(
+      appBar: AppBar(
+        title: Text('Watchlist'),
+        backgroundColor: Theme.of(context).cardColor,
+        actions: [
+          IconButton(
+            icon: Icon(Icons.exit_to_app),
+            onPressed: () => _auth.signOut(),
+          )
+        ],
+      ),
+      body: PageStorage(
+        bucket: _bucket,
+        child: _pages.elementAt(_currentIndex),
+      ),
+      bottomNavigationBar: BottomNavigationBar(
+        type: BottomNavigationBarType.fixed,
+        currentIndex: _currentIndex,
+        selectedItemColor: Theme.of(context).accentColor,
+        unselectedIconTheme: IconThemeData(color: Colors.white),
+        backgroundColor: Theme.of(context).cardColor,
+        onTap: (index) {
+          setState(() {
+            _currentIndex = index;
+          });
+        },
+        items: [
+          BottomNavigationBarItem(
+            label: 'To Watch',
+            icon: Icon(Icons.favorite_border),
+          ),
+          BottomNavigationBarItem(
+            label: 'Search',
+            icon: Icon(Icons.search),
+          ),
+          BottomNavigationBarItem(
+            label: 'Now Playing',
+            icon: Icon(Icons.fiber_new),
+          ),
+          BottomNavigationBarItem(
+            label: 'Top Rated',
+            icon: Icon(Icons.sort),
+          ),
+        ],
       ),
     );
   }

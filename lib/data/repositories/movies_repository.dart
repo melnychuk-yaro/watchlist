@@ -62,6 +62,7 @@ class MoviesRepository {
           .set(movieMap);
     } catch (e) {
       print(e);
+      throw Exception('Saving failed');
     }
   }
 
@@ -75,6 +76,7 @@ class MoviesRepository {
           .delete();
     } catch (e) {
       print(e);
+      throw Exception('Removing failed');
     }
   }
 
@@ -105,6 +107,7 @@ class MoviesRepository {
           }).toList());
     } catch (e) {
       print(e);
+      throw Exception('Error while getting movies page');
     }
   }
 
@@ -118,6 +121,7 @@ class MoviesRepository {
       return snapshot.docs.map((doc) => doc['id'] as int).toList();
     } catch (e) {
       print(e);
+      throw Exception('Error fetching faborites IDs');
     }
   }
 }

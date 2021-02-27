@@ -15,13 +15,15 @@ class NowPlaying extends StatefulWidget {
 
 class _NowPlayingState extends State<NowPlaying> {
   final _pagingController = PagingController<int, Movie>(firstPageKey: 1);
+  NowPlayingCubit _cubit;
 
   @override
   void initState() {
     super.initState();
-
+    _cubit = context.read<NowPlayingCubit>();
+    _setPaginationIntialState(_cubit);
     _pagingController.addPageRequestListener((pageKey) {
-      BlocProvider.of<NowPlayingCubit>(context).loadMovies(pageKey);
+      _cubit.loadMovies(pageKey);
     });
   }
 
@@ -29,6 +31,17 @@ class _NowPlayingState extends State<NowPlaying> {
   void dispose() {
     super.dispose();
     _pagingController.dispose();
+  }
+
+  void _setPaginationIntialState(cubit) {
+    NowPlayingState cubitState = cubit.state;
+    if (cubitState is NowPlayingLoaded) {
+      _pagingController.value = PagingState(
+        itemList: cubitState.movies,
+        error: null,
+        nextPageKey: cubitState.nextPageKey,
+      );
+    }
   }
 
   @override

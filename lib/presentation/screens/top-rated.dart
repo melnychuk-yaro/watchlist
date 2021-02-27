@@ -15,13 +15,15 @@ class TopRated extends StatefulWidget {
 
 class _TopRatedState extends State<TopRated> {
   final _pagingController = PagingController<int, Movie>(firstPageKey: 1);
+  TopMoviesCubit _cubit;
 
   @override
   void initState() {
     super.initState();
-
+    _cubit = context.read<TopMoviesCubit>();
+    _setPaginationIntialState(_cubit);
     _pagingController.addPageRequestListener((pageKey) {
-      BlocProvider.of<TopMoviesCubit>(context).loadMovies(pageKey);
+      _cubit.loadMovies(pageKey);
     });
   }
 
@@ -29,6 +31,17 @@ class _TopRatedState extends State<TopRated> {
   void dispose() {
     super.dispose();
     _pagingController.dispose();
+  }
+
+  void _setPaginationIntialState(cubit) {
+    TopMoviesState cubitState = cubit.state;
+    if (cubitState is TopMoviesLoaded) {
+      _pagingController.value = PagingState(
+        itemList: cubitState.movies,
+        error: null,
+        nextPageKey: cubitState.nextPageKey,
+      );
+    }
   }
 
   @override

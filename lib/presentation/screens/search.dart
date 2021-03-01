@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:watchlist/business_logic/bloc/search_bloc.dart';
 import 'package:watchlist/presentation/widgets/search-grid.dart';
+import 'package:watchlist/presentation/widgets/styled-text.dart';
 
 class Search extends StatefulWidget {
   final PageStorageKey key;
@@ -33,6 +34,7 @@ class _SearchState extends State<Search> {
   _onSearchChanged() {
     if (_debounce?.isActive ?? false) _debounce.cancel();
     _debounce = Timer(const Duration(milliseconds: 500), () {
+      print('debounced');
       BlocProvider.of<SearchBloc>(context)
           .add(SearchLoadEvent(_searchQuery.text));
     });
@@ -53,25 +55,11 @@ class _SearchState extends State<Search> {
           child: BlocBuilder<SearchBloc, SearchState>(
             builder: (context, state) {
               if (state is SearchInitial) {
-                return Center(
-                  child: Column(
-                    mainAxisSize: MainAxisSize.min,
-                    children: [
-                      Icon(
-                        Icons.local_movies,
-                        size: 56,
-                      ),
-                      const SizedBox(height: 8),
-                      Text(
-                        'Start Searching',
-                        style: TextStyle(
-                          fontWeight: FontWeight.bold,
-                          fontSize: 18,
-                        ),
-                      ),
-                    ],
-                  ),
-                );
+                return StyledText(text: 'Start Searching');
+              }
+
+              if (state is SearchLoading) {
+                return Center(child: CircularProgressIndicator());
               }
               return SearchGrid();
             },

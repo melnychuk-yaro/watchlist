@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:watchlist/business_logic/bloc/favorites_bloc.dart';
 import 'package:watchlist/presentation/widgets/movie-card.dart';
+import 'package:watchlist/presentation/widgets/styled-text.dart';
 
 class Favorites extends StatelessWidget {
   final PageStorageKey key;
@@ -20,16 +21,18 @@ class Favorites extends StatelessWidget {
           );
         }
         if (state is FavoritesLoaded) {
-          return GridView(
-            gridDelegate: SliverGridDelegateWithMaxCrossAxisExtent(
-              maxCrossAxisExtent: 300.0,
-              childAspectRatio: 0.75,
-            ),
-            padding: const EdgeInsets.all(4.0),
-            children: state.loadedMovies
-                .map((movie) => MovieCard(movie: movie))
-                .toList(),
-          );
+          return state.loadedMovies.length > 0
+              ? GridView(
+                  gridDelegate: SliverGridDelegateWithMaxCrossAxisExtent(
+                    maxCrossAxisExtent: 300.0,
+                    childAspectRatio: 0.75,
+                  ),
+                  padding: const EdgeInsets.all(4.0),
+                  children: state.loadedMovies
+                      .map((movie) => MovieCard(movie: movie))
+                      .toList(),
+                )
+              : StyledText(text: 'Add movies to your watchlist');
         }
         return Center(
           child: const CircularProgressIndicator(),

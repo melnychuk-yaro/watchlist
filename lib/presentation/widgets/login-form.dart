@@ -85,8 +85,8 @@ class _LoginFormState extends State<LoginForm> {
         password: _password,
       );
     } on FirebaseAuthException catch (e) {
-      Scaffold.of(context).hideCurrentSnackBar();
-      Scaffold.of(context).showSnackBar(
+      ScaffoldMessenger.of(context).hideCurrentSnackBar();
+      ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(
           content: Text(_getFirebaseAuthErrorMessage(e.code)),
           backgroundColor: Theme.of(context).errorColor,
@@ -105,8 +105,8 @@ class _LoginFormState extends State<LoginForm> {
         password: _password,
       );
     } on FirebaseAuthException catch (e) {
-      Scaffold.of(context).hideCurrentSnackBar();
-      Scaffold.of(context).showSnackBar(
+      ScaffoldMessenger.of(context).hideCurrentSnackBar();
+      ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(
           content: Text(_getFirebaseAuthErrorMessage(e.code)),
           backgroundColor: Theme.of(context).errorColor,

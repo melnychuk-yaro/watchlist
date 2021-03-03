@@ -8,10 +8,10 @@ part 'top_movies_state.dart';
 class TopMoviesCubit extends Cubit<TopMoviesState> {
   final MoviesRepository moviesRepository;
   TopMoviesCubit(this.moviesRepository)
-      : super(TopMoviesInitial(movies: List<Movie>()));
+      : super(TopMoviesInitial(movies: <Movie>[]));
 
   void resetMovies() {
-    emit(TopMoviesInitial(movies: List<Movie>()));
+    emit(TopMoviesInitial(movies: <Movie>[]));
   }
 
   Future<void> loadMovies(int page) async {

@@ -11,7 +11,7 @@ part 'favorites_state.dart';
 
 class FavoritesBloc extends Bloc<FavoritesEvent, FavoritesState> {
   final MoviesRepository moviesRepository;
-  FavoritesBloc(this.moviesRepository) : super(FavoritesInitial(List<Movie>()));
+  FavoritesBloc(this.moviesRepository) : super(FavoritesInitial(<Movie>[]));
 
   @override
   Stream<FavoritesState> mapEventToState(

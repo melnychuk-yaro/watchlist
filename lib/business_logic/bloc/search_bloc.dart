@@ -27,13 +27,13 @@ class SearchBloc extends Bloc<SearchEvent, SearchState> {
     }
 
     if (event is SearchResetEvent) {
-      yield SearchInitial(loadedMovies: List<Movie>());
+      yield SearchInitial(loadedMovies: <Movie>[]);
     }
   }
 
   Stream<SearchState> _mapSearchLoadEvent(event) async* {
     if (event.query.trim() == '') {
-      yield SearchInitial(loadedMovies: List<Movie>());
+      yield SearchInitial(loadedMovies: <Movie>[]);
     } else if (event.query != state.query) {
       yield SearchLoading();
       try {
@@ -41,7 +41,7 @@ class SearchBloc extends Bloc<SearchEvent, SearchState> {
             await moviesRepository.searchMovies(query: event.query);
 
         final List<Movie> updatedMovies =
-            List<Movie>.from(state.loadedMovies ?? List<Movie>())
+            List<Movie>.from(state.loadedMovies ?? <Movie>[])
               ..addAll(_moviesPage.itemList);
         yield SearchLoaded(
           loadedMovies: updatedMovies,

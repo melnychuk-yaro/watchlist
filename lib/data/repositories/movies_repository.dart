@@ -10,7 +10,8 @@ import 'package:watchlist/data/models/moviesPage.dart';
 import 'package:watchlist/data/repositories/auth_repository.dart';
 
 class MoviesRepository {
-  static const String urlAuthority = 'api.themoviedb.org/';
+  static const String urlAuthority = 'api.themoviedb.org';
+  static const String pathPrefix = '/3';
   static const String includeAdult = 'false';
   static const String language = 'en-US';
   final String apiKey = env['TMDB_API_KEY'];
@@ -41,7 +42,6 @@ class MoviesRepository {
     final uri = _buildUri(path: '/movie/now_playing', page: page);
     try {
       final response = await http.get(uri);
-
       return response.statusCode == 200
           ? await _getMoviesPage(response)
           : throw Failure(
@@ -171,12 +171,12 @@ class MoviesRepository {
 
   Uri _buildUri({@required String path, @required int page, String query}) {
     return Uri.https(
-      '$urlAuthority',
-      path,
+      urlAuthority,
+      pathPrefix + path,
       {
         'api_key': apiKey,
         'language': language,
-        'page': page,
+        'page': page.toString(),
         'include_adult': includeAdult,
         if (query != null) 'query': query,
       },

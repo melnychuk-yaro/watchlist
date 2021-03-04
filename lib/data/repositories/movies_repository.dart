@@ -1,50 +1,78 @@
 import 'dart:convert';
+import 'dart:io';
+import 'package:flutter/foundation.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:http/http.dart' as http;
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:watchlist/business_logic/helpers/failure.dart';
 import 'package:watchlist/data/models/movie.dart';
 import 'package:watchlist/data/models/moviesPage.dart';
 import 'package:watchlist/data/repositories/auth_repository.dart';
 
 class MoviesRepository {
-  static const String apiUri = 'https://api.themoviedb.org/3';
+  static const String urlAuthority = 'api.themoviedb.org/';
   static const String includeAdult = 'false';
   static const String language = 'en-US';
-  final String apiKey = DotEnv().env['TMDB_API_KEY'];
+  final String apiKey = env['TMDB_API_KEY'];
   final FirebaseFirestore firestore = FirebaseFirestore.instance;
   final AuthenticationRepository authenticationRepository =
       AuthenticationRepository();
 
   Future<MoviesPage> getTopRatedMovies({page = 1}) async {
-    final response = await http.get(
-        '$apiUri/movie/top_rated?api_key=$apiKey&language=$language&page=$page&include_adult=$includeAdult');
-    if (response.statusCode == 200) {
-      return await _getMoviesPage(response);
-    } else {
-      throw Exception('Error fetching movies.');
+    final uri = _buildUri(path: '/movie/top_rated', page: page);
+
+    try {
+      final response = await http.get(uri);
+
+      return response.statusCode == 200
+          ? await _getMoviesPage(response)
+          : throw Failure(
+              'Error fetching movies. Code: ${response.statusCode}');
+    } on SocketException {
+      throw Failure('No internet conneciton.');
+    } on HttpException {
+      throw Failure('Couldn\'t find movies.');
+    } on FormatException {
+      throw Failure('Bad response format.');
     }
   }
 
   Future<MoviesPage> getNewMovies({page = 1}) async {
-    final response = await http.get(
-        '$apiUri/movie/now_playing?api_key=$apiKey&language=$language&page=$page&include_adult=$includeAdult');
-    if (response.statusCode == 200) {
-      return await _getMoviesPage(response);
-    } else {
-      throw Exception('Error fetching movies.');
+    final uri = _buildUri(path: '/movie/now_playing', page: page);
+    try {
+      final response = await http.get(uri);
+
+      return response.statusCode == 200
+          ? await _getMoviesPage(response)
+          : throw Failure(
+              'Error fetching movies. Code: ${response.statusCode}');
+    } on SocketException {
+      throw Failure('No internet conneciton.');
+    } on HttpException {
+      throw Failure('Couldn\'t find movies.');
+    } on FormatException {
+      throw Failure('Bad response format.');
     }
   }
 
   Future<MoviesPage> searchMovies({String query, int page = 1}) async {
-    final response = await http.get(
-        '$apiUri/search/movie?api_key=$apiKey&language=$language&query=$query&page=$page&include_adult=$includeAdult');
-    if (response.statusCode == 200) {
-      return await _getMoviesPage(response);
-    } else if (response.statusCode == 422) {
-      return MoviesPage(itemList: [], isLastPage: true);
-    } else {
-      throw Exception(
-          'Error fetching movies. Uri: /search/movie. Query: $query');
+    final uri = _buildUri(path: '/search/movie', page: page, query: query);
+    try {
+      final response = await http.get(uri);
+      if (response.statusCode == 200) {
+        return await _getMoviesPage(response);
+      } else if (response.statusCode == 422) {
+        return MoviesPage(itemList: [], isLastPage: true);
+      } else {
+        throw Failure(
+            'Error fetching movies. Uri: /search/movie. Query: $query');
+      }
+    } on SocketException {
+      throw Failure('No internet conneciton.');
+    } on HttpException {
+      throw Failure('Couldn\'t find movies.');
+    } on FormatException {
+      throw Failure('Bad response format.');
     }
   }
 
@@ -60,9 +88,12 @@ class MoviesRepository {
           .collection('fav_movies')
           .doc(movie.id.toString())
           .set(movieMap);
-    } catch (e) {
-      print(e);
-      throw Exception('Saving failed');
+    } on SocketException {
+      throw Failure('No internet conneciton.');
+    } on HttpException {
+      throw Failure('Couldn\'t save movie.');
+    } on FormatException {
+      throw Failure('Bad response format.');
     }
   }
 
@@ -74,22 +105,33 @@ class MoviesRepository {
           .collection('fav_movies')
           .doc(id.toString())
           .delete();
-    } catch (e) {
-      print(e);
-      throw Exception('Removing failed');
+    } on SocketException {
+      throw Failure('No internet conneciton.');
+    } on HttpException {
+      throw Failure('Couldn\'t remove movie.');
+    } on FormatException {
+      throw Failure('Bad response format.');
     }
   }
 
   Future<List<Movie>> getFavMovies() async {
-    final snapshot = await firestore
-        .collection('users')
-        .doc(authenticationRepository.currentUser.id)
-        .collection('fav_movies')
-        .orderBy('date_added_to_favorite', descending: true)
-        .get();
-    return snapshot.docs
-        .map((doc) => Movie.fromMap(doc.data(), isFavorite: true))
-        .toList();
+    try {
+      final snapshot = await firestore
+          .collection('users')
+          .doc(authenticationRepository.currentUser.id)
+          .collection('fav_movies')
+          .orderBy('date_added_to_favorite', descending: true)
+          .get();
+      return snapshot.docs
+          .map((doc) => Movie.fromMap(doc.data(), isFavorite: true))
+          .toList();
+    } on SocketException {
+      throw Failure('No internet conneciton.');
+    } on HttpException {
+      throw Failure('Couldn\'t remove movie.');
+    } on FormatException {
+      throw Failure('Bad response format.');
+    }
   }
 
   Future<MoviesPage> _getMoviesPage(http.Response response) async {
@@ -105,9 +147,8 @@ class MoviesRepository {
               isFavorite: favIds.contains(movieMap['id']),
             );
           }).toList());
-    } catch (e) {
-      print(e);
-      throw Exception('Error while getting movies page');
+    } on FormatException {
+      throw Failure('Bad response format.');
     }
   }
 
@@ -119,9 +160,26 @@ class MoviesRepository {
           .collection('fav_movies')
           .get();
       return snapshot.docs.map((doc) => doc['id'] as int).toList();
-    } catch (e) {
-      print(e);
-      throw Exception('Error fetching faborites IDs');
+    } on SocketException {
+      throw Failure('No internet conneciton.');
+    } on HttpException {
+      throw Failure('Couldn\'t find movies.');
+    } on FormatException {
+      throw Failure('Bad response format.');
     }
+  }
+
+  Uri _buildUri({@required String path, @required int page, String query}) {
+    return Uri.https(
+      '$urlAuthority',
+      path,
+      {
+        'api_key': apiKey,
+        'language': language,
+        'page': page,
+        'include_adult': includeAdult,
+        if (query != null) 'query': query,
+      },
+    );
   }
 }

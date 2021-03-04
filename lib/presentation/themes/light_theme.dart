@@ -1,14 +1,21 @@
 import 'package:flutter/material.dart';
 
-class DefautTheme {
-  final Color color = Colors.indigoAccent[100];
+class LightTheme {
+  final Color color = Colors.indigoAccent;
 
-  ThemeData get theme => ThemeData.dark().copyWith(
+  ThemeData get themeData => ThemeData().copyWith(
         primaryColor: color,
         accentColor: color,
         toggleableActiveColor: color,
-        textSelectionColor: color,
-        textSelectionHandleColor: color,
+        appBarTheme: AppBarTheme().copyWith(
+          backgroundColor: Colors.white,
+          textTheme: TextTheme(headline6: TextStyle().copyWith(color: color)),
+          actionsIconTheme: IconThemeData().copyWith(color: color),
+        ),
+        textSelectionTheme: TextSelectionThemeData().copyWith(
+          selectionColor: color,
+          selectionHandleColor: color,
+        ),
         elevatedButtonTheme: ElevatedButtonThemeData(
           style: ElevatedButton.styleFrom(
             elevation: 0,

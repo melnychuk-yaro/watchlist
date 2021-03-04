@@ -26,7 +26,6 @@ class _HomeScreenState extends State<HomeScreen> {
     return Scaffold(
       appBar: AppBar(
         title: Text('Watchlist'),
-        backgroundColor: Theme.of(context).cardColor,
         actions: [
           IconButton(
             icon: Icon(Icons.exit_to_app),
@@ -41,9 +40,6 @@ class _HomeScreenState extends State<HomeScreen> {
       bottomNavigationBar: BottomNavigationBar(
         type: BottomNavigationBarType.fixed,
         currentIndex: _currentIndex,
-        selectedItemColor: Theme.of(context).accentColor,
-        unselectedIconTheme: IconThemeData(color: Colors.white),
-        backgroundColor: Theme.of(context).cardColor,
         onTap: (index) {
           setState(() {
             _currentIndex = index;

@@ -9,10 +9,10 @@ part 'now_playing_state.dart';
 class NowPlayingCubit extends Cubit<NowPlayingState> {
   final MoviesRepository moviesRepository;
   NowPlayingCubit(this.moviesRepository)
-      : super(NowPlayingInitial(movies: List<Movie>()));
+      : super(NowPlayingInitial(movies: <Movie>[]));
 
   void resetMovies() {
-    emit(NowPlayingInitial(movies: List<Movie>()));
+    emit(NowPlayingInitial(movies: <Movie>[]));
   }
 
   Future<void> loadMovies(int page) async {
@@ -30,7 +30,7 @@ class NowPlayingCubit extends Cubit<NowPlayingState> {
         isLastPage: moviesPage.isLastPage,
       ));
     } catch (e) {
-      NowPlayingInitial(movies: List<Movie>());
+      NowPlayingInitial(movies: <Movie>[]);
       emit(NowPlayingError(
         movies: _prevState.movies,
         error: 'Something went wrong',

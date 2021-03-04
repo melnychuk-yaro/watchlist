@@ -10,59 +10,55 @@ import 'package:watchlist/data/repositories/auth_repository.dart';
 import 'package:watchlist/data/repositories/movies_repository.dart';
 import 'package:watchlist/presentation/screens/home-screen.dart';
 import 'package:watchlist/presentation/screens/login-screen.dart';
-import 'package:watchlist/themes.dart';
-import 'package:flutter_dotenv/flutter_dotenv.dart';
+import 'package:watchlist/presentation/themes/app_theme.dart';
+import 'package:flutter_dotenv/flutter_dotenv.dart' as DotEnv;
 
 Future<void> main() async {
-  await DotEnv().load('.env');
+  await DotEnv.load(fileName: ".env");
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp();
-  runApp(WatchListApp());
+  runApp(App());
 }
 
-class WatchListApp extends StatelessWidget {
-  final _authenticationRepository = AuthenticationRepository();
+class App extends StatelessWidget {
+  final _authRepository = AuthenticationRepository();
   final _moviesRepository = MoviesRepository();
 
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
-      title: 'Watchlist',
-      theme: DefautTheme().theme,
-      home: BlocBuilder<AuthCubit, AuthState>(
-        cubit: AuthCubit(_authenticationRepository),
-        builder: (context, state) {
-          if (state is AuthInitial) {
-            return Center(child: CircularProgressIndicator());
-          }
-          return state is AuthLoggedIn
-              ? MultiBlocProvider(
-                  providers: [
-                    BlocProvider<FavoritesBloc>(
-                        create: (context) => FavoritesBloc(_moviesRepository)),
-                    BlocProvider<SearchBloc>(
-                        create: (context) => SearchBloc(_moviesRepository)),
-                    BlocProvider<TopMoviesCubit>(
-                        create: (context) => TopMoviesCubit(_moviesRepository)),
-                    BlocProvider<NowPlayingCubit>(
-                        create: (context) =>
-                            NowPlayingCubit(_moviesRepository)),
-                  ],
-                  child: HomeScreen(),
-                )
-              : LoginScreen();
-        },
+    return BlocProvider<AuthCubit>(
+      create: (context) => AuthCubit(_authRepository),
+      child: MaterialApp(
+        title: 'Watchlist',
+        theme: AppTheme().lightTheme,
+        darkTheme: AppTheme().darkTheme,
+        home: BlocBuilder<AuthCubit, AuthState>(
+          builder: (context, state) {
+            if (state is AuthInitial) {
+              return Center(child: CircularProgressIndicator());
+            }
+            return state is AuthLoggedIn
+                ? MultiBlocProvider(
+                    providers: [
+                      BlocProvider<FavoritesBloc>(
+                        create: (context) => FavoritesBloc(_moviesRepository),
+                      ),
+                      BlocProvider<SearchBloc>(
+                        create: (context) => SearchBloc(_moviesRepository),
+                      ),
+                      BlocProvider<TopMoviesCubit>(
+                        create: (context) => TopMoviesCubit(_moviesRepository),
+                      ),
+                      BlocProvider<NowPlayingCubit>(
+                        create: (context) => NowPlayingCubit(_moviesRepository),
+                      ),
+                    ],
+                    child: HomeScreen(),
+                  )
+                : LoginScreen();
+          },
+        ),
       ),
-    );
-  }
-}
-
-class ErrorText extends StatelessWidget {
-  @override
-  Widget build(BuildContext context) {
-    return Center(
-      child: Text(
-          'Something went wrong. Please try again later or contact support.'),
     );
   }
 }

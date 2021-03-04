@@ -11,6 +11,8 @@ class MovieCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final Brightness _brightness = MediaQuery.of(context).platformBrightness;
+
     return Stack(
       children: [
         Card(
@@ -27,7 +29,9 @@ class MovieCard extends StatelessWidget {
             child: GridTile(
               child: Center(),
               footer: Container(
-                color: Color(0xAA000000),
+                color: _brightness == Brightness.light
+                    ? Color(0xEEFAFAFA)
+                    : Color(0xEE303030),
                 padding:
                     const EdgeInsets.symmetric(horizontal: 8.0, vertical: 8.0),
                 child: Text(

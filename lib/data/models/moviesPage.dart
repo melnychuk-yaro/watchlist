@@ -6,5 +6,8 @@ class MoviesPage {
   final List<Movie> itemList;
   final bool isLastPage;
 
-  MoviesPage({@required this.itemList, this.isLastPage});
+  MoviesPage({
+    required this.itemList,
+    required this.isLastPage,
+  });
 }

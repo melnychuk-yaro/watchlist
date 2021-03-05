@@ -6,7 +6,7 @@ import 'package:watchlist/presentation/widgets/styled-text.dart';
 
 class Favorites extends StatelessWidget {
   final PageStorageKey key;
-  Favorites({@required this.key}) : super(key: key);
+  Favorites({required this.key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {

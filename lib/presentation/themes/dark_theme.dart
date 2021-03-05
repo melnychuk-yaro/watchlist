@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 
 class DarkTheme {
-  final Color color = Colors.indigoAccent[100];
+  final Color color = Colors.indigoAccent[100]!;
   final Color darkColor = const Color(0xFF424242);
 
   ThemeData get themeData => ThemeData.dark().copyWith(

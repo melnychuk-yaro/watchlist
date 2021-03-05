@@ -2,7 +2,11 @@ import 'package:flutter/material.dart';
 
 class StyledText extends StatelessWidget {
   final String text;
-  const StyledText({this.text});
+  final IconData icon;
+  const StyledText({
+    required this.text,
+    this.icon = Icons.local_movies,
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -11,7 +15,7 @@ class StyledText extends StatelessWidget {
         mainAxisSize: MainAxisSize.min,
         children: [
           Icon(
-            Icons.local_movies,
+            icon,
             size: 56,
           ),
           const SizedBox(height: 8),

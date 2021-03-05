@@ -11,11 +11,11 @@ class Movie {
   static const posterPath = 'https://image.tmdb.org/t/p/w500';
 
   const Movie({
-    @required this.id,
-    @required this.title,
-    @required this.releaseDate,
-    @required this.posterFileName,
-    @required this.rating,
+    required this.id,
+    required this.title,
+    required this.releaseDate,
+    required this.posterFileName,
+    required this.rating,
     this.isFavorite = false,
   });
 

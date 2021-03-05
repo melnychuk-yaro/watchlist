@@ -1,6 +1,5 @@
 import 'dart:convert';
 import 'dart:io';
-import 'package:flutter/foundation.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:http/http.dart' as http;
 import 'package:cloud_firestore/cloud_firestore.dart';
@@ -14,7 +13,7 @@ class MoviesRepository {
   static const String pathPrefix = '/3';
   static const String includeAdult = 'false';
   static const String language = 'en-US';
-  final String apiKey = env['TMDB_API_KEY'];
+  final String? apiKey = env['TMDB_API_KEY'];
   final FirebaseFirestore firestore = FirebaseFirestore.instance;
   final AuthenticationRepository authenticationRepository =
       AuthenticationRepository();
@@ -55,7 +54,7 @@ class MoviesRepository {
     }
   }
 
-  Future<MoviesPage> searchMovies({String query, int page = 1}) async {
+  Future<MoviesPage> searchMovies({String? query, int page = 1}) async {
     final uri = _buildUri(path: '/search/movie', page: page, query: query);
     try {
       final response = await http.get(uri);
@@ -97,7 +96,7 @@ class MoviesRepository {
     }
   }
 
-  Future<void> removeFavMovie(int id) async {
+  Future<void> removeFavMovie(int? id) async {
     try {
       return await firestore
           .collection('users')
@@ -123,7 +122,7 @@ class MoviesRepository {
           .orderBy('date_added_to_favorite', descending: true)
           .get();
       return snapshot.docs
-          .map((doc) => Movie.fromMap(doc.data(), isFavorite: true))
+          .map((doc) => Movie.fromMap(doc.data()!, isFavorite: true))
           .toList();
     } on SocketException {
       throw Failure('No internet conneciton.');
@@ -138,7 +137,7 @@ class MoviesRepository {
     try {
       Map<String, dynamic> body = json.decode(response.body);
       List results = body['results'];
-      List<int> favIds = await _getFavoritesIds();
+      List<int?> favIds = await _getFavoritesIds();
       return MoviesPage(
           isLastPage: body['page'] >= body['total_pages'],
           itemList: results.map((movieMap) {
@@ -152,14 +151,14 @@ class MoviesRepository {
     }
   }
 
-  Future<List<int>> _getFavoritesIds() async {
+  Future<List<int?>> _getFavoritesIds() async {
     try {
       final snapshot = await firestore
           .collection('users')
           .doc(authenticationRepository.currentUser.id)
           .collection('fav_movies')
           .get();
-      return snapshot.docs.map((doc) => doc['id'] as int).toList();
+      return snapshot.docs.map((doc) => doc['id'] as int?).toList();
     } on SocketException {
       throw Failure('No internet conneciton.');
     } on HttpException {
@@ -169,7 +168,7 @@ class MoviesRepository {
     }
   }
 
-  Uri _buildUri({@required String path, @required int page, String query}) {
+  Uri _buildUri({required String path, required int page, String? query}) {
     return Uri.https(
       urlAuthority,
       pathPrefix + path,

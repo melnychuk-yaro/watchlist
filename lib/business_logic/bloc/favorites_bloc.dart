@@ -45,7 +45,8 @@ class FavoritesBloc extends Bloc<FavoritesEvent, FavoritesState> {
     yield FavoritesAdding(state.loadedMovies);
     try {
       await moviesRepository.saveFavMovie(event.movie);
-      List<Movie> newMovies = state.loadedMovies + [event.movie];
+      List<Movie> newMovies = List<Movie>.from(state.loadedMovies)
+        ..add(event.movie);
       yield FavoritesAdded(
         loadedMovies: newMovies,
         newFavMovie: event.movie,

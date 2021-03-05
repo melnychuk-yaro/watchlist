@@ -8,7 +8,7 @@ import 'package:watchlist/presentation/widgets/styled-text.dart';
 
 class Search extends StatefulWidget {
   final PageStorageKey key;
-  Search({@required this.key});
+  Search({required this.key});
 
   @override
   _SearchState createState() => _SearchState();
@@ -16,7 +16,7 @@ class Search extends StatefulWidget {
 
 class _SearchState extends State<Search> {
   final _searchQuery = new TextEditingController();
-  Timer _debounce;
+  Timer? _debounce;
 
   @override
   void initState() {
@@ -32,7 +32,7 @@ class _SearchState extends State<Search> {
   }
 
   _onSearchChanged() {
-    if (_debounce?.isActive ?? false) _debounce.cancel();
+    if (_debounce?.isActive ?? false) _debounce!.cancel();
     _debounce = Timer(const Duration(milliseconds: 500), () {
       print('debounced');
       BlocProvider.of<SearchBloc>(context)

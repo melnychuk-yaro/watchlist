@@ -10,13 +10,12 @@ part 'auth_state.dart';
 
 class AuthCubit extends Cubit<AuthState> {
   final AuthenticationRepository authenticationRepository;
-  StreamSubscription _streamSubscription;
+  late StreamSubscription _streamSubscription;
 
   AuthCubit(this.authenticationRepository) : super(AuthInitial()) {
-    authenticationRepository.user.listen((User user) {
-      emit(
-          user == null || user.id == '' ? AuthLoggedOut() : AuthLoggedIn(user));
-    }).onError((e) => print(e));
+    _streamSubscription = authenticationRepository.user.listen((User user) {
+      emit(user.id == '' ? AuthLoggedOut() : AuthLoggedIn(user));
+    });
   }
 
   @override

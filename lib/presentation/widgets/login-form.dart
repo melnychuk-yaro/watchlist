@@ -11,7 +11,7 @@ class LoginForm extends StatefulWidget {
 
 class _LoginFormState extends State<LoginForm> {
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
-  FocusNode passwordFocusNode;
+  late FocusNode passwordFocusNode;
   var authRepository = AuthenticationRepository();
   var _isLogin = true;
   var _email = '';
@@ -37,43 +37,42 @@ class _LoginFormState extends State<LoginForm> {
       case 'account-exists-with-different-credential':
       case 'email-already-in-use':
         return 'Email already used. Go to login page.';
-        break;
+
       case 'wrong-password':
         return 'Wrong email/password combination.';
-        break;
+
       case 'user-not-found':
         return 'No user found with this email.';
-        break;
+
       case 'user-disabled':
         return 'User disabled.';
-        break;
+
       case 'operation-not-allowed':
         return 'Too many requests to log into this account.';
-        break;
+
       case 'operation-not-allowed':
         return 'Server error, please try again later.';
-        break;
+
       case 'invalid-email':
         return 'Email address is invalid.';
-        break;
+
       case 'user-not-found':
         return 'No account found with this email';
-        break;
+
       case 'email-already-in-use':
         return 'Email alredy in use';
-        break;
+
       case 'invalid-email':
         return 'The email address is not valid';
-        break;
+
       case 'weak-password':
         return 'Please use more secure password with at least 6 chars';
-        break;
+
       case 'operation-not-allowed':
         return 'Something went wrong. Please contact support';
-        break;
+
       default:
         return 'Something went wrong. Please try again or contact support.';
-        break;
     }
   }
 
@@ -140,7 +139,7 @@ class _LoginFormState extends State<LoginForm> {
             ),
             validator: (value) {
               RegExp exp = RegExp(r'^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$');
-              if (value.trim().isEmpty) {
+              if (value!.trim().isEmpty) {
                 return 'Please enter your email';
               }
               if (!exp.hasMatch(value)) {
@@ -171,7 +170,7 @@ class _LoginFormState extends State<LoginForm> {
               ),
             ),
             validator: (value) {
-              if (value.trim().length < 6) {
+              if (value!.trim().length < 6) {
                 return 'Must be at least 6 characters long.';
               }
               return null;
@@ -189,7 +188,7 @@ class _LoginFormState extends State<LoginForm> {
                       children: [
                         ElevatedButton(
                           onPressed: () {
-                            if (_formKey.currentState.validate()) {
+                            if (_formKey.currentState!.validate()) {
                               _login();
                             }
                           },
@@ -199,7 +198,7 @@ class _LoginFormState extends State<LoginForm> {
                     )
                   : ElevatedButton(
                       onPressed: () {
-                        if (_formKey.currentState.validate()) {
+                        if (_formKey.currentState!.validate()) {
                           _register();
                         }
                       },

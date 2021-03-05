@@ -7,7 +7,7 @@ import 'package:watchlist/presentation/widgets/movies-paginated-grid.dart';
 
 class TopRated extends StatefulWidget {
   final PageStorageKey key;
-  TopRated({@required this.key});
+  TopRated({required this.key});
 
   @override
   _TopRatedState createState() => _TopRatedState();
@@ -15,7 +15,7 @@ class TopRated extends StatefulWidget {
 
 class _TopRatedState extends State<TopRated> {
   final _pagingController = PagingController<int, Movie>(firstPageKey: 1);
-  TopMoviesCubit _cubit;
+  late TopMoviesCubit _cubit;
 
   @override
   void initState() {
@@ -34,7 +34,7 @@ class _TopRatedState extends State<TopRated> {
   }
 
   void _setPaginationIntialState(cubit) {
-    TopMoviesState cubitState = cubit.state;
+    TopMoviesState? cubitState = cubit.state;
     if (cubitState is TopMoviesLoaded) {
       _pagingController.value = PagingState(
         itemList: cubitState.movies,
@@ -56,7 +56,7 @@ class _TopRatedState extends State<TopRated> {
           _pagingController.value = PagingState(
             itemList: state.movies,
             error: null,
-            nextPageKey: state.isLastPage ? null : state.nextPageKey,
+            nextPageKey: state.nextPageKey,
           );
         }
       },

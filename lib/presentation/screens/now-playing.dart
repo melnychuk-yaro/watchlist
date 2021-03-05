@@ -7,7 +7,7 @@ import 'package:watchlist/presentation/widgets/movies-paginated-grid.dart';
 
 class NowPlaying extends StatefulWidget {
   final PageStorageKey key;
-  NowPlaying({@required this.key});
+  NowPlaying({required this.key});
 
   @override
   _NowPlayingState createState() => _NowPlayingState();
@@ -15,7 +15,7 @@ class NowPlaying extends StatefulWidget {
 
 class _NowPlayingState extends State<NowPlaying> {
   final _pagingController = PagingController<int, Movie>(firstPageKey: 1);
-  NowPlayingCubit _cubit;
+  late NowPlayingCubit _cubit;
 
   @override
   void initState() {
@@ -34,7 +34,7 @@ class _NowPlayingState extends State<NowPlaying> {
   }
 
   void _setPaginationIntialState(cubit) {
-    NowPlayingState cubitState = cubit.state;
+    NowPlayingState? cubitState = cubit.state;
     if (cubitState is NowPlayingLoaded) {
       _pagingController.value = PagingState(
         itemList: cubitState.movies,
@@ -55,7 +55,7 @@ class _NowPlayingState extends State<NowPlaying> {
           _pagingController.value = PagingState(
             itemList: state.movies,
             error: null,
-            nextPageKey: state.isLastPage ? null : state.nextPageKey,
+            nextPageKey: state.nextPageKey,
           );
         }
       },

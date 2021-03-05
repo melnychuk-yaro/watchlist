@@ -1,60 +1,43 @@
 part of 'top_movies_cubit.dart';
 
 @immutable
-abstract class TopMoviesState {
-  TopMoviesState({
-    @required this.movies,
-    @required this.error,
-    @required this.nextPageKey,
-    @required this.isLastPage,
+abstract class TopMoviesState extends Equatable {
+  const TopMoviesState({
+    required this.movies,
+    this.error,
+    this.nextPageKey,
   });
 
   final List<Movie> movies;
-  final dynamic error;
-  final int nextPageKey;
-  final bool isLastPage;
+  final String? error;
+  final int? nextPageKey;
+
+  @override
+  List<Object> get props => [this.movies];
 }
 
 class TopMoviesInitial extends TopMoviesState {
-  TopMoviesInitial({
-    @required this.movies,
-    this.error = '',
-    this.nextPageKey = 1,
-    this.isLastPage = false,
-  });
-
-  final List<Movie> movies;
-  final dynamic error;
-  final int nextPageKey;
-  final bool isLastPage;
+  TopMoviesInitial() : super(movies: <Movie>[], nextPageKey: 1, error: null);
 }
 
-class TopMoviesLoading extends TopMoviesState {}
-
 class TopMoviesLoaded extends TopMoviesState {
-  TopMoviesLoaded({
-    @required this.movies,
-    @required this.error,
-    @required this.nextPageKey,
-    @required this.isLastPage,
-  });
+  const TopMoviesLoaded({
+    required this.movies,
+    required this.nextPageKey,
+  }) : super(movies: movies, nextPageKey: nextPageKey);
 
   final List<Movie> movies;
-  final dynamic error;
-  final int nextPageKey;
-  final bool isLastPage;
+  final int? nextPageKey;
 }
 
 class TopMoviesError extends TopMoviesState {
-  TopMoviesError({
-    @required this.movies,
-    @required this.error,
-    @required this.nextPageKey,
-    @required this.isLastPage,
-  });
+  const TopMoviesError({
+    required this.movies,
+    required this.error,
+    required this.nextPageKey,
+  }) : super(movies: movies, nextPageKey: nextPageKey, error: error);
 
   final List<Movie> movies;
-  final dynamic error;
-  final int nextPageKey;
-  final bool isLastPage;
+  final String error;
+  final int? nextPageKey;
 }

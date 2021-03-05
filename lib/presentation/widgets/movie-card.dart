@@ -7,7 +7,7 @@ import 'package:watchlist/data/repositories/movies_repository.dart';
 class MovieCard extends StatelessWidget {
   final Movie movie;
   final MoviesRepository moviesRepository = MoviesRepository();
-  MovieCard({@required this.movie});
+  MovieCard({required this.movie});
 
   @override
   Widget build(BuildContext context) {
@@ -20,9 +20,10 @@ class MovieCard extends StatelessWidget {
           child: Container(
             decoration: BoxDecoration(
               image: DecorationImage(
-                image: movie.posterFileName == ''
-                    ? AssetImage('assets/images/dark-gray-bg.jpg')
-                    : NetworkImage(movie.fullPosterPath),
+                image: (movie.posterFileName == ''
+                        ? AssetImage('assets/images/dark-gray-bg.jpg')
+                        : NetworkImage(movie.fullPosterPath))
+                    as ImageProvider<Object>,
                 fit: BoxFit.cover,
               ),
             ),
@@ -66,9 +67,9 @@ class MovieCard extends StatelessWidget {
 
 class AddToFavButton extends StatefulWidget {
   const AddToFavButton({
-    Key key,
-    @required this.movie,
-    @required this.moviesRepository,
+    Key? key,
+    required this.movie,
+    required this.moviesRepository,
   }) : super(key: key);
 
   final Movie movie;
@@ -79,8 +80,8 @@ class AddToFavButton extends StatefulWidget {
 }
 
 class _AddToFavButtonState extends State<AddToFavButton> {
-  bool isFavorite;
-  FavoritesBloc favBloc;
+  late bool isFavorite;
+  late FavoritesBloc favBloc;
 
   @override
   void initState() {

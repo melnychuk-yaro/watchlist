@@ -12,7 +12,7 @@ class SearchGrid extends StatefulWidget {
 
 class _SearchGridState extends State<SearchGrid> {
   final _pagingController = PagingController<int, Movie>(firstPageKey: 1);
-  SearchBloc _searchBloc;
+  late SearchBloc _searchBloc;
 
   @override
   void initState() {
@@ -38,7 +38,7 @@ class _SearchGridState extends State<SearchGrid> {
           _pagingController.value = PagingState(
             itemList: state.loadedMovies,
             error: null,
-            nextPageKey: state.isLastPage ? null : state.nextPageKey,
+            nextPageKey: state.nextPageKey,
           );
         }
       },

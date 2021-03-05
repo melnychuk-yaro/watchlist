@@ -8,34 +8,25 @@ part 'now_playing_state.dart';
 
 class NowPlayingCubit extends Cubit<NowPlayingState> {
   final MoviesRepository moviesRepository;
-  NowPlayingCubit(this.moviesRepository)
-      : super(NowPlayingInitial(movies: <Movie>[]));
-
-  void resetMovies() {
-    emit(NowPlayingInitial(movies: <Movie>[]));
-  }
+  NowPlayingCubit(this.moviesRepository) : super(NowPlayingInitial());
 
   Future<void> loadMovies(int page) async {
-    NowPlayingState _prevState = state;
+    NowPlayingState prevState = state;
     try {
-      final moviesPage = await moviesRepository.getNewMovies(
-        page: state.nextPageKey,
-      );
-      final List<Movie> updatedMovies = List<Movie>.from(_prevState.movies)
+      final moviesPage =
+          await moviesRepository.getNewMovies(page: state.nextPageKey);
+      final updatedMovies = List<Movie>.from(prevState.movies)
         ..addAll(moviesPage.itemList);
       emit(NowPlayingLoaded(
         movies: updatedMovies,
-        error: '',
-        nextPageKey: _prevState.nextPageKey + 1,
-        isLastPage: moviesPage.isLastPage,
+        nextPageKey: moviesPage.isLastPage ? null : prevState.nextPageKey! + 1,
       ));
     } catch (e) {
-      NowPlayingInitial(movies: <Movie>[]);
+      NowPlayingInitial();
       emit(NowPlayingError(
-        movies: _prevState.movies,
-        error: 'Something went wrong',
-        nextPageKey: _prevState.nextPageKey,
-        isLastPage: _prevState.isLastPage,
+        movies: prevState.movies,
+        error: e.toString(),
+        nextPageKey: prevState.nextPageKey,
       ));
     }
   }

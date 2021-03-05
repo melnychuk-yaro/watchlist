@@ -34,7 +34,7 @@ class _NowPlayingState extends State<NowPlaying> {
   }
 
   void _setPaginationIntialState(cubit) {
-    NowPlayingState? cubitState = cubit.state;
+    final NowPlayingState cubitState = cubit.state;
     if (cubitState is NowPlayingLoaded) {
       _pagingController.value = PagingState(
         itemList: cubitState.movies,

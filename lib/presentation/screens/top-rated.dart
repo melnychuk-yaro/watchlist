@@ -34,7 +34,7 @@ class _TopRatedState extends State<TopRated> {
   }
 
   void _setPaginationIntialState(cubit) {
-    TopMoviesState? cubitState = cubit.state;
+    final TopMoviesState cubitState = cubit.state;
     if (cubitState is TopMoviesLoaded) {
       _pagingController.value = PagingState(
         itemList: cubitState.movies,

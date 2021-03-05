@@ -12,26 +12,33 @@ class SearchGrid extends StatefulWidget {
 
 class _SearchGridState extends State<SearchGrid> {
   final _pagingController = PagingController<int, Movie>(firstPageKey: 1);
-  late SearchBloc _searchBloc;
 
   @override
   void initState() {
     super.initState();
-    _searchBloc = BlocProvider.of<SearchBloc>(context);
+    SearchBloc _bloc = context.read<SearchBloc>();
+    _setPaginationIntialState(_bloc);
     _pagingController.addPageRequestListener((pageKey) {
-      _searchBloc.add(SearchNextPageLoadEvent());
+      _bloc.add(SearchNextPageLoadEvent());
     });
+  }
+
+  void _setPaginationIntialState(bloc) {
+    final SearchState blocState = bloc.state;
+    if (blocState is SearchLoaded) {
+      _pagingController.value = PagingState(
+        itemList: blocState.loadedMovies,
+        error: null,
+        nextPageKey: blocState.nextPageKey,
+      );
+    }
   }
 
   @override
   Widget build(BuildContext context) {
     return BlocListener<SearchBloc, SearchState>(
       listener: (context, state) {
-        if (state is SearchInitial) {
-          _pagingController.refresh();
-        }
         if (state is SearchError) {
-          //TODO: handle errors
           _pagingController.error = 'Something went wrong';
         }
         if (state is SearchLoaded) {
@@ -49,7 +56,6 @@ class _SearchGridState extends State<SearchGrid> {
   @override
   void dispose() {
     super.dispose();
-    _searchBloc.add(SearchResetEvent());
     _pagingController.dispose();
   }
 }

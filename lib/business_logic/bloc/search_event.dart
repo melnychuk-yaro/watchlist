@@ -9,5 +9,3 @@ class SearchLoadEvent extends SearchEvent {
 }
 
 class SearchNextPageLoadEvent extends SearchEvent {}
-
-class SearchResetEvent extends SearchEvent {}

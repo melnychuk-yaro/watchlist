@@ -19,35 +19,28 @@ class SearchBloc extends Bloc<SearchEvent, SearchState> {
     SearchEvent event,
   ) async* {
     if (event is SearchLoadEvent) {
-      yield* _mapSearchLoadEvent(event);
+      yield* _mapSearchLoadQueryEvent(event);
     }
 
     if (event is SearchNextPageLoadEvent) {
-      yield* _mapSearchNextPageLoadEvent(event);
-    }
-
-    if (event is SearchResetEvent) {
-      yield SearchInitial();
+      yield* _mapSearchLoadNextPageEvent(event);
     }
   }
 
-  Stream<SearchState> _mapSearchLoadEvent(event) async* {
+  Stream<SearchState> _mapSearchLoadQueryEvent(event) async* {
     if (event.query.trim() == '') {
       yield SearchInitial();
     } else if (event.query != state.query) {
       yield SearchLoading(
         query: event.query,
-        loadedMovies: state.loadedMovies,
+        loadedMovies: <Movie>[],
       );
       try {
         final MoviesPage moviesPage =
             await moviesRepository.searchMovies(query: event.query);
-        final List<Movie> updatedMovies = List<Movie>.from(state.loadedMovies)
-          ..addAll(moviesPage.itemList);
         yield SearchLoaded(
-          loadedMovies: updatedMovies,
-          nextPageKey:
-              moviesPage.isLastPage ? null : state.nextPageKey ?? 0 + 1,
+          loadedMovies: moviesPage.itemList,
+          nextPageKey: moviesPage.isLastPage ? null : 2,
           query: event.query,
         );
       } catch (e) {
@@ -62,7 +55,7 @@ class SearchBloc extends Bloc<SearchEvent, SearchState> {
     }
   }
 
-  Stream<SearchState> _mapSearchNextPageLoadEvent(event) async* {
+  Stream<SearchState> _mapSearchLoadNextPageEvent(event) async* {
     try {
       final MoviesPage moviesPage = await moviesRepository.searchMovies(
         query: state.query,

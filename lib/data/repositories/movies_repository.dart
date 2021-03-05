@@ -61,7 +61,7 @@ class MoviesRepository {
       if (response.statusCode == 200) {
         return await _getMoviesPage(response);
       } else if (response.statusCode == 422) {
-        return MoviesPage(itemList: [], isLastPage: true);
+        return MoviesPage(itemList: <Movie>[], isLastPage: true);
       } else {
         throw Failure(
             'Error fetching movies. Uri: /search/movie. Query: $query');

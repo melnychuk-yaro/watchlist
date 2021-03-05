@@ -34,9 +34,7 @@ class _SearchState extends State<Search> {
   _onSearchChanged() {
     if (_debounce?.isActive ?? false) _debounce!.cancel();
     _debounce = Timer(const Duration(milliseconds: 500), () {
-      print('debounced');
-      BlocProvider.of<SearchBloc>(context)
-          .add(SearchLoadEvent(_searchQuery.text));
+      context.read<SearchBloc>().add(SearchLoadEvent(_searchQuery.text));
     });
   }
 
@@ -56,10 +54,6 @@ class _SearchState extends State<Search> {
             builder: (context, state) {
               if (state is SearchInitial) {
                 return StyledText(text: 'Start Searching');
-              }
-
-              if (state is SearchLoading) {
-                return Center(child: CircularProgressIndicator());
               }
               return SearchGrid();
             },

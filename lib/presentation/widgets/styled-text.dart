@@ -14,10 +14,7 @@ class StyledText extends StatelessWidget {
       child: Column(
         mainAxisSize: MainAxisSize.min,
         children: [
-          Icon(
-            icon,
-            size: 56,
-          ),
+          Icon(icon, size: 56),
           const SizedBox(height: 8),
           Text(
             text,

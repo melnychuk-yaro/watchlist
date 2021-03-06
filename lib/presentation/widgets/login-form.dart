@@ -154,19 +154,13 @@ class _LoginFormState extends State<LoginForm> {
             enableSuggestions: false,
             autocorrect: false,
             onChanged: (value) => _password = value,
-            onFieldSubmitted: (_) {
-              if (_isLogin) {
-                _login();
-              } else {
-                _register();
-              }
-            },
+            onFieldSubmitted: (_) => _isLogin ? _login() : _register(),
             focusNode: passwordFocusNode,
             decoration: InputDecoration(
               hintText: 'Password',
               prefixIcon: Padding(
+                padding: const EdgeInsets.only(left: 16, right: 10),
                 child: Icon(Icons.vpn_key, color: Theme.of(context).hintColor),
-                padding: EdgeInsets.only(left: 16, right: 10),
               ),
             ),
             validator: (value) {

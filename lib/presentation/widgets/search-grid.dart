@@ -36,7 +36,7 @@ class _SearchGridState extends State<SearchGrid> {
 
   @override
   Widget build(BuildContext context) {
-    return BlocListener<SearchBloc, SearchState>(
+    return BlocConsumer<SearchBloc, SearchState>(
       listener: (context, state) {
         if (state is SearchError) {
           _pagingController.error = 'Something went wrong';
@@ -49,7 +49,12 @@ class _SearchGridState extends State<SearchGrid> {
           );
         }
       },
-      child: MoviesPaginatedGrid(pagingController: _pagingController),
+      builder: (context, state) {
+        if (state is SearchLoading) {
+          return Center(child: CircularProgressIndicator());
+        }
+        return MoviesPaginatedGrid(pagingController: _pagingController);
+      },
     );
   }
 

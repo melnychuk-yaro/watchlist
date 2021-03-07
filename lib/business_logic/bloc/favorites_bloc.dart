@@ -42,15 +42,13 @@ class FavoritesBloc extends Bloc<FavoritesEvent, FavoritesState> {
   }
 
   Stream<FavoritesState> _favoritesAdd(event) async* {
-    yield FavoritesAdding(state.loadedMovies);
+    yield FavoritesLoading(state.loadedMovies);
     try {
       await moviesRepository.saveFavMovie(event.movie);
+      Movie insertedMovie = event.movie.copyWith(isFavorite: true);
       List<Movie> newMovies = List<Movie>.from(state.loadedMovies)
-        ..add(event.movie);
-      yield FavoritesAdded(
-        loadedMovies: newMovies,
-        newFavMovie: event.movie,
-      );
+        ..insert(0, insertedMovie);
+      yield FavoritesLoaded(loadedMovies: newMovies);
     } catch (e) {
       print(e);
       yield FavoritesError(state.loadedMovies);

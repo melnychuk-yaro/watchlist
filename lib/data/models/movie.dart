@@ -49,4 +49,22 @@ class Movie {
       'vote_average': this.rating
     };
   }
+
+  Movie copyWith({
+    int? id,
+    String? title,
+    String? releaseDate,
+    String? posterFileName,
+    double? rating,
+    bool? isFavorite,
+  }) {
+    return Movie(
+      id: id ?? this.id,
+      title: title ?? this.title,
+      releaseDate: releaseDate ?? this.releaseDate,
+      posterFileName: posterFileName ?? this.posterFileName,
+      rating: rating ?? this.rating,
+      isFavorite: isFavorite ?? this.isFavorite,
+    );
+  }
 }

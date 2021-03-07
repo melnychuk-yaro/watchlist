@@ -19,17 +19,6 @@ class FavoritesLoaded extends FavoritesState {
   const FavoritesLoaded({required this.loadedMovies}) : super(loadedMovies);
 }
 
-class FavoritesAdding extends FavoritesState {
-  const FavoritesAdding(loadedMovies) : super(loadedMovies);
-}
-
-class FavoritesAdded extends FavoritesState {
-  final List<Movie> loadedMovies;
-  final Movie newFavMovie;
-  const FavoritesAdded({required this.loadedMovies, required this.newFavMovie})
-      : super(loadedMovies);
-}
-
 class FavoritesError extends FavoritesState {
   final List<Movie> loadedMovies;
   const FavoritesError(this.loadedMovies) : super(loadedMovies);

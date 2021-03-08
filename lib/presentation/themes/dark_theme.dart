@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 class DarkTheme {
   final Color color = Colors.indigoAccent.shade100;
   final Color darkColor = const Color(0xFF424242);
+  final Color grey = const Color(0xFF666666);
 
   ThemeData get themeData => ThemeData.dark().copyWith(
         primaryColor: color,
@@ -40,7 +41,7 @@ class DarkTheme {
           enabledBorder: OutlineInputBorder(
             borderRadius: BorderRadius.circular(8.0),
             borderSide: BorderSide(
-              color: darkColor,
+              color: grey,
               width: 2,
             ),
           ),

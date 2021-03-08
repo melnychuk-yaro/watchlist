@@ -175,7 +175,10 @@ class _LoginFormState extends State<LoginForm> {
               ? SizedBox(
                   height: 48.0,
                   width: 48.0,
-                  child: CircularProgressIndicator(),
+                  child: Padding(
+                    padding: const EdgeInsets.all(8.0),
+                    child: CircularProgressIndicator(),
+                  ),
                 )
               : _isLogin
                   ? Column(

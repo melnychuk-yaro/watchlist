@@ -17,6 +17,7 @@ class MoviesRepository {
   final FirebaseFirestore firestore = FirebaseFirestore.instance;
   final AuthenticationRepository authenticationRepository =
       AuthenticationRepository();
+  DocumentSnapshot? lastDocument;
 
   Future<MoviesPage> getTopRatedMovies({page = 1}) async {
     final uri = _buildUri(path: '/movie/top_rated', page: page);
@@ -113,23 +114,47 @@ class MoviesRepository {
     }
   }
 
-  Future<List<Movie>> getFavMovies() async {
+  Future<MoviesPage> getFavMovies() async {
+    QuerySnapshot querySnapshot;
+    const limit = 10;
+
     try {
-      final snapshot = await firestore
-          .collection('users')
-          .doc(authenticationRepository.currentUser.id)
-          .collection('fav_movies')
-          .orderBy('date_added_to_favorite', descending: true)
-          .get();
-      return snapshot.docs
+      lastDocument == null
+          ? querySnapshot = await firestore
+              .collection('users')
+              .doc(authenticationRepository.currentUser.id)
+              .collection('fav_movies')
+              .orderBy('date_added_to_favorite', descending: true)
+              .limit(limit)
+              .get()
+          : querySnapshot = await firestore
+              .collection('users')
+              .doc(authenticationRepository.currentUser.id)
+              .collection('fav_movies')
+              .orderBy('date_added_to_favorite', descending: true)
+              .startAfterDocument(lastDocument!)
+              .limit(limit)
+              .get();
+
+      bool isLastPage = querySnapshot.docs.length < limit ? true : false;
+      if (querySnapshot.docs.length > 0) {
+        lastDocument = querySnapshot.docs[querySnapshot.docs.length - 1];
+      }
+
+      List<Movie> movies = querySnapshot.docs
           .map((doc) => Movie.fromMap(doc.data()!, isFavorite: true))
           .toList();
+
+      return MoviesPage(itemList: movies, isLastPage: isLastPage);
     } on SocketException {
       throw Failure('No internet conneciton.');
     } on HttpException {
       throw Failure('Couldn\'t remove movie.');
     } on FormatException {
       throw Failure('Bad response format.');
+    } catch (e) {
+      print(e);
+      throw Failure('Unknown error.');
     }
   }
 

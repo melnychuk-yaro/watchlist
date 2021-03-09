@@ -1,25 +1,33 @@
 part of 'favorites_bloc.dart';
 
 @immutable
-abstract class FavoritesState {
+abstract class FavoritesState extends Equatable {
   final List<Movie> loadedMovies;
-  const FavoritesState(this.loadedMovies);
+  final int? nextPageKey;
+  FavoritesState({required this.loadedMovies, this.nextPageKey});
+
+  @override
+  List<Object?> get props => [loadedMovies];
 }
 
 class FavoritesInitial extends FavoritesState {
-  const FavoritesInitial(loadedMovies) : super(loadedMovies);
+  FavoritesInitial() : super(loadedMovies: <Movie>[], nextPageKey: null);
 }
 
 class FavoritesLoading extends FavoritesState {
-  const FavoritesLoading(loadedMovies) : super(loadedMovies);
+  FavoritesLoading(loadedMovies) : super(loadedMovies: loadedMovies);
 }
 
 class FavoritesLoaded extends FavoritesState {
   final List<Movie> loadedMovies;
-  const FavoritesLoaded({required this.loadedMovies}) : super(loadedMovies);
+  final int? nextPageKey;
+  FavoritesLoaded({required this.loadedMovies, required this.nextPageKey})
+      : super(loadedMovies: loadedMovies, nextPageKey: nextPageKey);
 }
 
 class FavoritesError extends FavoritesState {
   final List<Movie> loadedMovies;
-  const FavoritesError(this.loadedMovies) : super(loadedMovies);
+  final String error;
+  FavoritesError(this.loadedMovies, this.error)
+      : super(loadedMovies: loadedMovies);
 }

@@ -15,12 +15,15 @@ class Search extends StatefulWidget {
 }
 
 class _SearchState extends State<Search> {
-  final _searchQuery = new TextEditingController();
+  late TextEditingController _searchQuery;
+  late SearchBloc _bloc;
   Timer? _debounce;
 
   @override
   void initState() {
     super.initState();
+    _bloc = context.read<SearchBloc>();
+    _searchQuery = TextEditingController(text: _bloc.state.query);
     _searchQuery.addListener(_onSearchChanged);
   }
 
@@ -34,7 +37,7 @@ class _SearchState extends State<Search> {
   _onSearchChanged() {
     if (_debounce?.isActive ?? false) _debounce!.cancel();
     _debounce = Timer(const Duration(milliseconds: 500), () {
-      context.read<SearchBloc>().add(SearchLoadEvent(_searchQuery.text));
+      _bloc.add(SearchLoadEvent(_searchQuery.text));
     });
   }
 

@@ -1,13 +1,11 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:watchlist/business_logic/bloc/favorites_bloc.dart';
 import 'package:watchlist/data/models/movie.dart';
-import 'package:watchlist/data/repositories/movies_repository.dart';
+import 'package:watchlist/presentation/widgets/add-to-fav-button.dart';
 
 class MovieCard extends StatelessWidget {
   final Movie movie;
-  final MoviesRepository moviesRepository = MoviesRepository();
-  MovieCard({required this.movie});
+  final Key key;
+  MovieCard({required this.movie, required this.key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -54,55 +52,13 @@ class MovieCard extends StatelessWidget {
                 label: Text('${movie.rating}'),
               ),
               AddToFavButton(
+                key: ValueKey(movie.id),
                 movie: movie,
-                moviesRepository: moviesRepository,
               ),
             ],
           ),
         ),
       ],
-    );
-  }
-}
-
-class AddToFavButton extends StatefulWidget {
-  const AddToFavButton({
-    Key? key,
-    required this.movie,
-    required this.moviesRepository,
-  }) : super(key: key);
-
-  final Movie movie;
-  final MoviesRepository moviesRepository;
-
-  @override
-  _AddToFavButtonState createState() => _AddToFavButtonState();
-}
-
-class _AddToFavButtonState extends State<AddToFavButton> {
-  late bool isFavorite;
-  late FavoritesBloc favBloc;
-
-  @override
-  void initState() {
-    super.initState();
-    isFavorite = widget.movie.isFavorite;
-    favBloc = BlocProvider.of<FavoritesBloc>(context);
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    return IconButton(
-      onPressed: () {
-        isFavorite
-            ? favBloc.add(FavoritesDelete(widget.movie.id))
-            : favBloc.add(FavoritesAdd(widget.movie));
-        setState(() => isFavorite = !isFavorite);
-      },
-      icon: Icon(
-        isFavorite ? Icons.favorite : Icons.favorite_border,
-        color: Colors.red,
-      ),
     );
   }
 }

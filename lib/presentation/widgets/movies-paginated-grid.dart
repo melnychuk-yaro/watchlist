@@ -21,7 +21,7 @@ class MoviesPaginatedGrid extends StatelessWidget {
       ),
       builderDelegate: PagedChildBuilderDelegate(
         itemBuilder: (context, movie, index) {
-          return MovieCard(movie: movie);
+          return MovieCard(key: ValueKey(movie.id), movie: movie);
         },
       ),
     );

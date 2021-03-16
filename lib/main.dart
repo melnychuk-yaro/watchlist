@@ -3,7 +3,8 @@ import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:watchlist/business_logic/bloc/favorites_bloc.dart';
 import 'package:watchlist/business_logic/bloc/search_bloc.dart';
-import 'package:watchlist/business_logic/cubit/auth_cubit.dart';
+import 'package:watchlist/business_logic/bloc/auth_bloc.dart';
+import 'package:watchlist/business_logic/cubit/all_favorites_cubit.dart';
 import 'package:watchlist/business_logic/cubit/now_playing_cubit.dart';
 import 'package:watchlist/business_logic/cubit/top_movies_cubit.dart';
 import 'package:watchlist/data/repositories/auth_repository.dart';
@@ -26,22 +27,31 @@ class App extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return BlocProvider<AuthCubit>(
-      create: (context) => AuthCubit(_authRepository),
+    return BlocProvider<AuthBloc>(
+      create: (context) => AuthBloc(authenticationRepository: _authRepository),
       child: MaterialApp(
         title: 'Watchlist',
         theme: AppTheme().lightTheme,
         darkTheme: AppTheme().darkTheme,
-        home: BlocBuilder<AuthCubit, AuthState>(
+        home: BlocBuilder<AuthBloc, AuthState>(
           builder: (context, state) {
-            if (state is AuthInitial) {
+            if (state.status == AuthStatus.unknown) {
               return Center(child: CircularProgressIndicator());
             }
-            return state is AuthLoggedIn
+            return state.status == AuthStatus.authenticated
                 ? MultiBlocProvider(
                     providers: [
                       BlocProvider<FavoritesBloc>(
-                        create: (context) => FavoritesBloc(_moviesRepository),
+                        create: (context) => FavoritesBloc(
+                          _moviesRepository,
+                          context.read<AuthBloc>(),
+                        ),
+                      ),
+                      BlocProvider<AllFavoritesCubit>(
+                        create: (context) => AllFavoritesCubit(
+                          _moviesRepository,
+                          context.read<AuthBloc>(),
+                        ),
                       ),
                       BlocProvider<SearchBloc>(
                         create: (context) => SearchBloc(_moviesRepository),

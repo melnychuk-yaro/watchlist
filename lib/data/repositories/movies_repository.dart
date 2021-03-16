@@ -141,9 +141,10 @@ class MoviesRepository {
         lastDocument = querySnapshot.docs[querySnapshot.docs.length - 1];
       }
 
-      List<Movie> movies = querySnapshot.docs
-          .map((doc) => Movie.fromMap(doc.data()!, isFavorite: true))
-          .toList();
+      List<Movie> movies = querySnapshot.docs.map((doc) {
+        if (doc.data() == null) throw Failure('Bad response format.');
+        return Movie.fromMap(doc.data()!);
+      }).toList();
 
       return FavoritesMoviesPage(
         itemList: movies,

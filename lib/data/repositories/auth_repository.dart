@@ -41,10 +41,6 @@ class AuthenticationRepository {
     });
   }
 
-  User get currentUser {
-    return _firebaseAuth.currentUser!.toUser;
-  }
-
   /// Creates a new user with the provided [email] and [password].
   ///
   /// Throws a [SignUpFailure] if an exception occurs.
@@ -67,8 +63,10 @@ class AuthenticationRepository {
   /// Throws a [LogInWithGoogleFailure] if an exception occurs.
   Future<void> logInWithGoogle() async {
     try {
-      final googleUser =
-          await (_googleSignIn.signIn() as FutureOr<GoogleSignInAccount>);
+      final googleUser = await _googleSignIn.signIn();
+      if (googleUser == null) {
+        throw LogInWithGoogleFailure();
+      }
       final googleAuth = await googleUser.authentication;
       final credential = firebase_auth.GoogleAuthProvider.credential(
         accessToken: googleAuth.accessToken,

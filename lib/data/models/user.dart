@@ -1,7 +1,8 @@
+import 'package:equatable/equatable.dart';
 import 'package:meta/meta.dart';
 
 @immutable
-class User {
+class User extends Equatable {
   const User({
     required this.email,
     required this.id,
@@ -16,4 +17,7 @@ class User {
 
   /// Empty user which represents an unauthenticated user.
   static const empty = User(email: '', id: '', name: null, photo: null);
+
+  @override
+  List<Object> get props => [email, id];
 }

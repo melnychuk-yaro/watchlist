@@ -41,14 +41,13 @@ class FavoritesBloc extends Bloc<FavoritesEvent, FavoritesState> {
     } else if (event is FavoritesAdd) {
       yield* _favoritesAdd(event);
     } else if (event is FavoritesDelete) {
-      yield* _favoritesDelete(event, state);
+      yield* _favoritesDelete(event);
     } else if (event is FavoritesChangeUser) {
-      yield* _favoritesChangeUser(event, state);
+      yield* _favoritesChangeUser(event);
     }
   }
 
-  Stream<FavoritesState> _favoritesChangeUser(
-      event, FavoritesState state) async* {
+  Stream<FavoritesState> _favoritesChangeUser(event) async* {
     if (event.userId) yield FavoritesState.initial(event.userId);
     yield state.copyWith(status: FavoritesStatus.loading);
     yield* _favoritesLoad();
@@ -108,7 +107,7 @@ class FavoritesBloc extends Bloc<FavoritesEvent, FavoritesState> {
     }
   }
 
-  Stream<FavoritesState> _favoritesDelete(event, FavoritesState state) async* {
+  Stream<FavoritesState> _favoritesDelete(event) async* {
     yield state.copyWith(status: FavoritesStatus.loading);
     try {
       await moviesRepository.removeFavMovie(

@@ -4,6 +4,7 @@ import 'package:infinite_scroll_pagination/infinite_scroll_pagination.dart';
 import 'package:watchlist/business_logic/bloc/search_bloc.dart';
 import 'package:watchlist/data/models/movie.dart';
 import 'package:watchlist/presentation/widgets/movies-paginated-grid.dart';
+import 'package:watchlist/presentation/widgets/styled-text.dart';
 
 class SearchGrid extends StatefulWidget {
   @override
@@ -25,7 +26,7 @@ class _SearchGridState extends State<SearchGrid> {
 
   void _setPaginationIntialState(bloc) {
     final SearchState blocState = bloc.state;
-    if (blocState is SearchLoaded) {
+    if (blocState.status == SearchStatus.loaded) {
       _pagingController.value = PagingState(
         itemList: blocState.loadedMovies,
         error: null,
@@ -38,10 +39,9 @@ class _SearchGridState extends State<SearchGrid> {
   Widget build(BuildContext context) {
     return BlocConsumer<SearchBloc, SearchState>(
       listener: (context, state) {
-        if (state is SearchError) {
-          _pagingController.error = 'Something went wrong';
-        }
-        if (state is SearchLoaded) {
+        if (state.status == SearchStatus.failure) {
+          _pagingController.error = state.error;
+        } else if (state.status == SearchStatus.loaded) {
           _pagingController.value = PagingState(
             itemList: state.loadedMovies,
             error: null,
@@ -50,7 +50,9 @@ class _SearchGridState extends State<SearchGrid> {
         }
       },
       builder: (context, state) {
-        if (state is SearchLoading) {
+        if (state.status == SearchStatus.initial) {
+          return StyledText(text: 'Start Searching');
+        } else if (state.status == SearchStatus.loading) {
           return Center(child: CircularProgressIndicator());
         }
         return MoviesPaginatedGrid(pagingController: _pagingController);

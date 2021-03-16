@@ -12,14 +12,14 @@ part 'search_state.dart';
 
 class SearchBloc extends Bloc<SearchEvent, SearchState> {
   final MoviesRepository moviesRepository;
-  SearchBloc(this.moviesRepository) : super(SearchInitial());
+  SearchBloc(this.moviesRepository) : super(SearchState.initial());
 
   @override
   Stream<SearchState> mapEventToState(
     SearchEvent event,
   ) async* {
     if (event is SearchLoadEvent) {
-      yield* _mapSearchLoadQueryEvent(event);
+      yield* _mapSearchLoadFisrstPageEvent(event);
     }
 
     if (event is SearchNextPageLoadEvent) {
@@ -27,30 +27,23 @@ class SearchBloc extends Bloc<SearchEvent, SearchState> {
     }
   }
 
-  Stream<SearchState> _mapSearchLoadQueryEvent(event) async* {
+  Stream<SearchState> _mapSearchLoadFisrstPageEvent(event) async* {
     if (event.query.trim() == '') {
-      yield SearchInitial();
+      yield SearchState.initial();
     } else if (event.query != state.query) {
-      yield SearchLoading(
-        query: event.query,
-        loadedMovies: <Movie>[],
-      );
+      yield state.copyWith(status: SearchStatus.loading);
       try {
         final MoviesPage moviesPage =
             await moviesRepository.searchMovies(query: event.query);
-        yield SearchLoaded(
+        yield state.copyWith(
+          status: SearchStatus.loaded,
           loadedMovies: moviesPage.itemList,
-          nextPageKey: moviesPage.isLastPage ? null : 2,
+          nextPageKey: () => moviesPage.isLastPage ? null : 2,
           query: event.query,
         );
       } catch (e) {
         print(e);
-        yield SearchError(
-          loadedMovies: state.loadedMovies,
-          query: state.query,
-          error: e.toString(),
-          nextPageKey: state.nextPageKey,
-        );
+        yield state.copyWith(status: SearchStatus.failure, error: e.toString());
       }
     }
   }
@@ -63,19 +56,15 @@ class SearchBloc extends Bloc<SearchEvent, SearchState> {
       );
       final List<Movie> updatedMovies = List<Movie>.from(state.loadedMovies)
         ..addAll(moviesPage.itemList);
-      yield SearchLoaded(
+      yield state.copyWith(
+        status: SearchStatus.loaded,
         loadedMovies: updatedMovies,
-        nextPageKey: moviesPage.isLastPage ? null : state.nextPageKey ?? 0 + 1,
-        query: state.query,
+        nextPageKey: () =>
+            moviesPage.isLastPage ? null : (state.nextPageKey ?? 1) + 1,
       );
     } catch (e) {
       print(e);
-      yield SearchError(
-        loadedMovies: state.loadedMovies,
-        query: state.query,
-        error: e.toString(),
-        nextPageKey: state.nextPageKey,
-      );
+      yield state.copyWith(status: SearchStatus.failure, error: e.toString());
     }
   }
 }

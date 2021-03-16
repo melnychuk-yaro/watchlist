@@ -1,70 +1,46 @@
 part of 'search_bloc.dart';
 
+enum SearchStatus { initial, loading, loaded, failure }
+
 @immutable
-abstract class SearchState extends Equatable {
+class SearchState extends Equatable {
+  final SearchStatus status;
   final String query;
   final List<Movie> loadedMovies;
   final int? nextPageKey;
-  final String? error;
+  final String error;
   const SearchState({
+    required this.status,
     required this.query,
     required this.loadedMovies,
     this.nextPageKey,
-    this.error,
+    this.error = '',
   });
 
+  factory SearchState.initial() => SearchState(
+        status: SearchStatus.initial,
+        query: '',
+        loadedMovies: const <Movie>[],
+        nextPageKey: 1,
+        error: '',
+      );
+
+  SearchState copyWith({
+    SearchStatus? status,
+    String? query,
+    List<Movie>? loadedMovies,
+    int? Function()? nextPageKey,
+    String? error,
+  }) {
+    return SearchState(
+      status: status ?? this.status,
+      query: query ?? this.query,
+      loadedMovies: loadedMovies ?? this.loadedMovies,
+      nextPageKey: nextPageKey != null ? nextPageKey() : this.nextPageKey,
+      error: error ?? this.error,
+    );
+  }
+
   @override
-  List<Object?> get props => [loadedMovies, query];
-}
-
-class SearchInitial extends SearchState {
-  SearchInitial()
-      : super(
-          loadedMovies: <Movie>[],
-          query: '',
-          nextPageKey: null,
-          error: null,
-        );
-}
-
-class SearchLoading extends SearchState {
-  final List<Movie> loadedMovies;
-  final String query;
-  const SearchLoading({
-    required this.query,
-    required this.loadedMovies,
-  }) : super(loadedMovies: loadedMovies, query: query);
-}
-
-class SearchLoaded extends SearchState {
-  final String query;
-  final List<Movie> loadedMovies;
-  final int? nextPageKey;
-  const SearchLoaded({
-    required this.query,
-    required this.loadedMovies,
-    required this.nextPageKey,
-  }) : super(
-          query: query,
-          loadedMovies: loadedMovies,
-          nextPageKey: nextPageKey,
-        );
-}
-
-class SearchError extends SearchState {
-  final String error;
-  final String query;
-  final List<Movie> loadedMovies;
-  final int? nextPageKey;
-  const SearchError({
-    required this.error,
-    required this.query,
-    required this.loadedMovies,
-    required this.nextPageKey,
-  }) : super(
-          query: query,
-          loadedMovies: loadedMovies,
-          nextPageKey: nextPageKey,
-          error: error,
-        );
+  List<Object?> get props => [status, query, loadedMovies, nextPageKey, error];
 }

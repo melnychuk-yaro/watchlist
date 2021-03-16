@@ -4,7 +4,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:watchlist/business_logic/bloc/search_bloc.dart';
 import 'package:watchlist/presentation/widgets/search-grid.dart';
-import 'package:watchlist/presentation/widgets/styled-text.dart';
 
 class Search extends StatefulWidget {
   final PageStorageKey key;
@@ -52,16 +51,7 @@ class _SearchState extends State<Search> {
             decoration: InputDecoration(hintText: 'Search'),
           ),
         ),
-        Expanded(
-          child: BlocBuilder<SearchBloc, SearchState>(
-            builder: (context, state) {
-              if (state is SearchInitial) {
-                return StyledText(text: 'Start Searching');
-              }
-              return SearchGrid();
-            },
-          ),
-        ),
+        Expanded(child: SearchGrid()),
       ],
     );
   }

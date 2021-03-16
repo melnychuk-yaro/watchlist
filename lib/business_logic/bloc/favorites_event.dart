@@ -10,6 +10,11 @@ class FavoritesAdd extends FavoritesEvent {
   FavoritesAdd(this.movie);
 }
 
+class FavoritesChangeUser extends FavoritesEvent {
+  final String userId;
+  FavoritesChangeUser(this.userId);
+}
+
 class FavoritesDelete extends FavoritesEvent {
   final int movieId;
   FavoritesDelete(this.movieId);

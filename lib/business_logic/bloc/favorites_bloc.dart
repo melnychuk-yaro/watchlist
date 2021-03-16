@@ -1,11 +1,12 @@
 import 'dart:async';
 
 import 'package:bloc/bloc.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:equatable/equatable.dart';
 import 'package:meta/meta.dart';
-
+import 'package:watchlist/business_logic/bloc/auth_bloc.dart';
+import 'package:watchlist/data/models/favoritesMoviesPage.dart';
 import 'package:watchlist/data/models/movie.dart';
-import 'package:watchlist/data/models/moviesPage.dart';
 import 'package:watchlist/data/repositories/movies_repository.dart';
 
 part 'favorites_event.dart';
@@ -13,7 +14,23 @@ part 'favorites_state.dart';
 
 class FavoritesBloc extends Bloc<FavoritesEvent, FavoritesState> {
   final MoviesRepository moviesRepository;
-  FavoritesBloc(this.moviesRepository) : super(FavoritesInitial());
+  final AuthBloc authBloc;
+  late StreamSubscription _authBlocSubscription;
+  FavoritesBloc(this.moviesRepository, this.authBloc)
+      : super(FavoritesState.initial(authBloc.state.user.id)) {
+    add(FavoritesLoad());
+    _authBlocSubscription = authBloc.listen((authState) {
+      if (authState.status == AuthStatus.authenticated) {
+        add(FavoritesChangeUser(authState.user.id));
+      }
+    });
+  }
+
+  @override
+  Future<void> close() {
+    _authBlocSubscription.cancel();
+    return super.close();
+  }
 
   @override
   Stream<FavoritesState> mapEventToState(
@@ -21,62 +38,101 @@ class FavoritesBloc extends Bloc<FavoritesEvent, FavoritesState> {
   ) async* {
     if (event is FavoritesLoad) {
       yield* _favoritesLoad();
-    }
-
-    if (event is FavoritesAdd) {
+    } else if (event is FavoritesAdd) {
       yield* _favoritesAdd(event);
-    }
-
-    if (event is FavoritesDelete) {
+    } else if (event is FavoritesDelete) {
       yield* _favoritesDelete(event, state);
+    } else if (event is FavoritesChangeUser) {
+      yield* _favoritesChangeUser(event, state);
     }
+  }
+
+  Stream<FavoritesState> _favoritesChangeUser(
+      event, FavoritesState state) async* {
+    if (event.userId) yield FavoritesState.initial(event.userId);
+    yield state.copyWith(status: FavoritesStatus.loading);
+    yield* _favoritesLoad();
   }
 
   Stream<FavoritesState> _favoritesLoad() async* {
     try {
-      final MoviesPage moviesPage = await moviesRepository.getFavMovies();
+      final FavoritesMoviesPage moviesPage =
+          await moviesRepository.getFavMovies(
+        userId: state.userId,
+        lastDocument: state.lastDocumentSnapshot,
+      );
       final List<Movie> updatedMovies = List<Movie>.from(state.loadedMovies)
         ..addAll(moviesPage.itemList);
-
-      yield FavoritesLoaded(
-        loadedMovies: updatedMovies,
-        nextPageKey: moviesPage.isLastPage ? null : state.nextPageKey ?? 0 + 1,
-      );
+      yield updatedMovies.length == 0
+          ? state.copyWith(
+              status: FavoritesStatus.empty,
+              loadedMovies: updatedMovies,
+              nextPageKey: null,
+              lastDocumentSnapshot: () => null,
+            )
+          : state.copyWith(
+              status: FavoritesStatus.loaded,
+              loadedMovies: updatedMovies,
+              nextPageKey: () =>
+                  moviesPage.isLastPage ? null : (state.nextPageKey ?? 1) + 1,
+              lastDocumentSnapshot: () => moviesPage.lastDocumentSnapshot,
+            );
     } catch (e) {
-      yield FavoritesError(state.loadedMovies, e.toString());
+      yield state.copyWith(
+        status: FavoritesStatus.failure,
+        error: e.toString(),
+      );
     }
   }
 
   Stream<FavoritesState> _favoritesAdd(event) async* {
-    yield FavoritesLoading(state.loadedMovies);
+    yield state.copyWith(status: FavoritesStatus.loading);
     try {
-      await moviesRepository.saveFavMovie(event.movie);
+      await moviesRepository.saveFavMovie(
+        movie: event.movie,
+        userId: state.userId,
+      );
       Movie insertedMovie = event.movie.copyWith(isFavorite: true);
       List<Movie> newMovies = List<Movie>.from(state.loadedMovies)
         ..insert(0, insertedMovie);
-      yield FavoritesLoaded(
+      yield state.copyWith(
+        status: FavoritesStatus.loaded,
         loadedMovies: newMovies,
-        nextPageKey: state.nextPageKey,
       );
     } catch (e) {
       print(e);
-      yield FavoritesError(state.loadedMovies, e.toString());
+      yield state.copyWith(
+        status: FavoritesStatus.failure,
+        error: e.toString(),
+      );
     }
   }
 
-  Stream<FavoritesState> _favoritesDelete(event, state) async* {
-    yield FavoritesLoading(state.loadedMovies);
+  Stream<FavoritesState> _favoritesDelete(event, FavoritesState state) async* {
+    yield state.copyWith(status: FavoritesStatus.loading);
     try {
-      await moviesRepository.removeFavMovie(event.movieId);
-      List<Movie> newMovies = List.from(state.loadedMovies);
-      newMovies.removeWhere((movie) => movie.id == event.movieId);
-      yield FavoritesLoaded(
-        loadedMovies: newMovies,
-        nextPageKey: state.nextPageKey,
+      await moviesRepository.removeFavMovie(
+        id: event.movieId,
+        userId: state.userId,
       );
+      List<Movie> updatedMovies = List.from(state.loadedMovies)
+        ..removeWhere((movie) => movie.id == event.movieId);
+
+      yield updatedMovies.length == 0
+          ? state.copyWith(
+              status: FavoritesStatus.empty,
+              loadedMovies: updatedMovies,
+            )
+          : state.copyWith(
+              status: FavoritesStatus.loaded,
+              loadedMovies: updatedMovies,
+            );
     } catch (e) {
       print(e);
-      yield FavoritesError(state.loadedMovies, e.toString());
+      yield state.copyWith(
+        status: FavoritesStatus.failure,
+        error: e.toString(),
+      );
     }
   }
 }

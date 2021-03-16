@@ -35,7 +35,7 @@ class _FavoritesState extends State<Favorites> {
   }
 
   void _setPaginationIntialState(state) {
-    if (state is FavoritesLoaded) {
+    if (state.status == FavoritesStatus.loaded) {
       _pagingController.value = PagingState(
         itemList: state.loadedMovies,
         error: null,
@@ -44,14 +44,16 @@ class _FavoritesState extends State<Favorites> {
     }
   }
 
+//
   @override
   Widget build(BuildContext context) {
     return BlocConsumer<FavoritesBloc, FavoritesState>(
       listener: (context, state) {
-        if (state is FavoritesError) {
+        if (state.status == FavoritesStatus.failure) {
           _pagingController.error = state.error;
         }
-        if (state is FavoritesLoaded) {
+
+        if (state.status == FavoritesStatus.loaded) {
           _pagingController.value = PagingState(
             itemList: state.loadedMovies,
             error: null,
@@ -60,7 +62,12 @@ class _FavoritesState extends State<Favorites> {
         }
       },
       builder: (context, state) {
-        if (state.loadedMovies.length == 0) {
+        if (state.status == FavoritesStatus.loading ||
+            state.status == FavoritesStatus.initial) {
+          return Center(child: CircularProgressIndicator());
+        }
+        if (state.loadedMovies.length == 0 &&
+            state.status != FavoritesStatus.failure) {
           return StyledText(text: 'Add movies to your watchlist');
         }
         return MoviesPaginatedGrid(pagingController: _pagingController);

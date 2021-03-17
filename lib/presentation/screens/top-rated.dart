@@ -38,7 +38,7 @@ class _TopRatedState extends State<TopRated> {
     if (cubitState is TopMoviesLoaded) {
       _pagingController.value = PagingState(
         itemList: cubitState.movies,
-        error: null,
+        error: cubitState.error,
         nextPageKey: cubitState.nextPageKey,
       );
     } else if (cubitState is TopMoviesError) {
@@ -51,7 +51,6 @@ class _TopRatedState extends State<TopRated> {
     return BlocListener<TopMoviesCubit, TopMoviesState>(
       listener: (context, state) {
         if (state is TopMoviesError) {
-          //TODO: handle errors
           _pagingController.error = state.error;
         }
         if (state is TopMoviesLoaded) {

@@ -38,7 +38,7 @@ class _TopRatedState extends State<TopRated> {
     if (cubitState is TopMoviesLoaded) {
       _pagingController.value = PagingState(
         itemList: cubitState.movies,
-        error: null,
+        error: cubitState.error,
         nextPageKey: cubitState.nextPageKey,
       );
     } else if (cubitState is TopMoviesError) {

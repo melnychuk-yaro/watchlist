@@ -51,7 +51,6 @@ class _TopRatedState extends State<TopRated> {
     return BlocListener<TopMoviesCubit, TopMoviesState>(
       listener: (context, state) {
         if (state is TopMoviesError) {
-          //TODO: handle errors
           _pagingController.error = state.error;
         }
         if (state is TopMoviesLoaded) {

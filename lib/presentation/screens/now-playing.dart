@@ -38,9 +38,11 @@ class _NowPlayingState extends State<NowPlaying> {
     if (cubitState is NowPlayingLoaded) {
       _pagingController.value = PagingState(
         itemList: cubitState.movies,
-        error: null,
+        error: cubitState.error,
         nextPageKey: cubitState.nextPageKey,
       );
+    } else if (cubitState is NowPlayingError) {
+      _pagingController.error = cubitState.error;
     }
   }
 

@@ -41,6 +41,8 @@ class _TopRatedState extends State<TopRated> {
         error: null,
         nextPageKey: cubitState.nextPageKey,
       );
+    } else if (cubitState is TopMoviesError) {
+      _pagingController.error = cubitState.error;
     }
   }
 

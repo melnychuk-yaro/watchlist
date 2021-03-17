@@ -157,9 +157,6 @@ class MoviesRepository {
       throw Failure('Couldn\'t remove movie.');
     } on FormatException {
       throw Failure('Bad response format.');
-    } catch (e) {
-      print(e);
-      throw Failure('Unknown error.');
     }
   }
 

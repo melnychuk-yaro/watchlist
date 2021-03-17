@@ -3,6 +3,7 @@ import 'dart:async';
 import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
 import 'package:meta/meta.dart';
+import 'package:watchlist/business_logic/helpers/failure.dart';
 import 'package:watchlist/data/models/movie.dart';
 import 'package:watchlist/data/models/moviesPage.dart';
 import 'package:watchlist/data/repositories/movies_repository.dart';
@@ -41,9 +42,9 @@ class SearchBloc extends Bloc<SearchEvent, SearchState> {
           nextPageKey: () => moviesPage.isLastPage ? null : 2,
           query: event.query,
         );
-      } catch (e) {
-        print(e);
-        yield state.copyWith(status: SearchStatus.failure, error: e.toString());
+      } on Failure catch (f) {
+        yield SearchState.initial();
+        yield state.copyWith(status: SearchStatus.failure, error: f.toString());
       }
     }
   }
@@ -62,9 +63,9 @@ class SearchBloc extends Bloc<SearchEvent, SearchState> {
         nextPageKey: () =>
             moviesPage.isLastPage ? null : (state.nextPageKey ?? 1) + 1,
       );
-    } catch (e) {
-      print(e);
-      yield state.copyWith(status: SearchStatus.failure, error: e.toString());
+    } on Failure catch (f) {
+      yield SearchState.initial();
+      yield state.copyWith(status: SearchStatus.failure, error: f.toString());
     }
   }
 }

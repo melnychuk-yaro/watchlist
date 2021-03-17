@@ -1,6 +1,7 @@
 import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
 import 'package:meta/meta.dart';
+import 'package:watchlist/business_logic/helpers/failure.dart';
 import 'package:watchlist/data/models/movie.dart';
 import 'package:watchlist/data/repositories/movies_repository.dart';
 
@@ -11,21 +12,21 @@ class TopMoviesCubit extends Cubit<TopMoviesState> {
   TopMoviesCubit(this.moviesRepository) : super(TopMoviesInitial());
 
   Future<void> loadMovies(int page) async {
-    TopMoviesState prevState = state;
     try {
       final moviesPage =
           await moviesRepository.getTopRatedMovies(page: state.nextPageKey);
-      final List<Movie> updatedMovies = List<Movie>.from(prevState.movies)
+      final List<Movie> updatedMovies = List<Movie>.from(state.movies)
         ..addAll(moviesPage.itemList);
       emit(TopMoviesLoaded(
         movies: updatedMovies,
-        nextPageKey: moviesPage.isLastPage ? null : prevState.nextPageKey! + 1,
+        nextPageKey: moviesPage.isLastPage ? null : state.nextPageKey! + 1,
       ));
-    } catch (e) {
+    } on Failure catch (f) {
+      emit(TopMoviesInitial());
       emit(TopMoviesError(
-        movies: prevState.movies,
-        error: e.toString(),
-        nextPageKey: prevState.nextPageKey,
+        movies: state.movies,
+        error: f.toString(),
+        nextPageKey: state.nextPageKey,
       ));
     }
   }

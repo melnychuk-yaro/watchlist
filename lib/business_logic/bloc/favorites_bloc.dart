@@ -5,6 +5,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:equatable/equatable.dart';
 import 'package:meta/meta.dart';
 import 'package:watchlist/business_logic/bloc/auth_bloc.dart';
+import 'package:watchlist/business_logic/helpers/failure.dart';
 import 'package:watchlist/data/models/favoritesMoviesPage.dart';
 import 'package:watchlist/data/models/movie.dart';
 import 'package:watchlist/data/repositories/movies_repository.dart';
@@ -76,10 +77,11 @@ class FavoritesBloc extends Bloc<FavoritesEvent, FavoritesState> {
                   moviesPage.isLastPage ? null : (state.nextPageKey ?? 1) + 1,
               lastDocumentSnapshot: () => moviesPage.lastDocumentSnapshot,
             );
-    } catch (e) {
+    } on Failure catch (f) {
+      yield FavoritesState.initial(state.userId);
       yield state.copyWith(
         status: FavoritesStatus.failure,
-        error: e.toString(),
+        error: f.toString(),
       );
     }
   }
@@ -98,11 +100,11 @@ class FavoritesBloc extends Bloc<FavoritesEvent, FavoritesState> {
         status: FavoritesStatus.loaded,
         loadedMovies: newMovies,
       );
-    } catch (e) {
-      print(e);
+    } on Failure catch (f) {
+      yield FavoritesState.initial(state.userId);
       yield state.copyWith(
         status: FavoritesStatus.failure,
-        error: e.toString(),
+        error: f.toString(),
       );
     }
   }
@@ -126,11 +128,11 @@ class FavoritesBloc extends Bloc<FavoritesEvent, FavoritesState> {
               status: FavoritesStatus.loaded,
               loadedMovies: updatedMovies,
             );
-    } catch (e) {
-      print(e);
+    } on Failure catch (f) {
+      yield FavoritesState.initial(state.userId);
       yield state.copyWith(
         status: FavoritesStatus.failure,
-        error: e.toString(),
+        error: f.toString(),
       );
     }
   }

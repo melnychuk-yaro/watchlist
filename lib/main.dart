@@ -14,6 +14,8 @@ import 'package:watchlist/presentation/screens/login-screen.dart';
 import 'package:watchlist/presentation/themes/app_theme.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart' as DotEnv;
 
+import 'business_logic/cubit/login_cubit.dart';
+
 Future<void> main() async {
   await DotEnv.load(fileName: ".env");
   WidgetsFlutterBinding.ensureInitialized();
@@ -27,8 +29,11 @@ class App extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return BlocProvider<AuthBloc>(
-      create: (context) => AuthBloc(authenticationRepository: _authRepository),
+    return MultiBlocProvider(
+      providers: [
+        BlocProvider(create: (_) => AuthBloc(_authRepository)),
+        BlocProvider(create: (_) => LoginCubit(_authRepository)),
+      ],
       child: MaterialApp(
         title: 'Watchlist',
         theme: AppTheme().lightTheme,

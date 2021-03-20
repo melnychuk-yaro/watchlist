@@ -205,6 +205,13 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "9.0.0-nullsafety"
+  formz:
+    dependency: "direct main"
+    description:
+      name: formz
+      url: "https://pub.dartlang.org"
+    source: hosted
+    version: "0.4.0-nullsafety.0"
   google_sign_in:
     dependency: "direct main"
     description:

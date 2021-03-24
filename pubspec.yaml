@@ -24,18 +24,18 @@ dependencies:
   flutter:
     sdk: flutter
   cached_network_image: ^3.0.0-nullsafety
-  cloud_firestore: ^1.0.1
+  cloud_firestore: ^1.0.2
   cupertino_icons: ^1.0.2
   equatable: ^2.0.0
   # firebase_analytics: ^7.1.0
   firebase_auth: ^1.0.1
-  firebase_core: ^1.0.1
+  firebase_core: ^1.0.2
   flutter_bloc: ^7.0.0
   flutter_dotenv: ^4.0.0-nullsafety.0
   flutter_signin_button: ^2.0.0-nullsafety.0
   formz: ^0.4.0-nullsafety.0
-  google_sign_in: ^5.0.0
-  http: ^0.13.0
+  google_sign_in: ^5.0.1
+  http: ^0.13.1
   pedantic: ^1.11.0
   infinite_scroll_pagination: ^3.0.1
   

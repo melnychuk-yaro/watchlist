@@ -2,20 +2,8 @@ import 'dart:async';
 
 import 'package:firebase_auth/firebase_auth.dart' as firebase_auth;
 import 'package:google_sign_in/google_sign_in.dart';
-
+import 'package:watchlist/business_logic/helpers/failures/auth_failure.dart';
 import 'package:watchlist/data/models/user.dart';
-
-/// Thrown if during the sign up process if a failure occurs.
-class SignUpFailure implements Exception {}
-
-/// Thrown during the login process if a failure occurs.
-class LogInWithEmailAndPasswordFailure implements Exception {}
-
-/// Thrown during the sign in with google process if a failure occurs.
-class LogInWithGoogleFailure implements Exception {}
-
-/// Thrown during the logout process if a failure occurs.
-class LogOutFailure implements Exception {}
 
 /// {@template authentication_repository}
 /// Repository which manages user authentication.
@@ -30,6 +18,7 @@ class AuthenticationRepository {
 
   final firebase_auth.FirebaseAuth _firebaseAuth;
   final GoogleSignIn _googleSignIn;
+  static const String _unknownErrorMessage = 'Unknown Error';
 
   /// Stream of [User] which will emit the current user when
   /// the authentication state changes.
@@ -43,7 +32,7 @@ class AuthenticationRepository {
 
   /// Creates a new user with the provided [email] and [password].
   ///
-  /// Throws a [SignUpFailure] if an exception occurs.
+  /// Throws a [AuthFailure] if an exception occurs.
   Future<void> signUp({
     required String email,
     required String password,
@@ -53,19 +42,19 @@ class AuthenticationRepository {
         email: email,
         password: password,
       );
-    } on Exception {
-      throw SignUpFailure();
+    } on firebase_auth.FirebaseAuthException catch (e) {
+      throw AuthFailure(e.message ?? _unknownErrorMessage);
     }
   }
 
   /// Starts the Sign In with Google Flow.
   ///
-  /// Throws a [LogInWithGoogleFailure] if an exception occurs.
+  /// Throws a [AuthFailure] if an exception occurs.
   Future<void> logInWithGoogle() async {
     try {
       final googleUser = await _googleSignIn.signIn();
       if (googleUser == null) {
-        throw LogInWithGoogleFailure();
+        throw AuthFailure('Google User Not Found');
       }
       final googleAuth = await googleUser.authentication;
       final credential = firebase_auth.GoogleAuthProvider.credential(
@@ -73,14 +62,14 @@ class AuthenticationRepository {
         idToken: googleAuth.idToken,
       );
       await _firebaseAuth.signInWithCredential(credential);
-    } on Exception {
-      throw LogInWithGoogleFailure();
+    } on firebase_auth.FirebaseAuthException catch (e) {
+      throw AuthFailure(e.message ?? _unknownErrorMessage);
     }
   }
 
   /// Signs in with the provided [email] and [password].
   ///
-  /// Throws a [LogInWithEmailAndPasswordFailure] if an exception occurs.
+  /// Throws a [AuthFailure] if an exception occurs.
   Future<void> logInWithEmailAndPassword({
     required String email,
     required String password,
@@ -90,23 +79,23 @@ class AuthenticationRepository {
         email: email,
         password: password,
       );
-    } on Exception {
-      throw LogInWithEmailAndPasswordFailure();
+    } on firebase_auth.FirebaseAuthException catch (e) {
+      throw AuthFailure(e.message ?? _unknownErrorMessage);
     }
   }
 
   /// Signs out the current user which will emit
   /// [User.empty] from the [user] Stream.
   ///
-  /// Throws a [LogOutFailure] if an exception occurs.
+  /// Throws a [AuthFailure] if an exception occurs.
   Future<void> logOut() async {
     try {
       await Future.wait([
         _firebaseAuth.signOut(),
         _googleSignIn.signOut(),
       ]);
-    } on Exception {
-      throw LogOutFailure();
+    } on firebase_auth.FirebaseAuthException catch (e) {
+      throw AuthFailure(e.message ?? _unknownErrorMessage);
     }
   }
 }

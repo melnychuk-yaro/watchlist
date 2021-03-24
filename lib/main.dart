@@ -6,13 +6,16 @@ import 'package:watchlist/business_logic/bloc/search_bloc.dart';
 import 'package:watchlist/business_logic/bloc/auth_bloc.dart';
 import 'package:watchlist/business_logic/cubit/all_favorites_cubit.dart';
 import 'package:watchlist/business_logic/cubit/now_playing_cubit.dart';
+import 'package:watchlist/business_logic/cubit/sign_up_cubit.dart';
 import 'package:watchlist/business_logic/cubit/top_movies_cubit.dart';
 import 'package:watchlist/data/repositories/auth_repository.dart';
 import 'package:watchlist/data/repositories/movies_repository.dart';
 import 'package:watchlist/presentation/screens/home-screen.dart';
-import 'package:watchlist/presentation/screens/login-screen.dart';
+import 'package:watchlist/presentation/screens/auth-screen.dart';
 import 'package:watchlist/presentation/themes/app_theme.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart' as DotEnv;
+
+import 'business_logic/cubit/login_cubit.dart';
 
 Future<void> main() async {
   await DotEnv.load(fileName: ".env");
@@ -27,8 +30,12 @@ class App extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return BlocProvider<AuthBloc>(
-      create: (context) => AuthBloc(authenticationRepository: _authRepository),
+    return MultiBlocProvider(
+      providers: [
+        BlocProvider(create: (_) => AuthBloc(_authRepository)),
+        BlocProvider(create: (_) => LoginCubit(_authRepository)),
+        BlocProvider(create: (_) => SignUpCubit(_authRepository)),
+      ],
       child: MaterialApp(
         title: 'Watchlist',
         theme: AppTheme().lightTheme,
@@ -65,7 +72,7 @@ class App extends StatelessWidget {
                     ],
                     child: HomeScreen(),
                   )
-                : LoginScreen();
+                : AuthScreen();
           },
         ),
       ),

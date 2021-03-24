@@ -3,7 +3,7 @@ import 'dart:io';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:http/http.dart' as http;
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:watchlist/business_logic/helpers/failure.dart';
+import 'package:watchlist/business_logic/helpers/failures/failure.dart';
 import 'package:watchlist/data/models/favoritesMoviesPage.dart';
 import 'package:watchlist/data/models/movie.dart';
 import 'package:watchlist/data/models/moviesPage.dart';

@@ -1,6 +1,7 @@
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:formz/formz.dart';
 import 'package:equatable/equatable.dart';
+import 'package:watchlist/business_logic/helpers/failures/auth_failure.dart';
 import 'package:watchlist/data/models/email.dart';
 import 'package:watchlist/data/models/password.dart';
 import 'package:watchlist/data/repositories/auth_repository.dart';
@@ -37,8 +38,11 @@ class LoginCubit extends Cubit<LoginState> {
         password: state.password.value,
       );
       emit(state.copyWith(status: FormzStatus.submissionSuccess));
-    } on Exception {
-      emit(state.copyWith(status: FormzStatus.submissionFailure));
+    } on AuthFailure catch (e) {
+      emit(state.copyWith(
+        status: FormzStatus.submissionFailure,
+        errorMsg: e.toString(),
+      ));
     }
   }
 

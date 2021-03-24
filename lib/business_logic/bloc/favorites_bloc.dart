@@ -20,7 +20,7 @@ class FavoritesBloc extends Bloc<FavoritesEvent, FavoritesState> {
   FavoritesBloc(this.moviesRepository, this.authBloc)
       : super(FavoritesState.initial(authBloc.state.user.id)) {
     add(FavoritesLoad());
-    _authBlocSubscription = authBloc.listen((authState) {
+    _authBlocSubscription = authBloc.stream.listen((authState) {
       if (authState.status == AuthStatus.authenticated) {
         add(FavoritesChangeUser(authState.user.id));
       }

@@ -15,7 +15,7 @@ class AllFavoritesCubit extends Cubit<AllFavoritesState> {
   AllFavoritesCubit(this.moviesRepository, this.authBloc)
       : super(AllFavoritesInitial()) {
     loadFavMovies(authBloc.state.user.id);
-    _authBlocSubscription = authBloc.listen((authState) {
+    _authBlocSubscription = authBloc.stream.listen((authState) {
       emit(AllFavoritesInitial());
       if (authState.user.id != '') loadFavMovies(authState.user.id);
     });

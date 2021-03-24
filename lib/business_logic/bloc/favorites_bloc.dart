@@ -5,7 +5,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:equatable/equatable.dart';
 import 'package:meta/meta.dart';
 import 'package:watchlist/business_logic/bloc/auth_bloc.dart';
-import 'package:watchlist/business_logic/helpers/failure.dart';
+import 'package:watchlist/business_logic/helpers/failures/failure.dart';
 import 'package:watchlist/data/models/favoritesMoviesPage.dart';
 import 'package:watchlist/data/models/movie.dart';
 import 'package:watchlist/data/repositories/movies_repository.dart';
@@ -20,7 +20,7 @@ class FavoritesBloc extends Bloc<FavoritesEvent, FavoritesState> {
   FavoritesBloc(this.moviesRepository, this.authBloc)
       : super(FavoritesState.initial(authBloc.state.user.id)) {
     add(FavoritesLoad());
-    _authBlocSubscription = authBloc.listen((authState) {
+    _authBlocSubscription = authBloc.stream.listen((authState) {
       if (authState.status == AuthStatus.authenticated) {
         add(FavoritesChangeUser(authState.user.id));
       }
@@ -93,9 +93,8 @@ class FavoritesBloc extends Bloc<FavoritesEvent, FavoritesState> {
         movie: event.movie,
         userId: state.userId,
       );
-      Movie insertedMovie = event.movie.copyWith(isFavorite: true);
       List<Movie> newMovies = List<Movie>.from(state.loadedMovies)
-        ..insert(0, insertedMovie);
+        ..insert(0, event.movie);
       yield state.copyWith(
         status: FavoritesStatus.loaded,
         loadedMovies: newMovies,

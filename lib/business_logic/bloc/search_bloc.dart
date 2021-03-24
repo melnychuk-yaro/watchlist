@@ -3,7 +3,7 @@ import 'dart:async';
 import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
 import 'package:meta/meta.dart';
-import 'package:watchlist/business_logic/helpers/failure.dart';
+import 'package:watchlist/business_logic/helpers/failures/failure.dart';
 import 'package:watchlist/data/models/movie.dart';
 import 'package:watchlist/data/models/moviesPage.dart';
 import 'package:watchlist/data/repositories/movies_repository.dart';

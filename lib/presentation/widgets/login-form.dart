@@ -1,29 +1,23 @@
 import 'package:flutter/material.dart';
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter_signin_button/button_view.dart';
 import 'package:flutter_signin_button/flutter_signin_button.dart';
-import 'package:watchlist/data/repositories/auth_repository.dart';
+import 'package:formz/formz.dart';
+import 'package:watchlist/business_logic/cubit/login_cubit.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:watchlist/data/models/password.dart';
+import 'package:watchlist/presentation/widgets/button-loading-indicator.dart';
 
 class LoginForm extends StatefulWidget {
+  final Function toggleIsLogin;
+  LoginForm({required this.toggleIsLogin});
+
   @override
   _LoginFormState createState() => _LoginFormState();
 }
 
 class _LoginFormState extends State<LoginForm> {
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
-  late FocusNode passwordFocusNode;
-  var authRepository = AuthenticationRepository();
-  var _isLogin = true;
-  var _email = '';
-  var _password = '';
-  var _loading = false;
-
-  @override
-  void initState() {
-    super.initState();
-
-    passwordFocusNode = FocusNode();
-  }
+  final FocusNode passwordFocusNode = FocusNode();
 
   @override
   void dispose() {
@@ -32,205 +26,140 @@ class _LoginFormState extends State<LoginForm> {
     passwordFocusNode.dispose();
   }
 
-  String _getFirebaseAuthErrorMessage(String code) {
-    switch (code) {
-      case 'account-exists-with-different-credential':
-      case 'email-already-in-use':
-        return 'Email already used. Go to login page.';
-
-      case 'wrong-password':
-        return 'Wrong email/password combination.';
-
-      case 'user-not-found':
-        return 'No user found with this email.';
-
-      case 'user-disabled':
-        return 'User disabled.';
-
-      case 'operation-not-allowed':
-        return 'Too many requests to log into this account.';
-
-      case 'operation-not-allowed':
-        return 'Server error, please try again later.';
-
-      case 'invalid-email':
-        return 'Email address is invalid.';
-
-      case 'user-not-found':
-        return 'No account found with this email';
-
-      case 'email-already-in-use':
-        return 'Email alredy in use';
-
-      case 'invalid-email':
-        return 'The email address is not valid';
-
-      case 'weak-password':
-        return 'Please use more secure password with at least 6 chars';
-
-      case 'operation-not-allowed':
-        return 'Something went wrong. Please contact support';
-
-      default:
-        return 'Something went wrong. Please try again or contact support.';
-    }
-  }
-
-  Future<void> _register() async {
-    setState(() => _loading = true);
-    try {
-      await authRepository.signUp(
-        email: _email,
-        password: _password,
-      );
-    } on FirebaseAuthException catch (e) {
-      ScaffoldMessenger.of(context).hideCurrentSnackBar();
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(
-          content: Text(_getFirebaseAuthErrorMessage(e.code)),
-          backgroundColor: Theme.of(context).errorColor,
+  @override
+  Widget build(BuildContext context) {
+    return BlocListener<LoginCubit, LoginState>(
+      listener: (context, loginState) {
+        if (loginState.status.isSubmissionFailure) {
+          ScaffoldMessenger.of(context)
+            ..hideCurrentSnackBar()
+            ..showSnackBar(
+              SnackBar(
+                content: Text(loginState.errorMsg),
+                backgroundColor: Theme.of(context).errorColor,
+              ),
+            );
+        }
+      },
+      child: Form(
+        key: _formKey,
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            _EmailInput(nextFieldFocusNode: passwordFocusNode),
+            const SizedBox(height: 16),
+            _PasswordInput(passwordFocusNode: passwordFocusNode),
+            const SizedBox(height: 16),
+            _LoginButton(),
+            const SizedBox(height: 8),
+            SignInButton(
+              Buttons.GoogleDark,
+              onPressed: () => context.read<LoginCubit>().logInWithGoogle(),
+            ),
+            const SizedBox(height: 16),
+            Row(
+              children: <Widget>[
+                Expanded(child: Divider(color: Colors.white)),
+                Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 16.0),
+                  child: const Text('OR'),
+                ),
+                Expanded(child: Divider(color: Colors.white)),
+              ],
+            ),
+            TextButton(
+              onPressed: () => widget.toggleIsLogin(),
+              child: const Text('Create a new account'),
+            ),
+          ],
         ),
-      );
-    } finally {
-      setState(() => _loading = false);
-    }
+      ),
+    );
   }
+}
 
-  Future<void> _login() async {
-    setState(() => _loading = true);
-    try {
-      await authRepository.logInWithEmailAndPassword(
-        email: _email,
-        password: _password,
-      );
-    } on FirebaseAuthException catch (e) {
-      ScaffoldMessenger.of(context).hideCurrentSnackBar();
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(
-          content: Text(_getFirebaseAuthErrorMessage(e.code)),
-          backgroundColor: Theme.of(context).errorColor,
-        ),
-      );
-    } finally {
-      setState(() => _loading = false);
-    }
-  }
+class _EmailInput extends StatelessWidget {
+  const _EmailInput({
+    Key? key,
+    required this.nextFieldFocusNode,
+  }) : super(key: key);
+
+  final FocusNode nextFieldFocusNode;
 
   @override
   Widget build(BuildContext context) {
-    return Form(
-      key: _formKey,
-      child: Column(
-        mainAxisSize: MainAxisSize.min,
-        children: [
-          TextFormField(
-            autofocus: true,
-            keyboardType: TextInputType.emailAddress,
-            onChanged: (value) => _email = value,
-            onFieldSubmitted: (_) {
-              FocusScope.of(context).requestFocus(passwordFocusNode);
-            },
-            decoration: InputDecoration(
-              hintText: 'Email',
-              prefixIcon: Padding(
-                child: Icon(Icons.email, color: Theme.of(context).hintColor),
-                padding: EdgeInsets.only(left: 16, right: 10),
-              ),
+    return BlocBuilder<LoginCubit, LoginState>(
+      buildWhen: (previous, current) => previous.email != current.email,
+      builder: (context, state) {
+        return TextFormField(
+          keyboardType: TextInputType.emailAddress,
+          onChanged: (email) => context.read<LoginCubit>().emailChanged(email),
+          onFieldSubmitted: (_) {
+            FocusScope.of(context).requestFocus(nextFieldFocusNode);
+          },
+          decoration: InputDecoration(
+            hintText: 'Email',
+            prefixIcon: Padding(
+              child: Icon(Icons.email, color: Theme.of(context).hintColor),
+              padding: EdgeInsets.only(left: 16, right: 10),
             ),
-            validator: (value) {
-              RegExp exp = RegExp(r'^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$');
-              if (value!.trim().isEmpty) {
-                return 'Please enter your email';
-              }
-              if (!exp.hasMatch(value)) {
-                return 'Please enter a valid email';
-              }
-              return null;
-            },
+            errorText: state.email.invalid ? 'Invalid email' : null,
           ),
-          SizedBox(height: 16),
-          TextFormField(
-            obscureText: true,
-            enableSuggestions: false,
-            autocorrect: false,
-            onChanged: (value) => _password = value,
-            onFieldSubmitted: (_) => _isLogin ? _login() : _register(),
-            focusNode: passwordFocusNode,
-            decoration: InputDecoration(
-              hintText: 'Password',
-              prefixIcon: Padding(
-                padding: const EdgeInsets.only(left: 16, right: 10),
-                child: Icon(Icons.vpn_key, color: Theme.of(context).hintColor),
-              ),
+        );
+      },
+    );
+  }
+}
+
+class _PasswordInput extends StatelessWidget {
+  const _PasswordInput({required this.passwordFocusNode});
+
+  final FocusNode passwordFocusNode;
+
+  @override
+  Widget build(BuildContext context) {
+    return BlocBuilder<LoginCubit, LoginState>(
+      builder: (context, state) {
+        return TextFormField(
+          obscureText: true,
+          enableSuggestions: false,
+          autocorrect: false,
+          onChanged: (password) =>
+              context.read<LoginCubit>().passwordChanged(password),
+          onFieldSubmitted: (_) =>
+              context.read<LoginCubit>().logInWithCredentials(),
+          focusNode: passwordFocusNode,
+          decoration: InputDecoration(
+            hintText: 'Password',
+            prefixIcon: Padding(
+              padding: const EdgeInsets.only(left: 16, right: 10),
+              child: Icon(Icons.vpn_key, color: Theme.of(context).hintColor),
             ),
-            validator: (value) {
-              if (value!.trim().length < 6) {
-                return 'Must be at least 6 characters long.';
-              }
-              return null;
-            },
+            errorText: state.password.error == PasswordValidationError.short
+                ? 'Password is to short'
+                : null,
           ),
-          SizedBox(height: 16),
-          _loading
-              ? SizedBox(
-                  height: 48.0,
-                  width: 48.0,
-                  child: Padding(
-                    padding: const EdgeInsets.all(8.0),
-                    child: CircularProgressIndicator(),
-                  ),
-                )
-              : _isLogin
-                  ? Column(
-                      children: [
-                        ElevatedButton(
-                          onPressed: () {
-                            if (_formKey.currentState!.validate()) {
-                              _login();
-                            }
-                          },
-                          child: Text('Login'),
-                        ),
-                      ],
-                    )
-                  : ElevatedButton(
-                      onPressed: () {
-                        if (_formKey.currentState!.validate()) {
-                          _register();
-                        }
-                      },
-                      child: Text('Sign Up'),
-                    ),
-          SignInButton(
-            Buttons.GoogleDark,
-            onPressed: () => authRepository.logInWithGoogle(),
-          ),
-          SizedBox(height: 16),
-          Row(
-            children: <Widget>[
-              Expanded(child: Divider(color: Colors.white)),
-              Padding(
-                padding: EdgeInsets.symmetric(horizontal: 16.0),
-                child: Text('OR'),
-              ),
-              Expanded(child: Divider(color: Colors.white)),
-            ],
-          ),
-          _isLogin
-              ? TextButton(
-                  onPressed: () {
-                    setState(() => _isLogin = false);
-                  },
-                  child: Text('Create a new account'),
-                )
-              : TextButton(
-                  onPressed: () {
-                    setState(() => _isLogin = true);
-                  },
-                  child: Text('Already have an account?'),
-                )
-        ],
-      ),
+        );
+      },
+    );
+  }
+}
+
+class _LoginButton extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    return BlocBuilder<LoginCubit, LoginState>(
+      buildWhen: (previous, current) => previous.status != current.status,
+      builder: (context, state) {
+        return state.status.isSubmissionInProgress
+            ? ButtonLoadingIndicator()
+            : ElevatedButton(
+                onPressed: state.status.isValidated
+                    ? () => context.read<LoginCubit>().logInWithCredentials()
+                    : null,
+                child: const Text('Login'),
+              );
+      },
     );
   }
 }

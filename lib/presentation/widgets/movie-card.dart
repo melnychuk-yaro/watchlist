@@ -1,3 +1,4 @@
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:watchlist/data/models/movie.dart';
 import 'package:watchlist/presentation/widgets/add-to-fav-button.dart';
@@ -20,7 +21,8 @@ class MovieCard extends StatelessWidget {
               image: DecorationImage(
                 image: movie.posterFileName == ''
                     ? AssetImage('assets/images/dark-gray-bg.jpg')
-                    : NetworkImage(movie.fullPosterPath) as ImageProvider,
+                    : CachedNetworkImageProvider(movie.fullPosterPath)
+                        as ImageProvider,
                 fit: BoxFit.cover,
               ),
             ),

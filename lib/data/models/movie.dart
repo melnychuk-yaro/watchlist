@@ -24,11 +24,10 @@ class Movie {
       id: movieMap['id'],
       title: movieMap['title'],
       releaseDate: movieMap['release_date'] ?? '',
-      posterFileName: movieMap['poster_path'] == null ||
-              movieMap['poster_path'] == 'null' ||
-              movieMap['poster_path'] == ''
-          ? ''
-          : movieMap['poster_path'],
+      posterFileName:
+          movieMap['poster_path'] == null || movieMap['poster_path'] == 'null'
+              ? ''
+              : movieMap['poster_path'],
       rating:
           movieMap['vote_average'] == null || movieMap['vote_average'] == 'null'
               ? 0.0

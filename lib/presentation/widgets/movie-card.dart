@@ -1,6 +1,11 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:watchlist/business_logic/bloc/favorites_bloc.dart';
+import 'package:watchlist/business_logic/cubit/single_movie_cubit.dart';
+import 'package:watchlist/business_logic/cubit/all_favorites_cubit.dart';
 import 'package:watchlist/data/models/movie.dart';
+import 'package:watchlist/presentation/screens/movie-screen.dart';
 import 'package:watchlist/presentation/widgets/add-to-fav-button.dart';
 
 class MovieCard extends StatelessWidget {
@@ -14,30 +19,46 @@ class MovieCard extends StatelessWidget {
 
     return Stack(
       children: [
-        Card(
-          clipBehavior: Clip.antiAlias,
-          child: Container(
-            decoration: BoxDecoration(
-              image: DecorationImage(
-                image: movie.posterFileName == ''
-                    ? AssetImage('assets/images/dark-gray-bg.jpg')
-                    : CachedNetworkImageProvider(movie.fullPosterPath)
-                        as ImageProvider,
-                fit: BoxFit.cover,
+        GestureDetector(
+          onTap: () => Navigator.of(context).push(
+            MaterialPageRoute(
+                builder: (_) => MultiBlocProvider(
+                      providers: [
+                        BlocProvider.value(
+                            value: context.read<SingleMovieCubit>()),
+                        BlocProvider.value(
+                            value: context.read<AllFavoritesCubit>()),
+                        BlocProvider.value(
+                            value: context.read<FavoritesBloc>()),
+                      ],
+                      child: MovieScreen(id: movie.id),
+                    )),
+          ),
+          child: Card(
+            clipBehavior: Clip.antiAlias,
+            child: Container(
+              decoration: BoxDecoration(
+                image: DecorationImage(
+                  image: movie.posterFileName == ''
+                      ? AssetImage('assets/images/dark-gray-bg.jpg')
+                      : CachedNetworkImageProvider(movie.fullPosterPath)
+                          as ImageProvider,
+                  fit: BoxFit.cover,
+                ),
               ),
-            ),
-            child: GridTile(
-              child: Center(),
-              footer: Container(
-                color: _brightness == Brightness.light
-                    ? Color(0xEEFAFAFA)
-                    : Color(0xEE303030),
-                padding:
-                    const EdgeInsets.symmetric(horizontal: 8.0, vertical: 8.0),
-                child: Text(
-                  movie.title,
-                  textAlign: TextAlign.center,
-                  style: TextStyle(fontSize: 16.0),
+              child: GridTile(
+                child: Center(),
+                footer: Container(
+                  color: _brightness == Brightness.light
+                      ? Color(0xEEFAFAFA)
+                      : Color(0xEE303030),
+                  padding: const EdgeInsets.symmetric(
+                      horizontal: 8.0, vertical: 8.0),
+                  child: Text(
+                    movie.title,
+                    textAlign: TextAlign.center,
+                    style: TextStyle(fontSize: 16.0),
+                  ),
                 ),
               ),
             ),

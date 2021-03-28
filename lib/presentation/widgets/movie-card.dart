@@ -4,6 +4,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:watchlist/business_logic/bloc/favorites_bloc.dart';
 import 'package:watchlist/business_logic/cubit/single_movie_cubit.dart';
 import 'package:watchlist/business_logic/cubit/all_favorites_cubit.dart';
+import 'package:watchlist/constatns.dart';
 import 'package:watchlist/data/models/movie.dart';
 import 'package:watchlist/presentation/screens/movie-screen.dart';
 import 'package:watchlist/presentation/widgets/add-to-fav-button.dart';
@@ -49,9 +50,8 @@ class MovieCard extends StatelessWidget {
               child: GridTile(
                 child: Center(),
                 footer: Container(
-                  color: _brightness == Brightness.light
-                      ? Color(0xEEFAFAFA)
-                      : Color(0xEE303030),
+                  color:
+                      _brightness == Brightness.light ? kLightText : kDarkText,
                   padding: const EdgeInsets.symmetric(
                       horizontal: 8.0, vertical: 8.0),
                   child: Text(

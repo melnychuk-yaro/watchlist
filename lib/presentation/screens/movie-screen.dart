@@ -47,7 +47,7 @@ class _MovieScreenState extends State<MovieScreen> {
 }
 
 class _SingleMovie extends StatelessWidget {
-  const _SingleMovie({Key? key, required this.movie}) : super(key: key);
+  _SingleMovie({Key? key, required this.movie}) : super(key: key);
   final MovieDetailed movie;
   static const double posterWidth = 120;
 
@@ -84,8 +84,12 @@ class _SingleMovie extends StatelessWidget {
                       boxShadow: kShadow,
                     ),
                     child: FittedBox(
-                        fit: BoxFit.fill,
-                        child: BackButton(color: Colors.white)),
+                      fit: BoxFit.fill,
+                      child: MediaQuery.of(context).platformBrightness ==
+                              Brightness.dark
+                          ? BackButton(color: kLightText)
+                          : BackButton(color: kDarkText),
+                    ),
                   ),
                 ),
               ),

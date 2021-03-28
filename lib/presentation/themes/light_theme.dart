@@ -11,6 +11,7 @@ class LightTheme {
           backgroundColor: Colors.white,
           textTheme: TextTheme(headline6: TextStyle().copyWith(color: color)),
           actionsIconTheme: IconThemeData().copyWith(color: color),
+          iconTheme: IconThemeData(color: color),
         ),
         textSelectionTheme: TextSelectionThemeData().copyWith(
           selectionColor: color,

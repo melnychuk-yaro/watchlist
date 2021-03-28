@@ -7,6 +7,7 @@ import 'package:watchlist/business_logic/bloc/auth_bloc.dart';
 import 'package:watchlist/business_logic/cubit/all_favorites_cubit.dart';
 import 'package:watchlist/business_logic/cubit/now_playing_cubit.dart';
 import 'package:watchlist/business_logic/cubit/sign_up_cubit.dart';
+import 'package:watchlist/business_logic/cubit/single_movie_cubit.dart';
 import 'package:watchlist/business_logic/cubit/top_movies_cubit.dart';
 import 'package:watchlist/data/repositories/auth_repository.dart';
 import 'package:watchlist/data/repositories/movies_repository.dart';
@@ -68,6 +69,10 @@ class App extends StatelessWidget {
                       ),
                       BlocProvider<NowPlayingCubit>(
                         create: (context) => NowPlayingCubit(_moviesRepository),
+                      ),
+                      BlocProvider<SingleMovieCubit>(
+                        create: (context) =>
+                            SingleMovieCubit(_moviesRepository),
                       ),
                     ],
                     child: HomeScreen(),

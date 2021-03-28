@@ -6,6 +6,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:watchlist/business_logic/helpers/failures/failure.dart';
 import 'package:watchlist/data/models/favoritesMoviesPage.dart';
 import 'package:watchlist/data/models/movie.dart';
+import 'package:watchlist/data/models/movie_detailed.dart';
 import 'package:watchlist/data/models/moviesPage.dart';
 
 class MoviesRepository {
@@ -63,6 +64,26 @@ class MoviesRepository {
       } else {
         throw Failure(
             'Error fetching movies. Uri: /search/movie. Query: $query');
+      }
+    } on SocketException {
+      throw Failure('No internet conneciton.');
+    } on HttpException {
+      throw Failure('Couldn\'t find movies.');
+    } on FormatException {
+      throw Failure('Bad response format.');
+    }
+  }
+
+  Future<MovieDetailed> getSingleMovie({required int id}) async {
+    final uri = _buildUri(
+        path: '/movie/$id', queryParameters: {'append_to_response': 'videos'});
+    try {
+      final response = await http.get(uri);
+      if (response.statusCode == 200) {
+        Map<String, dynamic> body = json.decode(response.body);
+        return MovieDetailed.fromMap(body);
+      } else {
+        throw Failure('Error fetching movie. Id: $id');
       }
     } on SocketException {
       throw Failure('No internet conneciton.');
@@ -192,16 +213,22 @@ class MoviesRepository {
     }
   }
 
-  Uri _buildUri({required String path, required int page, String? query}) {
+  Uri _buildUri({
+    required String path,
+    int? page,
+    String? query,
+    Map<String, dynamic>? queryParameters,
+  }) {
     return Uri.https(
       urlAuthority,
       pathPrefix + path,
       {
         'api_key': _apiKey,
         'language': language,
-        'page': page.toString(),
         'include_adult': includeAdult,
+        if (page != null) 'page': page.toString(),
         if (query != null) 'query': query,
+        if (queryParameters != null) ...queryParameters,
       },
     );
   }

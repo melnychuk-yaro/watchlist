@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:watchlist/presentation/widgets/login-form.dart';
-import 'package:watchlist/presentation/widgets/sign-up-form.dart';
+import '../widgets/login_form.dart';
+import '../widgets/sign_up_form.dart';
 
 class AuthScreen extends StatelessWidget {
   @override
@@ -31,7 +31,7 @@ class __AuthFormSwicherState extends State<_AuthFormSwicher> {
   Widget build(BuildContext context) {
     return AnimatedSwitcher(
       duration: const Duration(milliseconds: 300),
-      transitionBuilder: (Widget child, Animation<double> animation) {
+      transitionBuilder: (child, animation) {
         return ScaleTransition(child: child, scale: animation);
       },
       child: _isLogin

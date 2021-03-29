@@ -1,4 +1,4 @@
-import 'package:watchlist/data/models/movie.dart';
+import 'movie.dart';
 
 class MovieDetailed extends Movie {
   final int id;
@@ -37,7 +37,7 @@ class MovieDetailed extends Movie {
 
   factory MovieDetailed.fromMap(Map<String, dynamic> movieMap) {
     String getVideoId(Map<String, dynamic> movieMap) {
-      String videoId = '';
+      var videoId = '';
       for (Map<String, dynamic> video in movieMap['videos']['results']) {
         if (video['site'] == 'YouTube' && video['type'] == 'Trailer') {
           videoId = video['key'];

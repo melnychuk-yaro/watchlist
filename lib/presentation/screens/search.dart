@@ -2,8 +2,8 @@ import 'dart:async';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:watchlist/business_logic/bloc/search_bloc.dart';
-import 'package:watchlist/presentation/widgets/search-grid.dart';
+import '../../business_logic/bloc/search_bloc.dart';
+import '../widgets/search_grid.dart';
 
 class Search extends StatefulWidget {
   final PageStorageKey key;

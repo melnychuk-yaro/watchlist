@@ -3,9 +3,9 @@ import 'dart:async';
 import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
 import 'package:flutter/foundation.dart';
-import 'package:watchlist/data/models/user.dart';
-import 'package:watchlist/data/repositories/auth_repository.dart';
 import 'package:pedantic/pedantic.dart';
+import '../../data/models/user.dart';
+import '../../data/repositories/auth_repository.dart';
 
 part 'auth_event.dart';
 part 'auth_state.dart';

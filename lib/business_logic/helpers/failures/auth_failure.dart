@@ -1,4 +1,4 @@
-import 'package:watchlist/business_logic/helpers/failures/failure.dart';
+import 'failure.dart';
 
 class AuthFailure extends Failure {
   final String message;

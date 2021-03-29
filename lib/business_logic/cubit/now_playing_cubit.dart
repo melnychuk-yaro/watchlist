@@ -1,9 +1,10 @@
 import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
 import 'package:flutter/foundation.dart';
-import 'package:watchlist/business_logic/helpers/failures/failure.dart';
-import 'package:watchlist/data/models/movie.dart';
-import 'package:watchlist/data/repositories/movies_repository.dart';
+
+import '../../data/models/movie.dart';
+import '../../data/repositories/movies_repository.dart';
+import '../helpers/failures/failure.dart';
 
 part 'now_playing_state.dart';
 

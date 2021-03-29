@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:watchlist/business_logic/bloc/favorites_bloc.dart';
-import 'package:watchlist/business_logic/cubit/all_favorites_cubit.dart';
-import 'package:watchlist/data/models/movie.dart';
+import '../../business_logic/bloc/favorites_bloc.dart';
+import '../../business_logic/cubit/all_favorites_cubit.dart';
+import '../../data/models/movie.dart';
 
 class AddToFavButton extends StatelessWidget {
   const AddToFavButton({

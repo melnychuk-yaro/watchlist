@@ -2,10 +2,10 @@ import 'package:flutter/material.dart';
 import 'package:flutter_signin_button/button_view.dart';
 import 'package:flutter_signin_button/flutter_signin_button.dart';
 import 'package:formz/formz.dart';
-import 'package:watchlist/business_logic/cubit/login_cubit.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:watchlist/data/models/password.dart';
-import 'package:watchlist/presentation/widgets/button-loading-indicator.dart';
+import '../../business_logic/cubit/login_cubit.dart';
+import '../../data/models/password.dart';
+import 'button_loading_indicator.dart';
 
 class LoginForm extends StatefulWidget {
   final Function toggleIsLogin;

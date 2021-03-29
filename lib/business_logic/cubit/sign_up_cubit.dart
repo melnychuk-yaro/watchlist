@@ -1,11 +1,12 @@
 import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
 import 'package:formz/formz.dart';
-import 'package:watchlist/business_logic/helpers/failures/auth_failure.dart';
-import 'package:watchlist/data/models/confirmed_password.dart';
-import 'package:watchlist/data/models/email.dart';
-import 'package:watchlist/data/models/password.dart';
-import 'package:watchlist/data/repositories/auth_repository.dart';
+
+import '../../data/models/confirmed_password.dart';
+import '../../data/models/email.dart';
+import '../../data/models/password.dart';
+import '../../data/repositories/auth_repository.dart';
+import '../helpers/failures/auth_failure.dart';
 
 part 'sign_up_state.dart';
 

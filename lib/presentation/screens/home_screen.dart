@@ -1,9 +1,10 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import 'package:watchlist/presentation/screens/favorites.dart';
-import 'package:watchlist/presentation/screens/search.dart';
-import 'package:watchlist/presentation/screens/top-rated.dart';
-import 'package:watchlist/presentation/screens/now-playing.dart';
+
+import 'favorites.dart';
+import 'now_playing.dart';
+import 'search.dart';
+import 'top_rated.dart';
 
 class HomeScreen extends StatefulWidget {
   @override
@@ -29,7 +30,7 @@ class _HomeScreenState extends State<HomeScreen> {
         actions: [
           IconButton(
             icon: Icon(Icons.exit_to_app),
-            onPressed: () => _auth.signOut(),
+            onPressed: _auth.signOut,
           )
         ],
       ),

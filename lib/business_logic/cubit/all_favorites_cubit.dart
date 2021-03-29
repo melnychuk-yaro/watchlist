@@ -2,8 +2,9 @@ import 'dart:async';
 
 import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
-import 'package:watchlist/business_logic/bloc/auth_bloc.dart';
-import 'package:watchlist/data/repositories/movies_repository.dart';
+
+import '../../data/repositories/movies_repository.dart';
+import '../bloc/auth_bloc.dart';
 
 part 'all_favorites_state.dart';
 
@@ -27,13 +28,13 @@ class AllFavoritesCubit extends Cubit<AllFavoritesState> {
   }
 
   Future<void> addFavMovie(int uidmovieId) async {
-    List<int> favoriteMovieIds = List.from(state.allFavoriteMovieIds)
+    final favoriteMovieIds = List<int>.from(state.allFavoriteMovieIds)
       ..add(uidmovieId);
     emit(AllFavoritesLoaded(favoriteMovieIds));
   }
 
   Future<void> removeFavMovie(int uidmovieId) async {
-    List<int> favoriteMovieIds = List.from(state.allFavoriteMovieIds)
+    final favoriteMovieIds = List<int>.from(state.allFavoriteMovieIds)
       ..remove(uidmovieId);
     emit(AllFavoritesLoaded(favoriteMovieIds));
   }

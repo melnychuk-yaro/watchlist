@@ -3,10 +3,10 @@ import 'dart:async';
 import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
 import 'package:meta/meta.dart';
-import 'package:watchlist/business_logic/helpers/failures/failure.dart';
-import 'package:watchlist/data/models/movie.dart';
-import 'package:watchlist/data/models/moviesPage.dart';
-import 'package:watchlist/data/repositories/movies_repository.dart';
+
+import '../../data/models/movie.dart';
+import '../../data/repositories/movies_repository.dart';
+import '../helpers/failures/failure.dart';
 
 part 'search_event.dart';
 part 'search_state.dart';
@@ -34,7 +34,7 @@ class SearchBloc extends Bloc<SearchEvent, SearchState> {
     } else if (event.query != state.query) {
       yield state.copyWith(status: SearchStatus.loading);
       try {
-        final MoviesPage moviesPage =
+        final moviesPage =
             await moviesRepository.searchMovies(query: event.query);
         yield state.copyWith(
           status: SearchStatus.loaded,
@@ -51,11 +51,11 @@ class SearchBloc extends Bloc<SearchEvent, SearchState> {
 
   Stream<SearchState> _mapSearchLoadNextPageEvent(event) async* {
     try {
-      final MoviesPage moviesPage = await moviesRepository.searchMovies(
+      final moviesPage = await moviesRepository.searchMovies(
         query: state.query,
         page: state.nextPageKey ?? 1,
       );
-      final List<Movie> updatedMovies = List<Movie>.from(state.loadedMovies)
+      final updatedMovies = List<Movie>.from(state.loadedMovies)
         ..addAll(moviesPage.itemList);
       yield state.copyWith(
         status: SearchStatus.loaded,

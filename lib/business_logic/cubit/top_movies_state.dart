@@ -13,7 +13,7 @@ abstract class TopMoviesState extends Equatable {
   final int? nextPageKey;
 
   @override
-  List<Object> get props => [this.movies];
+  List<Object> get props => [movies];
 }
 
 class TopMoviesInitial extends TopMoviesState {

@@ -1,13 +1,14 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:watchlist/business_logic/bloc/favorites_bloc.dart';
-import 'package:watchlist/business_logic/cubit/single_movie_cubit.dart';
-import 'package:watchlist/business_logic/cubit/all_favorites_cubit.dart';
-import 'package:watchlist/constatns.dart';
-import 'package:watchlist/data/models/movie.dart';
-import 'package:watchlist/presentation/screens/movie-screen.dart';
-import 'package:watchlist/presentation/widgets/add-to-fav-button.dart';
+
+import '../../business_logic/bloc/favorites_bloc.dart';
+import '../../business_logic/cubit/all_favorites_cubit.dart';
+import '../../business_logic/cubit/single_movie_cubit.dart';
+import '../../constatns.dart';
+import '../../data/models/movie.dart';
+import '../screens/movie_screen.dart';
+import 'add_to_fav_button.dart';
 
 class MovieCard extends StatelessWidget {
   final Movie movie;
@@ -16,7 +17,7 @@ class MovieCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final Brightness _brightness = MediaQuery.of(context).platformBrightness;
+    final _brightness = MediaQuery.of(context).platformBrightness;
 
     return Stack(
       children: [

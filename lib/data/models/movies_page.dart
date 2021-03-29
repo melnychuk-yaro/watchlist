@@ -1,5 +1,5 @@
 import 'package:flutter/foundation.dart';
-import 'package:watchlist/data/models/movie.dart';
+import 'movie.dart';
 
 @immutable
 class MoviesPage {

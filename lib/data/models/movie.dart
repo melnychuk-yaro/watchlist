@@ -37,11 +37,11 @@ class Movie {
 
   Map<String, dynamic> toMap() {
     return {
-      'id': this.id,
-      'title': this.title,
-      'release_date': this.releaseDate,
-      'poster_path': this.posterFileName,
-      'vote_average': this.rating
+      'id': id,
+      'title': title,
+      'release_date': releaseDate,
+      'poster_path': posterFileName,
+      'vote_average': rating
     };
   }
 

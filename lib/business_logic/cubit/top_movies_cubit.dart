@@ -1,9 +1,10 @@
 import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
 import 'package:meta/meta.dart';
-import 'package:watchlist/business_logic/helpers/failures/failure.dart';
-import 'package:watchlist/data/models/movie.dart';
-import 'package:watchlist/data/repositories/movies_repository.dart';
+
+import '../../data/models/movie.dart';
+import '../../data/repositories/movies_repository.dart';
+import '../helpers/failures/failure.dart';
 
 part 'top_movies_state.dart';
 
@@ -15,7 +16,7 @@ class TopMoviesCubit extends Cubit<TopMoviesState> {
     try {
       final moviesPage =
           await moviesRepository.getTopRatedMovies(page: state.nextPageKey);
-      final List<Movie> updatedMovies = List<Movie>.from(state.movies)
+      final updatedMovies = List<Movie>.from(state.movies)
         ..addAll(moviesPage.itemList);
       emit(TopMoviesLoaded(
         movies: updatedMovies,

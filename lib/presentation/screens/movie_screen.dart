@@ -1,11 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:watchlist/business_logic/cubit/single_movie_cubit.dart';
-import 'package:watchlist/constatns.dart';
-import 'package:watchlist/data/models/movie_detailed.dart';
-import 'package:watchlist/presentation/widgets/add-to-fav-button.dart';
-import 'package:watchlist/presentation/widgets/styled-text.dart';
 import 'package:youtube_player_iframe/youtube_player_iframe.dart';
+
+import '../../business_logic/cubit/single_movie_cubit.dart';
+import '../../constatns.dart';
+import '../../data/models/movie_detailed.dart';
+import '../widgets/add_to_fav_button.dart';
+import '../widgets/styled_text.dart';
 
 class MovieScreen extends StatefulWidget {
   const MovieScreen({required this.id});

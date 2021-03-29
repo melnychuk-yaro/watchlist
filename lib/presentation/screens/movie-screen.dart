@@ -5,7 +5,7 @@ import 'package:watchlist/constatns.dart';
 import 'package:watchlist/data/models/movie_detailed.dart';
 import 'package:watchlist/presentation/widgets/add-to-fav-button.dart';
 import 'package:watchlist/presentation/widgets/styled-text.dart';
-import 'package:youtube_player_flutter/youtube_player_flutter.dart';
+import 'package:youtube_player_iframe/youtube_player_iframe.dart';
 
 class MovieScreen extends StatefulWidget {
   const MovieScreen({required this.id});
@@ -289,27 +289,40 @@ class Genres extends StatelessWidget {
   }
 }
 
-class YouTubePlayer extends StatelessWidget {
+class YouTubePlayer extends StatefulWidget {
   YouTubePlayer({Key? key, required this.youtubeVideoId}) : super(key: key);
   final String youtubeVideoId;
 
+  @override
+  _YouTubePlayerState createState() => _YouTubePlayerState();
+}
+
+class _YouTubePlayerState extends State<YouTubePlayer> {
   late final YoutubePlayerController _controller = YoutubePlayerController(
-    initialVideoId: youtubeVideoId,
-    flags: YoutubePlayerFlags(autoPlay: false),
+    initialVideoId: widget.youtubeVideoId,
+    params: YoutubePlayerParams(
+      autoPlay: false,
+    ),
   );
+
+  @override
+  void dispose() {
+    super.dispose();
+    _controller.close();
+  }
 
   @override
   Widget build(BuildContext context) {
     return Container(
       decoration: BoxDecoration(
-        boxShadow: kShadow,
         borderRadius: BorderRadius.circular(kBorderRadius),
+        boxShadow: kShadow,
       ),
       child: ClipRRect(
         borderRadius: BorderRadius.circular(kBorderRadius),
-        child: YoutubePlayer(
+        child: YoutubePlayerIFrame(
           controller: _controller,
-          showVideoProgressIndicator: true,
+          aspectRatio: 16 / 9,
         ),
       ),
     );

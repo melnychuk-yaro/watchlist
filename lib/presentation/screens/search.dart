@@ -2,8 +2,9 @@ import 'dart:async';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:watchlist/constatns.dart';
+
 import '../../business_logic/bloc/search_bloc.dart';
+import '../../constatns.dart';
 import '../widgets/search_grid.dart';
 
 class Search extends StatefulWidget {

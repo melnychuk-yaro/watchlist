@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:intl/intl.dart';
 
 import '../../../business_logic/cubit/single_movie_cubit.dart';
 import '../../../constatns.dart';
@@ -55,6 +56,11 @@ class _SingleMovie extends StatelessWidget {
   _SingleMovie({Key? key, required this.movie}) : super(key: key);
   final MovieDetailed movie;
   static const double posterWidth = 120;
+  final budgetFormat = NumberFormat.currency(
+    locale: 'en_US',
+    symbol: '\$',
+    decimalDigits: 0,
+  );
 
   @override
   Widget build(BuildContext context) {
@@ -127,7 +133,7 @@ class _SingleMovie extends StatelessWidget {
                               ? InfoItem(defenition: 'Budget:', value: '-')
                               : InfoItem(
                                   defenition: 'Budget:',
-                                  value: '\$${movie.budget}',
+                                  value: '${budgetFormat.format(movie.budget)}',
                                 ),
                         ],
                       ),

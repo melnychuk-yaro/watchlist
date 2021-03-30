@@ -7,7 +7,7 @@ import '../../business_logic/cubit/all_favorites_cubit.dart';
 import '../../business_logic/cubit/single_movie_cubit.dart';
 import '../../constatns.dart';
 import '../../data/models/movie.dart';
-import '../screens/movie_screen.dart';
+import '../screens/movie_screen/movie_screen.dart';
 import 'add_to_fav_button.dart';
 
 class MovieCard extends StatelessWidget {

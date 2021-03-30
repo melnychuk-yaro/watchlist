@@ -36,8 +36,8 @@ dependencies:
   google_sign_in: ^5.0.1
   http: ^0.13.1
   infinite_scroll_pagination: ^3.0.1
+  intl: ^0.17.0
   pedantic: ^1.11.0
-  # youtube_player_flutter: ^8.0.0
   youtube_player_iframe: ^2.0.0
   
 

@@ -2,6 +2,7 @@ import 'dart:async';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:watchlist/constatns.dart';
 import '../../business_logic/bloc/search_bloc.dart';
 import '../widgets/search_grid.dart';
 
@@ -45,7 +46,12 @@ class _SearchState extends State<Search> {
     return Column(
       children: [
         Padding(
-          padding: const EdgeInsets.fromLTRB(8.0, 12.0, 8.0, 4.0),
+          padding: const EdgeInsets.fromLTRB(
+            kPadding / 2,
+            kPadding / 2,
+            kPadding / 2,
+            kPadding / 4,
+          ),
           child: TextField(
             controller: _searchQuery,
             decoration: InputDecoration(hintText: 'Search'),

@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:formz/formz.dart';
 import '../../business_logic/cubit/sign_up_cubit.dart';
+import '../../constatns.dart';
 import '../../data/models/confirmed_password.dart';
 import '../../data/models/password.dart';
 import 'button_loading_indicator.dart';
@@ -48,21 +49,21 @@ class _SignUpFormState extends State<SignUpForm> {
           mainAxisSize: MainAxisSize.min,
           children: [
             _EmailInput(nextFieldFocusNode: passwordFocusNode),
-            const SizedBox(height: 16),
+            const SizedBox(height: kPadding),
             _PasswordInput(
               focusNode: passwordFocusNode,
               nextFieldFocusNode: confirmedPasswordFocusNode,
             ),
-            const SizedBox(height: 16),
+            const SizedBox(height: kPadding),
             _PasswordConfirmInput(focusNode: confirmedPasswordFocusNode),
-            const SizedBox(height: 16),
+            const SizedBox(height: kPadding),
             _SignUpButton(),
-            const SizedBox(height: 16),
+            const SizedBox(height: kPadding),
             Row(
               children: <Widget>[
                 Expanded(child: Divider(color: Colors.white)),
                 Padding(
-                  padding: const EdgeInsets.symmetric(horizontal: 16.0),
+                  padding: const EdgeInsets.symmetric(horizontal: kPadding),
                   child: const Text('OR'),
                 ),
                 Expanded(child: Divider(color: Colors.white)),
@@ -121,7 +122,7 @@ class _EmailInput extends StatelessWidget {
             hintText: 'Email',
             prefixIcon: Padding(
               child: Icon(Icons.email, color: Theme.of(context).hintColor),
-              padding: EdgeInsets.only(left: 16, right: 10),
+              padding: EdgeInsets.only(left: kPadding, right: 10),
             ),
             errorText: state.email.invalid ? 'Invalid email' : null,
           ),
@@ -156,7 +157,7 @@ class _PasswordInput extends StatelessWidget {
           decoration: InputDecoration(
             hintText: 'Password',
             prefixIcon: Padding(
-              padding: const EdgeInsets.only(left: 16, right: 10),
+              padding: const EdgeInsets.only(left: kPadding, right: 10),
               child: Icon(Icons.vpn_key, color: Theme.of(context).hintColor),
             ),
             errorText: state.password.error == PasswordValidationError.short
@@ -190,7 +191,7 @@ class _PasswordConfirmInput extends StatelessWidget {
           decoration: InputDecoration(
             hintText: 'Confirm Password',
             prefixIcon: Padding(
-              padding: const EdgeInsets.only(left: 16, right: 10),
+              padding: const EdgeInsets.only(left: kPadding, right: 10),
               child: Icon(Icons.vpn_key, color: Theme.of(context).hintColor),
             ),
             errorText: state.confirmedPassword.error ==

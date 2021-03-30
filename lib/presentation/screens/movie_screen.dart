@@ -75,7 +75,7 @@ class _SingleMovie extends StatelessWidget {
               ),
               SafeArea(
                 child: Padding(
-                  padding: const EdgeInsets.only(left: 16.0, top: 16.0),
+                  padding: const EdgeInsets.only(left: kPadding, top: kPadding),
                   child: Container(
                     width: 48,
                     height: 48,
@@ -97,7 +97,7 @@ class _SingleMovie extends StatelessWidget {
             ],
           ),
           Padding(
-            padding: const EdgeInsets.all(16),
+            padding: const EdgeInsets.all(kPadding),
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               mainAxisSize: MainAxisSize.min,
@@ -106,7 +106,7 @@ class _SingleMovie extends StatelessWidget {
                   children: [
                     Container(width: posterWidth),
                     Padding(
-                      padding: const EdgeInsets.only(left: 16.0),
+                      padding: const EdgeInsets.only(left: kPadding),
                       child: Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
@@ -177,7 +177,7 @@ class _ToolBar extends StatelessWidget {
         ),
       ),
       child: Padding(
-        padding: const EdgeInsets.all(8.0),
+        padding: const EdgeInsets.all(kPadding / 2),
         child: Row(
           children: [
             AddToFavButton(

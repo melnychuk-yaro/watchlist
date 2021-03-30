@@ -9,5 +9,6 @@ const List<BoxShadow> kShadow = [
   ),
 ];
 const double kBorderRadius = 16.0;
+const double kPadding = 16.0;
 const Color kLightText = Color(0xEEFAFAFA);
 const Color kDarkText = Color(0xEE303030);

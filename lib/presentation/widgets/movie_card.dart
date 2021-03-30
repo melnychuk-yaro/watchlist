@@ -54,7 +54,7 @@ class MovieCard extends StatelessWidget {
                   color:
                       _brightness == Brightness.light ? kLightText : kDarkText,
                   padding: const EdgeInsets.symmetric(
-                      horizontal: 8.0, vertical: 8.0),
+                      horizontal: kPadding / 2, vertical: kPadding / 2),
                   child: Text(
                     movie.title,
                     textAlign: TextAlign.center,
@@ -66,7 +66,7 @@ class MovieCard extends StatelessWidget {
           ),
         ),
         Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 8.0),
+          padding: const EdgeInsets.symmetric(horizontal: kPadding / 2),
           child: Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [

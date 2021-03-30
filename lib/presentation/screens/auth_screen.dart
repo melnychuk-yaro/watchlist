@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import '../../constatns.dart';
 import '../widgets/login_form.dart';
 import '../widgets/sign_up_form.dart';
 
@@ -59,7 +60,12 @@ class _LoginCard extends StatelessWidget {
         borderRadius: BorderRadius.circular(24.0),
       ),
       child: Container(
-        padding: const EdgeInsets.fromLTRB(24.0, 30.0, 24.0, 16.0),
+        padding: const EdgeInsets.fromLTRB(
+          kPadding * 1.5,
+          kPadding * 2,
+          kPadding * 1.5,
+          kPadding,
+        ),
         width: 300.0,
         child: child,
       ),

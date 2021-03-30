@@ -38,6 +38,9 @@ class MovieCard extends StatelessWidget {
           ),
           child: Card(
             clipBehavior: Clip.antiAlias,
+            shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(kBorderRadius),
+            ),
             child: Container(
               decoration: BoxDecoration(
                 image: DecorationImage(

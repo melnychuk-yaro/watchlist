@@ -4,11 +4,11 @@ import 'package:bloc/bloc.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:equatable/equatable.dart';
 import 'package:meta/meta.dart';
-import 'package:watchlist/business_logic/bloc/auth_bloc.dart';
-import 'package:watchlist/business_logic/helpers/failures/failure.dart';
-import 'package:watchlist/data/models/favoritesMoviesPage.dart';
-import 'package:watchlist/data/models/movie.dart';
-import 'package:watchlist/data/repositories/movies_repository.dart';
+
+import '../../data/models/movie.dart';
+import '../../data/repositories/movies_repository.dart';
+import '../helpers/failures/failure.dart';
+import 'auth_bloc.dart';
 
 part 'favorites_event.dart';
 part 'favorites_state.dart';
@@ -56,14 +56,13 @@ class FavoritesBloc extends Bloc<FavoritesEvent, FavoritesState> {
 
   Stream<FavoritesState> _favoritesLoad() async* {
     try {
-      final FavoritesMoviesPage moviesPage =
-          await moviesRepository.getFavMovies(
+      final moviesPage = await moviesRepository.getFavMovies(
         userId: state.userId,
         lastDocument: state.lastDocumentSnapshot,
       );
-      final List<Movie> updatedMovies = List<Movie>.from(state.loadedMovies)
+      final updatedMovies = List<Movie>.from(state.loadedMovies)
         ..addAll(moviesPage.itemList);
-      yield updatedMovies.length == 0
+      yield updatedMovies.isEmpty
           ? state.copyWith(
               status: FavoritesStatus.empty,
               loadedMovies: updatedMovies,
@@ -93,7 +92,7 @@ class FavoritesBloc extends Bloc<FavoritesEvent, FavoritesState> {
         movie: event.movie,
         userId: state.userId,
       );
-      List<Movie> newMovies = List<Movie>.from(state.loadedMovies)
+      final newMovies = List<Movie>.from(state.loadedMovies)
         ..insert(0, event.movie);
       yield state.copyWith(
         status: FavoritesStatus.loaded,
@@ -115,10 +114,10 @@ class FavoritesBloc extends Bloc<FavoritesEvent, FavoritesState> {
         id: event.movieId,
         userId: state.userId,
       );
-      List<Movie> updatedMovies = List.from(state.loadedMovies)
+      final updatedMovies = List<Movie>.from(state.loadedMovies)
         ..removeWhere((movie) => movie.id == event.movieId);
 
-      yield updatedMovies.length == 0
+      yield updatedMovies.isEmpty
           ? state.copyWith(
               status: FavoritesStatus.empty,
               loadedMovies: updatedMovies,

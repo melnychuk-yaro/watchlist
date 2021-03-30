@@ -1,10 +1,11 @@
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:formz/formz.dart';
 import 'package:equatable/equatable.dart';
-import 'package:watchlist/business_logic/helpers/failures/auth_failure.dart';
-import 'package:watchlist/data/models/email.dart';
-import 'package:watchlist/data/models/password.dart';
-import 'package:watchlist/data/repositories/auth_repository.dart';
+
+import '../../data/models/email.dart';
+import '../../data/models/password.dart';
+import '../../data/repositories/auth_repository.dart';
+import '../helpers/failures/auth_failure.dart';
 
 part 'login_state.dart';
 
@@ -53,8 +54,6 @@ class LoginCubit extends Cubit<LoginState> {
       emit(state.copyWith(status: FormzStatus.submissionSuccess));
     } on Exception {
       emit(state.copyWith(status: FormzStatus.submissionFailure));
-    } on NoSuchMethodError {
-      emit(state.copyWith(status: FormzStatus.pure));
     }
   }
 }

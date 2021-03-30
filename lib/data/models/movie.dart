@@ -24,11 +24,10 @@ class Movie {
       id: movieMap['id'],
       title: movieMap['title'],
       releaseDate: movieMap['release_date'] ?? '',
-      posterFileName: movieMap['poster_path'] == null ||
-              movieMap['poster_path'] == 'null' ||
-              movieMap['poster_path'] == ''
-          ? ''
-          : movieMap['poster_path'],
+      posterFileName:
+          movieMap['poster_path'] == null || movieMap['poster_path'] == 'null'
+              ? ''
+              : movieMap['poster_path'],
       rating:
           movieMap['vote_average'] == null || movieMap['vote_average'] == 'null'
               ? 0.0
@@ -38,11 +37,11 @@ class Movie {
 
   Map<String, dynamic> toMap() {
     return {
-      'id': this.id,
-      'title': this.title,
-      'release_date': this.releaseDate,
-      'poster_path': this.posterFileName,
-      'vote_average': this.rating
+      'id': id,
+      'title': title,
+      'release_date': releaseDate,
+      'poster_path': posterFileName,
+      'vote_average': rating
     };
   }
 

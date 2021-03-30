@@ -2,8 +2,8 @@ import 'dart:async';
 
 import 'package:firebase_auth/firebase_auth.dart' as firebase_auth;
 import 'package:google_sign_in/google_sign_in.dart';
-import 'package:watchlist/business_logic/helpers/failures/auth_failure.dart';
-import 'package:watchlist/data/models/user.dart';
+import '../../business_logic/helpers/failures/auth_failure.dart';
+import '../models/user.dart';
 
 /// {@template authentication_repository}
 /// Repository which manages user authentication.

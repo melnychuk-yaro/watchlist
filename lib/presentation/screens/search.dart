@@ -2,8 +2,10 @@ import 'dart:async';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:watchlist/business_logic/bloc/search_bloc.dart';
-import 'package:watchlist/presentation/widgets/search-grid.dart';
+
+import '../../business_logic/bloc/search_bloc.dart';
+import '../../constatns.dart';
+import '../widgets/search_grid.dart';
 
 class Search extends StatefulWidget {
   final PageStorageKey key;
@@ -45,7 +47,12 @@ class _SearchState extends State<Search> {
     return Column(
       children: [
         Padding(
-          padding: const EdgeInsets.fromLTRB(8.0, 12.0, 8.0, 4.0),
+          padding: const EdgeInsets.fromLTRB(
+            kPadding / 2,
+            kPadding / 2,
+            kPadding / 2,
+            kPadding / 4,
+          ),
           child: TextField(
             controller: _searchQuery,
             decoration: InputDecoration(hintText: 'Search'),

@@ -1,6 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:watchlist/data/models/movie.dart';
-import 'package:watchlist/data/models/moviesPage.dart';
+import 'movie.dart';
+import 'movies_page.dart';
 
 class FavoritesMoviesPage extends MoviesPage {
   final List<Movie> itemList;

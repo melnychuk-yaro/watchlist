@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 
+import '../../constatns.dart';
+
 class LightTheme {
   final Color color = Colors.indigoAccent;
 
@@ -11,6 +13,7 @@ class LightTheme {
           backgroundColor: Colors.white,
           textTheme: TextTheme(headline6: TextStyle().copyWith(color: color)),
           actionsIconTheme: IconThemeData().copyWith(color: color),
+          iconTheme: IconThemeData(color: color),
         ),
         textSelectionTheme: TextSelectionThemeData().copyWith(
           selectionColor: color,
@@ -20,8 +23,10 @@ class LightTheme {
           style: ElevatedButton.styleFrom(
             elevation: 0,
             primary: color,
-            padding:
-                const EdgeInsets.symmetric(horizontal: 24.0, vertical: 8.0),
+            padding: const EdgeInsets.symmetric(
+              horizontal: kPadding * 1.5,
+              vertical: kPadding / 2,
+            ),
             textStyle: TextStyle(fontSize: 16.0),
           ),
         ),

@@ -3,10 +3,11 @@ import 'dart:io';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:http/http.dart' as http;
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:watchlist/business_logic/helpers/failures/failure.dart';
-import 'package:watchlist/data/models/favoritesMoviesPage.dart';
-import 'package:watchlist/data/models/movie.dart';
-import 'package:watchlist/data/models/moviesPage.dart';
+import '../../business_logic/helpers/failures/failure.dart';
+import '../models/favorites_movies_page.dart';
+import '../models/movie.dart';
+import '../models/movie_detailed.dart';
+import '../models/movies_page.dart';
 
 class MoviesRepository {
   static const String urlAuthority = 'api.themoviedb.org';
@@ -16,7 +17,7 @@ class MoviesRepository {
   final String? _apiKey = env['TMDB_API_KEY'];
   final FirebaseFirestore _firestore = FirebaseFirestore.instance;
 
-  Future<MoviesPage> getTopRatedMovies({page = 1}) async {
+  Future<MoviesPage> getTopRatedMovies({int? page = 1}) async {
     final uri = _buildUri(path: '/movie/top_rated', page: page);
 
     try {
@@ -35,7 +36,7 @@ class MoviesRepository {
     }
   }
 
-  Future<MoviesPage> getNewMovies({page = 1}) async {
+  Future<MoviesPage> getNewMovies({int? page = 1}) async {
     final uri = _buildUri(path: '/movie/now_playing', page: page);
     try {
       final response = await http.get(uri);
@@ -73,10 +74,30 @@ class MoviesRepository {
     }
   }
 
+  Future<MovieDetailed> getSingleMovie({required int id}) async {
+    final uri = _buildUri(
+        path: '/movie/$id', queryParameters: {'append_to_response': 'videos'});
+    try {
+      final response = await http.get(uri);
+      if (response.statusCode == 200) {
+        Map<String, dynamic> body = json.decode(response.body);
+        return MovieDetailed.fromMap(body);
+      } else {
+        throw Failure('Error fetching movie. Id: $id');
+      }
+    } on SocketException {
+      throw Failure('No internet conneciton.');
+    } on HttpException {
+      throw Failure('Couldn\'t find movies.');
+    } on FormatException {
+      throw Failure('Bad response format.');
+    }
+  }
+
   Future<void> saveFavMovie(
       {required Movie movie, required String userId}) async {
     try {
-      Map<String, dynamic> movieMap = movie.toMap();
+      var movieMap = movie.toMap();
       movieMap['date_added_to_favorite'] =
           DateTime.now().millisecondsSinceEpoch;
 
@@ -136,12 +157,12 @@ class MoviesRepository {
               .limit(limit)
               .get();
 
-      bool isLastPage = querySnapshot.docs.length < limit ? true : false;
-      if (querySnapshot.docs.length > 0) {
+      final isLastPage = querySnapshot.docs.length < limit ? true : false;
+      if (querySnapshot.docs.isEmpty) {
         lastDocument = querySnapshot.docs[querySnapshot.docs.length - 1];
       }
 
-      List<Movie> movies = querySnapshot.docs.map((doc) {
+      final movies = querySnapshot.docs.map((doc) {
         if (doc.data() == null) throw Failure('Bad response format.');
         return Movie.fromMap(doc.data()!);
       }).toList();
@@ -192,16 +213,22 @@ class MoviesRepository {
     }
   }
 
-  Uri _buildUri({required String path, required int page, String? query}) {
+  Uri _buildUri({
+    required String path,
+    int? page,
+    String? query,
+    Map<String, dynamic>? queryParameters,
+  }) {
     return Uri.https(
       urlAuthority,
       pathPrefix + path,
       {
         'api_key': _apiKey,
         'language': language,
-        'page': page.toString(),
         'include_adult': includeAdult,
+        if (page != null) 'page': page.toString(),
         if (query != null) 'query': query,
+        if (queryParameters != null) ...queryParameters,
       },
     );
   }

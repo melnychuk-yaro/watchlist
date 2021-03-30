@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:infinite_scroll_pagination/infinite_scroll_pagination.dart';
-import 'package:watchlist/business_logic/cubit/now_playing_cubit.dart';
-import 'package:watchlist/data/models/movie.dart';
-import 'package:watchlist/presentation/widgets/movies-paginated-grid.dart';
+import '../../business_logic/cubit/now_playing_cubit.dart';
+import '../../data/models/movie.dart';
+import '../widgets/movies_paginated_grid.dart';
 
 class NowPlaying extends StatefulWidget {
   final PageStorageKey key;

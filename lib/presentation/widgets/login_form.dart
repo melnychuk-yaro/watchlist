@@ -1,11 +1,13 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_signin_button/button_view.dart';
 import 'package:flutter_signin_button/flutter_signin_button.dart';
 import 'package:formz/formz.dart';
-import 'package:watchlist/business_logic/cubit/login_cubit.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:watchlist/data/models/password.dart';
-import 'package:watchlist/presentation/widgets/button-loading-indicator.dart';
+
+import '../../business_logic/cubit/login_cubit.dart';
+import '../../constatns.dart';
+import '../../data/models/password.dart';
+import 'button_loading_indicator.dart';
 
 class LoginForm extends StatefulWidget {
   final Function toggleIsLogin;
@@ -47,21 +49,21 @@ class _LoginFormState extends State<LoginForm> {
           mainAxisSize: MainAxisSize.min,
           children: [
             _EmailInput(nextFieldFocusNode: passwordFocusNode),
-            const SizedBox(height: 16),
+            const SizedBox(height: kPadding),
             _PasswordInput(passwordFocusNode: passwordFocusNode),
-            const SizedBox(height: 16),
+            const SizedBox(height: kPadding),
             _LoginButton(),
-            const SizedBox(height: 8),
+            const SizedBox(height: kPadding / 2),
             SignInButton(
               Buttons.GoogleDark,
               onPressed: () => context.read<LoginCubit>().logInWithGoogle(),
             ),
-            const SizedBox(height: 16),
+            const SizedBox(height: kPadding),
             Row(
               children: <Widget>[
                 Expanded(child: Divider(color: Colors.white)),
                 Padding(
-                  padding: const EdgeInsets.symmetric(horizontal: 16.0),
+                  padding: const EdgeInsets.symmetric(horizontal: kPadding),
                   child: const Text('OR'),
                 ),
                 Expanded(child: Divider(color: Colors.white)),
@@ -101,7 +103,7 @@ class _EmailInput extends StatelessWidget {
             hintText: 'Email',
             prefixIcon: Padding(
               child: Icon(Icons.email, color: Theme.of(context).hintColor),
-              padding: EdgeInsets.only(left: 16, right: 10),
+              padding: EdgeInsets.only(left: kPadding, right: 10),
             ),
             errorText: state.email.invalid ? 'Invalid email' : null,
           ),
@@ -132,7 +134,7 @@ class _PasswordInput extends StatelessWidget {
           decoration: InputDecoration(
             hintText: 'Password',
             prefixIcon: Padding(
-              padding: const EdgeInsets.only(left: 16, right: 10),
+              padding: const EdgeInsets.only(left: kPadding, right: 10),
               child: Icon(Icons.vpn_key, color: Theme.of(context).hintColor),
             ),
             errorText: state.password.error == PasswordValidationError.short

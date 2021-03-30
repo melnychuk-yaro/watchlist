@@ -1,3 +1,5 @@
+[![style: effective dart](https://img.shields.io/badge/style-effective_dart-40c4ff.svg)](https://pub.dev/packages/effective_dart) <a href="https://github.com/felangel/bloc"><img src="https://tinyurl.com/bloc-library" alt="Bloc Library"></a> ![firebase](https://img.shields.io/badge/firebase%20-%23039BE5.svg?&style=plaastic&logo=firebase)
+
 # Watchlist
 
 ### Save movies you want to watch later.

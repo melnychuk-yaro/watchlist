@@ -1,8 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:infinite_scroll_pagination/infinite_scroll_pagination.dart';
-import 'package:watchlist/data/models/movie.dart';
-import 'package:watchlist/presentation/widgets/movie-card.dart';
-import 'package:watchlist/presentation/widgets/styled-text.dart';
+import '../../constatns.dart';
+import '../../data/models/movie.dart';
+import 'movie_card.dart';
+import 'styled_text.dart';
 
 class MoviesPaginatedGrid extends StatelessWidget {
   MoviesPaginatedGrid({
@@ -29,9 +30,9 @@ class MoviesPaginatedGrid extends StatelessWidget {
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
               StyledText(text: pagingController.error, icon: Icons.error),
-              const SizedBox(height: 8),
+              const SizedBox(height: kPadding / 2),
               ElevatedButton(
-                onPressed: () => pagingController.refresh(),
+                onPressed: pagingController.refresh,
                 child: Text('Try again'),
               ),
             ],

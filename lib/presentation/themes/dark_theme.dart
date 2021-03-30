@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 
+import '../../constatns.dart';
+
 class DarkTheme {
   final Color color = Colors.indigoAccent.shade100;
   final Color darkColor = const Color(0xFF424242);
@@ -25,8 +27,10 @@ class DarkTheme {
           style: ElevatedButton.styleFrom(
             elevation: 0,
             primary: color,
-            padding:
-                const EdgeInsets.symmetric(horizontal: 24.0, vertical: 8.0),
+            padding: const EdgeInsets.symmetric(
+              horizontal: kPadding * 1.5,
+              vertical: kPadding / 2,
+            ),
             textStyle: TextStyle(fontSize: 16.0),
           ),
         ),

@@ -13,7 +13,7 @@ abstract class NowPlayingState extends Equatable {
   final int? nextPageKey;
 
   @override
-  List<Object> get props => [this.movies];
+  List<Object> get props => [movies];
 }
 
 class NowPlayingInitial extends NowPlayingState {

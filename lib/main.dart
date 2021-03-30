@@ -1,24 +1,25 @@
-import 'package:flutter/material.dart';
 import 'package:firebase_core/firebase_core.dart';
+import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:watchlist/business_logic/bloc/favorites_bloc.dart';
-import 'package:watchlist/business_logic/bloc/search_bloc.dart';
-import 'package:watchlist/business_logic/bloc/auth_bloc.dart';
-import 'package:watchlist/business_logic/cubit/all_favorites_cubit.dart';
-import 'package:watchlist/business_logic/cubit/now_playing_cubit.dart';
-import 'package:watchlist/business_logic/cubit/sign_up_cubit.dart';
-import 'package:watchlist/business_logic/cubit/top_movies_cubit.dart';
-import 'package:watchlist/data/repositories/auth_repository.dart';
-import 'package:watchlist/data/repositories/movies_repository.dart';
-import 'package:watchlist/presentation/screens/home-screen.dart';
-import 'package:watchlist/presentation/screens/auth-screen.dart';
-import 'package:watchlist/presentation/themes/app_theme.dart';
-import 'package:flutter_dotenv/flutter_dotenv.dart' as DotEnv;
+import 'package:flutter_dotenv/flutter_dotenv.dart' as dot_env;
 
+import 'business_logic/bloc/auth_bloc.dart';
+import 'business_logic/bloc/favorites_bloc.dart';
+import 'business_logic/bloc/search_bloc.dart';
+import 'business_logic/cubit/all_favorites_cubit.dart';
 import 'business_logic/cubit/login_cubit.dart';
+import 'business_logic/cubit/now_playing_cubit.dart';
+import 'business_logic/cubit/sign_up_cubit.dart';
+import 'business_logic/cubit/single_movie_cubit.dart';
+import 'business_logic/cubit/top_movies_cubit.dart';
+import 'data/repositories/auth_repository.dart';
+import 'data/repositories/movies_repository.dart';
+import 'presentation/screens/auth_screen.dart';
+import 'presentation/screens/home_screen.dart';
+import 'presentation/themes/app_theme.dart';
 
 Future<void> main() async {
-  await DotEnv.load(fileName: ".env");
+  await dot_env.load(fileName: ".env");
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp();
   runApp(App());
@@ -68,6 +69,10 @@ class App extends StatelessWidget {
                       ),
                       BlocProvider<NowPlayingCubit>(
                         create: (context) => NowPlayingCubit(_moviesRepository),
+                      ),
+                      BlocProvider<SingleMovieCubit>(
+                        create: (context) =>
+                            SingleMovieCubit(_moviesRepository),
                       ),
                     ],
                     child: HomeScreen(),

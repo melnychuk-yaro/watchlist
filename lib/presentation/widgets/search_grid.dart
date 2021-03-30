@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:infinite_scroll_pagination/infinite_scroll_pagination.dart';
-import 'package:watchlist/business_logic/bloc/search_bloc.dart';
-import 'package:watchlist/data/models/movie.dart';
-import 'package:watchlist/presentation/widgets/movies-paginated-grid.dart';
-import 'package:watchlist/presentation/widgets/styled-text.dart';
+import '../../business_logic/bloc/search_bloc.dart';
+import '../../data/models/movie.dart';
+import 'movies_paginated_grid.dart';
+import 'styled_text.dart';
 
 class SearchGrid extends StatefulWidget {
   @override
@@ -17,7 +17,7 @@ class _SearchGridState extends State<SearchGrid> {
   @override
   void initState() {
     super.initState();
-    SearchBloc _bloc = context.read<SearchBloc>();
+    final _bloc = context.read<SearchBloc>();
     _setPaginationIntialState(_bloc);
     _pagingController.addPageRequestListener((pageKey) {
       _bloc.add(SearchNextPageLoadEvent());

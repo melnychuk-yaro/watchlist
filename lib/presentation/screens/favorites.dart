@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:infinite_scroll_pagination/infinite_scroll_pagination.dart';
-import 'package:watchlist/business_logic/bloc/favorites_bloc.dart';
-import 'package:watchlist/data/models/movie.dart';
-import 'package:watchlist/presentation/widgets/movies-paginated-grid.dart';
-import 'package:watchlist/presentation/widgets/styled-text.dart';
+import '../../business_logic/bloc/favorites_bloc.dart';
+import '../../data/models/movie.dart';
+import '../widgets/movies_paginated_grid.dart';
+import '../widgets/styled_text.dart';
 
 class Favorites extends StatefulWidget {
   final PageStorageKey key;
@@ -66,7 +66,7 @@ class _FavoritesState extends State<Favorites> {
             state.status == FavoritesStatus.initial) {
           return Center(child: CircularProgressIndicator());
         }
-        if (state.loadedMovies.length == 0 &&
+        if (state.loadedMovies.isEmpty &&
             state.status != FavoritesStatus.failure) {
           return StyledText(text: 'Add movies to your watchlist');
         }

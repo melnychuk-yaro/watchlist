@@ -22,7 +22,13 @@ class Backdrop extends StatelessWidget {
           bottomLeft: Radius.circular(kBorderRadius * 2),
         ),
       ),
-      child: Image.network(backdropPath, fit: BoxFit.cover),
+      child: Image.network(
+        backdropPath,
+        fit: BoxFit.cover,
+        errorBuilder: (context, exception, stackTrace) {
+          return Container(color: Colors.grey);
+        },
+      ),
     );
   }
 }

@@ -24,19 +24,25 @@ class Poster extends StatelessWidget {
       ),
       child: AspectRatio(
         aspectRatio: 2 / 3,
-        child: Image.network(
-          posterPath,
-          fit: BoxFit.cover,
-          errorBuilder: (context, exception, stackTrace) {
-            return Container(color: Theme.of(context).cardColor);
-          },
-          frameBuilder: (_, child, frame, wasSynchronouslyLoaded) {
-            return wasSynchronouslyLoaded || frame != null
-                ? child
-                : SkeletonAnimation(
-                    child: Container(color: Theme.of(context).cardColor),
-                  );
-          },
+        child: Hero(
+          tag: posterPath,
+          child: ClipRRect(
+            borderRadius: BorderRadius.circular(kBorderRadius),
+            child: Image.network(
+              posterPath,
+              fit: BoxFit.cover,
+              errorBuilder: (context, exception, stackTrace) {
+                return Container(color: Theme.of(context).cardColor);
+              },
+              frameBuilder: (_, child, frame, wasSynchronouslyLoaded) {
+                return wasSynchronouslyLoaded || frame != null
+                    ? child
+                    : SkeletonAnimation(
+                        child: Container(color: Theme.of(context).cardColor),
+                      );
+              },
+            ),
+          ),
         ),
       ),
     );

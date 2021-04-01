@@ -15,9 +15,14 @@ import 'toolbar.dart';
 import 'youtube_player.dart';
 
 class MovieScreen extends StatefulWidget {
-  const MovieScreen({required this.id, required this.title});
+  const MovieScreen({
+    required this.id,
+    required this.title,
+    required this.posterPath,
+  });
   final int id;
   final String title;
+  final String posterPath;
 
   @override
   _MovieScreenState createState() => _MovieScreenState();
@@ -82,12 +87,10 @@ class _MovieScreenState extends State<MovieScreen> {
                     Positioned(
                       top: 143,
                       left: 16,
-                      child: state is SingleMovieLoaded
-                          ? Poster(
-                              posterPath: state.movie.fullPosterPath,
-                              posterWidth: posterWidth,
-                            )
-                          : _PosterSkeleton(posterWidth: posterWidth),
+                      child: Poster(
+                        posterPath: widget.posterPath,
+                        posterWidth: posterWidth,
+                      ),
                     ),
                     Positioned(
                       top: 215,
@@ -268,33 +271,6 @@ class _TextSceleton extends StatelessWidget {
         decoration: BoxDecoration(
           color: Theme.of(context).cardColor,
           borderRadius: BorderRadius.circular(kBorderRadius),
-        ),
-      ),
-    );
-  }
-}
-
-class _PosterSkeleton extends StatelessWidget {
-  const _PosterSkeleton({
-    Key? key,
-    required this.posterWidth,
-  }) : super(key: key);
-
-  final double posterWidth;
-
-  @override
-  Widget build(BuildContext context) {
-    return SkeletonAnimation(
-      borderRadius: BorderRadius.circular(kBorderRadius),
-      child: Container(
-        width: posterWidth,
-        decoration: BoxDecoration(
-          color: Theme.of(context).cardColor,
-          borderRadius: BorderRadius.circular(kBorderRadius),
-          boxShadow: kShadow,
-        ),
-        child: AspectRatio(
-          aspectRatio: 2 / 3,
         ),
       ),
     );

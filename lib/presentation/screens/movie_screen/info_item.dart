@@ -13,9 +13,7 @@ class InfoItem extends StatelessWidget {
         children: [
           TextSpan(
             text: '$defenition ',
-            style: TextStyle(
-              fontWeight: FontWeight.w800,
-            ),
+            style: TextStyle(fontWeight: FontWeight.w800),
           ),
           TextSpan(text: value),
         ],

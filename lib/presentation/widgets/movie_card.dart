@@ -1,7 +1,5 @@
-import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:skeleton_text/skeleton_text.dart';
 
 import '../../business_logic/bloc/favorites_bloc.dart';
 import '../../business_logic/cubit/all_favorites_cubit.dart';
@@ -10,6 +8,7 @@ import '../../constatns.dart';
 import '../../data/models/movie.dart';
 import '../screens/movie_screen/movie_screen.dart';
 import 'add_to_fav_button.dart';
+import 'poster.dart';
 
 class MovieCard extends StatelessWidget {
   final Movie movie;
@@ -61,23 +60,7 @@ class MovieCard extends StatelessWidget {
           ),
           child: Hero(
             tag: movie.fullPosterPath,
-            child: ClipRRect(
-              borderRadius: BorderRadius.circular(kBorderRadius),
-              child: Image.network(
-                movie.fullPosterPath,
-                fit: BoxFit.cover,
-                errorBuilder: (context, exception, stackTrace) {
-                  return Container(color: Theme.of(context).cardColor);
-                },
-                frameBuilder: (_, child, frame, wasSynchronouslyLoaded) {
-                  return wasSynchronouslyLoaded || frame != null
-                      ? child
-                      : SkeletonAnimation(
-                          child: Container(color: Theme.of(context).cardColor),
-                        );
-                },
-              ),
-            ),
+            child: Poster(posterUrl: movie.fullPosterPath),
           ),
           footer: Container(
             color: _brightness == Brightness.light ? kLightText : kDarkText,

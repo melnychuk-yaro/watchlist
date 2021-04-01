@@ -87,7 +87,7 @@ class _MovieScreenState extends State<MovieScreen> {
                     Positioned(
                       top: 143,
                       left: 16,
-                      child: Poster(
+                      child: SingleMoviePoster(
                         posterPath: widget.posterPath,
                         posterWidth: posterWidth,
                       ),
@@ -131,8 +131,8 @@ class _MovieScreenState extends State<MovieScreen> {
                                           defenition: 'Budget:', value: '-')
                                       : InfoItem(
                                           defenition: 'Budget:',
-                                          value:
-                                              '${budgetFormat.format(state.movie.budget)}',
+                                          value: budgetFormat
+                                              .format(state.movie.budget),
                                         ),
                                 ],
                               )

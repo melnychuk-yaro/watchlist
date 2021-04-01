@@ -19,7 +19,7 @@ class MoviesPaginatedGrid extends StatelessWidget {
       padding: const EdgeInsets.all(4.0),
       gridDelegate: SliverGridDelegateWithMaxCrossAxisExtent(
         maxCrossAxisExtent: 300.0,
-        childAspectRatio: 0.75,
+        childAspectRatio: 2 / 3,
       ),
       builderDelegate: PagedChildBuilderDelegate(
         itemBuilder: (context, movie, index) {

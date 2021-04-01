@@ -158,7 +158,7 @@ class MoviesRepository {
               .get();
 
       final isLastPage = querySnapshot.docs.length < limit ? true : false;
-      if (querySnapshot.docs.isEmpty) {
+      if (querySnapshot.docs.isNotEmpty) {
         lastDocument = querySnapshot.docs[querySnapshot.docs.length - 1];
       }
 

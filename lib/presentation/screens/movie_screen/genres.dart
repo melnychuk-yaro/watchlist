@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 
+import '../../../constatns.dart';
+
 class Genres extends StatelessWidget {
   final List<dynamic> genres;
 
@@ -11,6 +13,7 @@ class Genres extends StatelessWidget {
       height: 32,
       child: ListView.builder(
         scrollDirection: Axis.horizontal,
+        padding: const EdgeInsets.symmetric(horizontal: kPadding),
         itemCount: genres.length,
         itemBuilder: (context, index) {
           return Container(

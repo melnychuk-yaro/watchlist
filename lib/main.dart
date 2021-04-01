@@ -41,6 +41,7 @@ class App extends StatelessWidget {
         title: 'Watchlist',
         theme: AppTheme().lightTheme,
         darkTheme: AppTheme().darkTheme,
+        debugShowCheckedModeBanner: false,
         home: BlocBuilder<AuthBloc, AuthState>(
           builder: (context, state) {
             if (state.status == AuthStatus.unknown) {

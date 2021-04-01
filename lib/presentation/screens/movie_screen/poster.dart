@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
-import 'package:skeleton_text/skeleton_text.dart';
 
 import '../../../constatns.dart';
+import '../../widgets/poster.dart';
 
-class Poster extends StatelessWidget {
-  const Poster({
+class SingleMoviePoster extends StatelessWidget {
+  const SingleMoviePoster({
     Key? key,
     required this.posterPath,
     required this.posterWidth,
@@ -24,19 +24,12 @@ class Poster extends StatelessWidget {
       ),
       child: AspectRatio(
         aspectRatio: 2 / 3,
-        child: Image.network(
-          posterPath,
-          fit: BoxFit.cover,
-          errorBuilder: (context, exception, stackTrace) {
-            return Container(color: Theme.of(context).cardColor);
-          },
-          frameBuilder: (_, child, frame, wasSynchronouslyLoaded) {
-            return wasSynchronouslyLoaded || frame != null
-                ? child
-                : SkeletonAnimation(
-                    child: Container(color: Theme.of(context).cardColor),
-                  );
-          },
+        child: Hero(
+          tag: posterPath,
+          child: ClipRRect(
+            borderRadius: BorderRadius.circular(kBorderRadius),
+            child: Poster(posterUrl: posterPath),
+          ),
         ),
       ),
     );

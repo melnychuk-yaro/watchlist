@@ -24,17 +24,15 @@ class MovieCard extends StatelessWidget {
         GestureDetector(
           onTap: () => Navigator.of(context).push(
             MaterialPageRoute(
-                builder: (_) => MultiBlocProvider(
-                      providers: [
-                        BlocProvider.value(
-                            value: context.read<SingleMovieCubit>()),
-                        BlocProvider.value(
-                            value: context.read<AllFavoritesCubit>()),
-                        BlocProvider.value(
-                            value: context.read<FavoritesBloc>()),
-                      ],
-                      child: MovieScreen(id: movie.id),
-                    )),
+              builder: (_) => MultiBlocProvider(
+                providers: [
+                  BlocProvider.value(value: context.read<SingleMovieCubit>()),
+                  BlocProvider.value(value: context.read<AllFavoritesCubit>()),
+                  BlocProvider.value(value: context.read<FavoritesBloc>()),
+                ],
+                child: MovieScreen(id: movie.id, title: movie.title),
+              ),
+            ),
           ),
           child: Card(
             clipBehavior: Clip.antiAlias,

@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:skeleton_text/skeleton_text.dart';
 
 import '../../../constatns.dart';
 
@@ -21,21 +22,22 @@ class Poster extends StatelessWidget {
         borderRadius: BorderRadius.circular(kBorderRadius),
         boxShadow: kShadow,
       ),
-      child: Image.network(
-        posterPath,
-        errorBuilder: (context, exception, stackTrace) {
-          return AspectRatio(
-            aspectRatio: 2 / 3,
-            child: Container(color: Colors.grey),
-          );
-        },
-        loadingBuilder: (_, child, loadingProgress) {
-          if (loadingProgress == null) return child;
-          return AspectRatio(
-            aspectRatio: 2 / 3,
-            child: Container(color: Theme.of(context).cardColor),
-          );
-        },
+      child: AspectRatio(
+        aspectRatio: 2 / 3,
+        child: Image.network(
+          posterPath,
+          fit: BoxFit.cover,
+          errorBuilder: (context, exception, stackTrace) {
+            return Container(color: Theme.of(context).cardColor);
+          },
+          frameBuilder: (_, child, frame, wasSynchronouslyLoaded) {
+            return wasSynchronouslyLoaded || frame != null
+                ? child
+                : SkeletonAnimation(
+                    child: Container(color: Theme.of(context).cardColor),
+                  );
+          },
+        ),
       ),
     );
   }

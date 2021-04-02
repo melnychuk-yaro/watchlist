@@ -75,7 +75,11 @@ class _MovieScreenState extends State<MovieScreen> {
                             child: Container(
                               height: backdropHeight,
                               decoration: BoxDecoration(
-                                color: Theme.of(context).cardColor,
+                                color:
+                                    MediaQuery.of(context).platformBrightness ==
+                                            Brightness.dark
+                                        ? kSkeletonDarkBg
+                                        : kSkeletonLightBg,
                                 boxShadow: kShadow,
                                 borderRadius: BorderRadius.only(
                                   bottomLeft:
@@ -241,7 +245,9 @@ class _YouTubeSkeleton extends StatelessWidget {
         aspectRatio: 16 / 9,
         child: Container(
           decoration: BoxDecoration(
-            color: Theme.of(context).cardColor,
+            color: MediaQuery.of(context).platformBrightness == Brightness.dark
+                ? kSkeletonDarkBg
+                : kSkeletonLightBg,
             boxShadow: kShadow,
             borderRadius: BorderRadius.circular(kBorderRadius),
           ),
@@ -269,7 +275,9 @@ class _TextSceleton extends StatelessWidget {
         height: height,
         width: width,
         decoration: BoxDecoration(
-          color: Theme.of(context).cardColor,
+          color: MediaQuery.of(context).platformBrightness == Brightness.dark
+              ? kSkeletonDarkBg
+              : kSkeletonLightBg,
           borderRadius: BorderRadius.circular(kBorderRadius),
         ),
       ),
@@ -293,7 +301,9 @@ class _ToolBarSkeleton extends StatelessWidget {
         height: 64.0,
         width: 64.0,
         decoration: BoxDecoration(
-          color: Theme.of(context).cardColor,
+          color: MediaQuery.of(context).platformBrightness == Brightness.dark
+              ? kSkeletonDarkBg
+              : kSkeletonLightBg,
           boxShadow: kShadow,
           borderRadius: BorderRadius.only(
             bottomLeft: Radius.circular(kBorderRadius),

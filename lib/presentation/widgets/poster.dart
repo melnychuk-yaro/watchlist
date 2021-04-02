@@ -21,7 +21,12 @@ class Poster extends StatelessWidget {
         },
         placeholder: (context, url) {
           return SkeletonAnimation(
-            child: Container(color: Theme.of(context).cardColor),
+            child: Container(
+              color:
+                  MediaQuery.of(context).platformBrightness == Brightness.dark
+                      ? kSkeletonDarkBg
+                      : kSkeletonLightBg,
+            ),
           );
         },
       ),

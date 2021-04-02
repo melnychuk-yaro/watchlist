@@ -4,10 +4,10 @@
 
 ### Save movies you want to watch later.
 
-- add movies to watchlist.
+- add movies to the watchlist.
 - search your favorite movies.
 - check new trending movies.
-- check top rated movies.
+- check top-rated movies.
 
 ### Screenshots:
 ![Light Screenshot](https://user-images.githubusercontent.com/74709638/112332286-49861480-8cc2-11eb-8da7-7ba85596cc42.png) ![Dark Screenshot](https://user-images.githubusercontent.com/74709638/112332303-4d199b80-8cc2-11eb-86fb-60a66aebb3f6.png)

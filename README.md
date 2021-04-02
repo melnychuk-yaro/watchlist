@@ -4,13 +4,14 @@
 
 ### Save movies you want to watch later.
 
-- add movies to watchlist.
+- add movies to the watchlist.
 - search your favorite movies.
 - check new trending movies.
-- check top rated movies.
+- check top-rated movies.
 
 ### Screenshots:
-![Light Screenshot](https://user-images.githubusercontent.com/74709638/112332286-49861480-8cc2-11eb-8da7-7ba85596cc42.png) ![Dark Screenshot](https://user-images.githubusercontent.com/74709638/112332303-4d199b80-8cc2-11eb-86fb-60a66aebb3f6.png)
+![Screenshot_1617359766_framed](https://user-images.githubusercontent.com/74709638/113413230-d156d780-93c2-11eb-9a28-df3e430a8802.png) ![Screenshot_1617359775_framed](https://user-images.githubusercontent.com/74709638/113413231-d1ef6e00-93c2-11eb-96bc-d77200620bb9.png) ![Screenshot_1617359717_framed](https://user-images.githubusercontent.com/74709638/113413222-cdc35080-93c2-11eb-97cb-538efad2767c.png) ![Screenshot_1617359740_framed](https://user-images.githubusercontent.com/74709638/113413228-d0be4100-93c2-11eb-8c9c-2474ffaceeb1.png)
+
 
 
 Powered by [TMDb](https://www.themoviedb.org) api.

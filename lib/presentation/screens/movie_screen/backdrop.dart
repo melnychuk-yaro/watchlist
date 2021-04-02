@@ -38,7 +38,12 @@ class Backdrop extends StatelessWidget {
                   borderRadius: BorderRadius.only(
                     bottomLeft: Radius.circular(kBorderRadius * 2),
                   ),
-                  child: Container(color: Theme.of(context).cardColor),
+                  child: Container(
+                    color: MediaQuery.of(context).platformBrightness ==
+                            Brightness.dark
+                        ? kSkeletonDarkBg
+                        : kSkeletonLightBg,
+                  ),
                 );
         },
       ),

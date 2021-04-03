@@ -3,13 +3,13 @@ import 'dart:async';
 import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
 
-import '../../data/repositories/movies_repository.dart';
+import '../../data/repositories/favorites_repository.dart';
 import '../bloc/auth_bloc.dart';
 
 part 'all_favorites_state.dart';
 
 class AllFavoritesCubit extends Cubit<AllFavoritesState> {
-  final MoviesRepository moviesRepository;
+  final FavoritesRepository moviesRepository;
   final AuthBloc authBloc;
   late StreamSubscription _authBlocSubscription;
 

@@ -13,6 +13,7 @@ import 'business_logic/cubit/sign_up_cubit.dart';
 import 'business_logic/cubit/single_movie_cubit.dart';
 import 'business_logic/cubit/top_movies_cubit.dart';
 import 'data/repositories/auth_repository.dart';
+import 'data/repositories/favorites_repository.dart';
 import 'data/repositories/movies_repository.dart';
 import 'presentation/screens/auth_screen.dart';
 import 'presentation/screens/home_screen.dart';
@@ -28,6 +29,7 @@ Future<void> main() async {
 class App extends StatelessWidget {
   final _authRepository = AuthenticationRepository();
   final _moviesRepository = MoviesRepository();
+  final _favoritesRepository = FavoritesRepository();
 
   @override
   Widget build(BuildContext context) {
@@ -52,13 +54,13 @@ class App extends StatelessWidget {
                     providers: [
                       BlocProvider<FavoritesBloc>(
                         create: (context) => FavoritesBloc(
-                          _moviesRepository,
+                          _favoritesRepository,
                           context.read<AuthBloc>(),
                         ),
                       ),
                       BlocProvider<AllFavoritesCubit>(
                         create: (context) => AllFavoritesCubit(
-                          _moviesRepository,
+                          _favoritesRepository,
                           context.read<AuthBloc>(),
                         ),
                       ),

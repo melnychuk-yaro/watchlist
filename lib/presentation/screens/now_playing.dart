@@ -21,7 +21,7 @@ class _NowPlayingState extends State<NowPlaying> {
   void initState() {
     super.initState();
     _cubit = context.read<NowPlayingCubit>();
-    _setPaginationIntialState(_cubit);
+    _setPaginationInitialState(_cubit);
     _pagingController.addPageRequestListener((pageKey) {
       _cubit.loadMovies(pageKey);
     });
@@ -33,7 +33,7 @@ class _NowPlayingState extends State<NowPlaying> {
     _pagingController.dispose();
   }
 
-  void _setPaginationIntialState(cubit) {
+  void _setPaginationInitialState(cubit) {
     final NowPlayingState cubitState = cubit.state;
     if (cubitState is NowPlayingLoaded) {
       _pagingController.value = PagingState(

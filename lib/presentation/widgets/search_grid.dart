@@ -18,13 +18,13 @@ class _SearchGridState extends State<SearchGrid> {
   void initState() {
     super.initState();
     final _bloc = context.read<SearchBloc>();
-    _setPaginationIntialState(_bloc);
+    _setPaginationInitialState(_bloc);
     _pagingController.addPageRequestListener((pageKey) {
       _bloc.add(SearchNextPageLoadEvent());
     });
   }
 
-  void _setPaginationIntialState(bloc) {
+  void _setPaginationInitialState(bloc) {
     final SearchState blocState = bloc.state;
     if (blocState.status == SearchStatus.loaded) {
       _pagingController.value = PagingState(

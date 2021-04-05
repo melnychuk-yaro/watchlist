@@ -22,7 +22,7 @@ class _FavoritesState extends State<Favorites> {
   void initState() {
     super.initState();
     _bloc = context.read<FavoritesBloc>();
-    _setPaginationIntialState(_bloc.state);
+    _setPaginationInitialState(_bloc.state);
     _pagingController.addPageRequestListener((nextPageKey) {
       _bloc.add(FavoritesLoad());
     });
@@ -34,7 +34,7 @@ class _FavoritesState extends State<Favorites> {
     _pagingController.dispose();
   }
 
-  void _setPaginationIntialState(state) {
+  void _setPaginationInitialState(state) {
     if (state.status == FavoritesStatus.loaded) {
       _pagingController.value = PagingState(
         itemList: state.loadedMovies,

@@ -21,7 +21,7 @@ class _TopRatedState extends State<TopRated> {
   void initState() {
     super.initState();
     _cubit = context.read<TopMoviesCubit>();
-    _setPaginationIntialState(_cubit);
+    _setPaginationInitialState(_cubit);
     _pagingController.addPageRequestListener((pageKey) {
       _cubit.loadMovies(pageKey);
     });
@@ -33,7 +33,7 @@ class _TopRatedState extends State<TopRated> {
     _pagingController.dispose();
   }
 
-  void _setPaginationIntialState(cubit) {
+  void _setPaginationInitialState(cubit) {
     final TopMoviesState cubitState = cubit.state;
     if (cubitState is TopMoviesLoaded) {
       _pagingController.value = PagingState(

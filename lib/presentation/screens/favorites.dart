@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:infinite_scroll_pagination/infinite_scroll_pagination.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+
 import '../../business_logic/bloc/favorites_bloc.dart';
 import '../../data/models/movie.dart';
 import '../widgets/movies_paginated_grid.dart';
@@ -68,7 +70,8 @@ class _FavoritesState extends State<Favorites> {
         }
         if (state.loadedMovies.isEmpty &&
             state.status != FavoritesStatus.failure) {
-          return StyledText(text: 'Add movies to your watchlist');
+          return StyledText(
+              text: AppLocalizations.of(context)!.add_movies_to_your_watchlist);
         }
         return MoviesPaginatedGrid(pagingController: _pagingController);
       },

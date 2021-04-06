@@ -3,6 +3,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_signin_button/button_view.dart';
 import 'package:flutter_signin_button/flutter_signin_button.dart';
 import 'package:formz/formz.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 import '../../business_logic/cubit/login_cubit.dart';
 import '../../constatns.dart';
@@ -64,14 +65,14 @@ class _LoginFormState extends State<LoginForm> {
                 Expanded(child: Divider(color: Colors.white)),
                 Padding(
                   padding: const EdgeInsets.symmetric(horizontal: kPadding),
-                  child: const Text('OR'),
+                  child: Text(AppLocalizations.of(context)!.or),
                 ),
                 Expanded(child: Divider(color: Colors.white)),
               ],
             ),
             TextButton(
               onPressed: () => widget.toggleIsLogin(),
-              child: const Text('Create a new account'),
+              child: Text(AppLocalizations.of(context)!.create_new_account),
             ),
           ],
         ),
@@ -100,12 +101,14 @@ class _EmailInput extends StatelessWidget {
             FocusScope.of(context).requestFocus(nextFieldFocusNode);
           },
           decoration: InputDecoration(
-            hintText: 'Email',
+            hintText: AppLocalizations.of(context)!.email,
             prefixIcon: Padding(
               child: Icon(Icons.email, color: Theme.of(context).hintColor),
               padding: EdgeInsets.only(left: kPadding, right: 10),
             ),
-            errorText: state.email.invalid ? 'Invalid email' : null,
+            errorText: state.email.invalid
+                ? AppLocalizations.of(context)!.invalid_email
+                : null,
           ),
         );
       },
@@ -132,13 +135,13 @@ class _PasswordInput extends StatelessWidget {
               context.read<LoginCubit>().logInWithCredentials(),
           focusNode: passwordFocusNode,
           decoration: InputDecoration(
-            hintText: 'Password',
+            hintText: AppLocalizations.of(context)!.password,
             prefixIcon: Padding(
               padding: const EdgeInsets.only(left: kPadding, right: 10),
               child: Icon(Icons.vpn_key, color: Theme.of(context).hintColor),
             ),
             errorText: state.password.error == PasswordValidationError.short
-                ? 'Password is to short'
+                ? AppLocalizations.of(context)!.password_to_short
                 : null,
           ),
         );
@@ -159,7 +162,7 @@ class _LoginButton extends StatelessWidget {
                 onPressed: state.status.isValidated
                     ? () => context.read<LoginCubit>().logInWithCredentials()
                     : null,
-                child: const Text('Login'),
+                child: Text(AppLocalizations.of(context)!.login),
               );
       },
     );

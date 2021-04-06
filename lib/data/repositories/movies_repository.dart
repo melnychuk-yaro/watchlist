@@ -2,6 +2,7 @@ import 'dart:convert';
 import 'dart:io';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:http/http.dart' as http;
+
 import '../../business_logic/helpers/failures/failure.dart';
 import '../models/movie.dart';
 import '../models/movie_detailed.dart';
@@ -11,7 +12,7 @@ class MoviesRepository {
   static const String urlAuthority = 'api.themoviedb.org';
   static const String pathPrefix = '/3';
   static const String includeAdult = 'false';
-  static const String language = 'en-US';
+  final String language = Platform.localeName.replaceFirst('_', '-');
   final String? _apiKey = env['TMDB_API_KEY'];
 
   Future<MoviesPage> getTopRatedMovies({int? page = 1}) async {

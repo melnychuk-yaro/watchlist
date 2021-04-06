@@ -1,0 +1,32 @@
+{
+  "@budget": {
+    "description": "Followed by value"
+  },
+  "@rating": {
+    "description": "Followed by value"
+  },
+  "@release_date": {
+    "description": "Followed by value"
+  },
+  "add_movies_to_your_watchlist": "Add Movies To Your Watchlist",
+  "budget": "Budget:",
+  "confirm_password": "Confirm Password",
+  "create_new_account": "Create New Account",
+  "email": "Email",
+  "have_account": "Already have an account?",
+  "invalid_email": "Invalid email",
+  "login": "Login",
+  "now_playing": "Now Playing",
+  "or": "OR",
+  "password": "Password",
+  "password_to_short": "Password is to short",
+  "paswords_do_not_match": "Passwords don't match",
+  "rating": "Rating:",
+  "release_date": "Release Date:",
+  "search": "Search",
+  "sign_up": "Sign Up",
+  "start_searching": "Start Searching",
+  "to_watch": "To Watch",
+  "top_rated": "Top Rated",
+  "try_again": "Try again"
+}

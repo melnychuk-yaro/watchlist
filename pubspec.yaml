@@ -23,6 +23,8 @@ environment:
 dependencies:
   flutter:
     sdk: flutter
+  flutter_localizations:
+    sdk: flutter
   cached_network_image: ^3.0.0
   cloud_firestore: ^1.0.3
   cupertino_icons: ^1.0.2
@@ -70,7 +72,9 @@ flutter:
   assets:
     - assets/images/
     - .env
-  #   - images/a_dot_ham.jpeg
+
+  generate: true
+  
   # An image asset can refer to one or more resolution-specific "variants", see
   # https://flutter.dev/assets-and-images/#resolution-aware.
   # For details regarding adding assets from package dependencies, see

@@ -1,0 +1,23 @@
+{
+  "add_movies_to_your_watchlist": "Добавь фильмы в список просмотра",
+  "budget": "Бюджет:",
+  "confirm_password": "Повторите пароль",
+  "create_new_account": "Регистрация",
+  "email": "Email",
+  "have_account": "Есть аккаунт?",
+  "invalid_email": "Неверный email",
+  "login": "Вход",
+  "now_playing": "Новинки",
+  "or": "или",
+  "password": "Пароль",
+  "password_to_short": "Короткий пароль",
+  "paswords_do_not_match": "Пароли не совпадают",
+  "rating": "Рейтинг:",
+  "release_date": "Релиз:",
+  "search": "Поиск",
+  "sign_up": "Регистрация",
+  "start_searching": "Начни поиск",
+  "to_watch": "Посмотреть",
+  "top_rated": "Топ",
+  "try_again": "Попруй еще раз"
+}

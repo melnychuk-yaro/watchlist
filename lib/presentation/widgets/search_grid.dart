@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:infinite_scroll_pagination/infinite_scroll_pagination.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+
 import '../../business_logic/bloc/search_bloc.dart';
 import '../../data/models/movie.dart';
 import 'movies_paginated_grid.dart';
@@ -51,7 +53,8 @@ class _SearchGridState extends State<SearchGrid> {
       },
       builder: (context, state) {
         if (state.status == SearchStatus.initial) {
-          return StyledText(text: 'Start Searching');
+          return StyledText(
+              text: AppLocalizations.of(context)!.start_searching);
         } else if (state.status == SearchStatus.loading) {
           return Center(child: CircularProgressIndicator());
         }

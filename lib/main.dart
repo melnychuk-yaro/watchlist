@@ -2,6 +2,8 @@ import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart' as dot_env;
+import 'package:flutter_localizations/flutter_localizations.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 import 'business_logic/bloc/auth_bloc.dart';
 import 'business_logic/bloc/favorites_bloc.dart';
@@ -13,6 +15,7 @@ import 'business_logic/cubit/sign_up_cubit.dart';
 import 'business_logic/cubit/single_movie_cubit.dart';
 import 'business_logic/cubit/top_movies_cubit.dart';
 import 'data/repositories/auth_repository.dart';
+import 'data/repositories/favorites_repository.dart';
 import 'data/repositories/movies_repository.dart';
 import 'presentation/screens/auth_screen.dart';
 import 'presentation/screens/home_screen.dart';
@@ -28,6 +31,7 @@ Future<void> main() async {
 class App extends StatelessWidget {
   final _authRepository = AuthenticationRepository();
   final _moviesRepository = MoviesRepository();
+  final _favoritesRepository = FavoritesRepository();
 
   @override
   Widget build(BuildContext context) {
@@ -42,6 +46,17 @@ class App extends StatelessWidget {
         theme: AppTheme().lightTheme,
         darkTheme: AppTheme().darkTheme,
         debugShowCheckedModeBanner: false,
+        localizationsDelegates: [
+          AppLocalizations.delegate,
+          GlobalMaterialLocalizations.delegate,
+          GlobalWidgetsLocalizations.delegate,
+          GlobalCupertinoLocalizations.delegate,
+        ],
+        supportedLocales: [
+          const Locale('en', ''),
+          const Locale('ru', ''),
+          const Locale('uk', ''),
+        ],
         home: BlocBuilder<AuthBloc, AuthState>(
           builder: (context, state) {
             if (state.status == AuthStatus.unknown) {
@@ -52,13 +67,13 @@ class App extends StatelessWidget {
                     providers: [
                       BlocProvider<FavoritesBloc>(
                         create: (context) => FavoritesBloc(
-                          _moviesRepository,
+                          _favoritesRepository,
                           context.read<AuthBloc>(),
                         ),
                       ),
                       BlocProvider<AllFavoritesCubit>(
                         create: (context) => AllFavoritesCubit(
-                          _moviesRepository,
+                          _favoritesRepository,
                           context.read<AuthBloc>(),
                         ),
                       ),

@@ -2,6 +2,7 @@ import 'dart:async';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 import '../../business_logic/bloc/search_bloc.dart';
 import '../../constatns.dart';
@@ -55,7 +56,9 @@ class _SearchState extends State<Search> {
           ),
           child: TextField(
             controller: _searchQuery,
-            decoration: InputDecoration(hintText: 'Search'),
+            decoration: InputDecoration(
+              hintText: AppLocalizations.of(context)!.search,
+            ),
           ),
         ),
         Expanded(child: SearchGrid()),

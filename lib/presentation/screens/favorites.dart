@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:infinite_scroll_pagination/infinite_scroll_pagination.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+
 import '../../business_logic/bloc/favorites_bloc.dart';
 import '../../data/models/movie.dart';
 import '../widgets/movies_paginated_grid.dart';
@@ -22,7 +24,7 @@ class _FavoritesState extends State<Favorites> {
   void initState() {
     super.initState();
     _bloc = context.read<FavoritesBloc>();
-    _setPaginationIntialState(_bloc.state);
+    _setPaginationInitialState(_bloc.state);
     _pagingController.addPageRequestListener((nextPageKey) {
       _bloc.add(FavoritesLoad());
     });
@@ -34,7 +36,7 @@ class _FavoritesState extends State<Favorites> {
     _pagingController.dispose();
   }
 
-  void _setPaginationIntialState(state) {
+  void _setPaginationInitialState(state) {
     if (state.status == FavoritesStatus.loaded) {
       _pagingController.value = PagingState(
         itemList: state.loadedMovies,
@@ -68,7 +70,8 @@ class _FavoritesState extends State<Favorites> {
         }
         if (state.loadedMovies.isEmpty &&
             state.status != FavoritesStatus.failure) {
-          return StyledText(text: 'Add movies to your watchlist');
+          return StyledText(
+              text: AppLocalizations.of(context)!.add_movies_to_your_watchlist);
         }
         return MoviesPaginatedGrid(pagingController: _pagingController);
       },

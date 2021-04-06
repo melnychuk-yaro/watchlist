@@ -6,7 +6,7 @@ import 'package:equatable/equatable.dart';
 import 'package:meta/meta.dart';
 
 import '../../data/models/movie.dart';
-import '../../data/repositories/movies_repository.dart';
+import '../../data/repositories/favorites_repository.dart';
 import '../helpers/failures/failure.dart';
 import 'auth_bloc.dart';
 
@@ -14,7 +14,7 @@ part 'favorites_event.dart';
 part 'favorites_state.dart';
 
 class FavoritesBloc extends Bloc<FavoritesEvent, FavoritesState> {
-  final MoviesRepository moviesRepository;
+  final FavoritesRepository moviesRepository;
   final AuthBloc authBloc;
   late StreamSubscription _authBlocSubscription;
   FavoritesBloc(this.moviesRepository, this.authBloc)

@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:formz/formz.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+
 import '../../business_logic/cubit/sign_up_cubit.dart';
 import '../../constatns.dart';
 import '../../data/models/confirmed_password.dart';
@@ -64,14 +66,14 @@ class _SignUpFormState extends State<SignUpForm> {
                 Expanded(child: Divider(color: Colors.white)),
                 Padding(
                   padding: const EdgeInsets.symmetric(horizontal: kPadding),
-                  child: const Text('OR'),
+                  child: Text(AppLocalizations.of(context)!.or),
                 ),
                 Expanded(child: Divider(color: Colors.white)),
               ],
             ),
             TextButton(
               onPressed: () => widget.toggleIsLogin(),
-              child: const Text('Already have an account?'),
+              child: Text(AppLocalizations.of(context)!.have_account),
             )
           ],
         ),
@@ -96,7 +98,7 @@ class _SignUpButton extends StatelessWidget {
                 onPressed: state.status.isValidated
                     ? () => context.read<SignUpCubit>().signUpFormSubmitted()
                     : null,
-                child: const Text('Sign Up'),
+                child: Text(AppLocalizations.of(context)!.sign_up),
               );
       },
     );
@@ -119,12 +121,14 @@ class _EmailInput extends StatelessWidget {
           onFieldSubmitted: (_) =>
               FocusScope.of(context).requestFocus(nextFieldFocusNode),
           decoration: InputDecoration(
-            hintText: 'Email',
+            hintText: AppLocalizations.of(context)!.email,
             prefixIcon: Padding(
               child: Icon(Icons.email, color: Theme.of(context).hintColor),
               padding: EdgeInsets.only(left: kPadding, right: 10),
             ),
-            errorText: state.email.invalid ? 'Invalid email' : null,
+            errorText: state.email.invalid
+                ? AppLocalizations.of(context)!.invalid_email
+                : null,
           ),
         );
       },
@@ -155,13 +159,13 @@ class _PasswordInput extends StatelessWidget {
               FocusScope.of(context).requestFocus(nextFieldFocusNode),
           focusNode: focusNode,
           decoration: InputDecoration(
-            hintText: 'Password',
+            hintText: AppLocalizations.of(context)!.password,
             prefixIcon: Padding(
               padding: const EdgeInsets.only(left: kPadding, right: 10),
               child: Icon(Icons.vpn_key, color: Theme.of(context).hintColor),
             ),
             errorText: state.password.error == PasswordValidationError.short
-                ? 'Password is to short'
+                ? AppLocalizations.of(context)!.password_to_short
                 : null,
           ),
         );
@@ -189,14 +193,14 @@ class _PasswordConfirmInput extends StatelessWidget {
               context.read<SignUpCubit>().signUpFormSubmitted(),
           focusNode: focusNode,
           decoration: InputDecoration(
-            hintText: 'Confirm Password',
+            hintText: AppLocalizations.of(context)!.confirm_password,
             prefixIcon: Padding(
               padding: const EdgeInsets.only(left: kPadding, right: 10),
               child: Icon(Icons.vpn_key, color: Theme.of(context).hintColor),
             ),
             errorText: state.confirmedPassword.error ==
                     ConfirmedPasswordValidationError.unmatch
-                ? 'Passwords don\'t match'
+                ? AppLocalizations.of(context)!.paswords_do_not_match
                 : null,
           ),
         );

@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:infinite_scroll_pagination/infinite_scroll_pagination.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+
 import '../../constatns.dart';
 import '../../data/models/movie.dart';
 import 'movie_card.dart';
@@ -33,7 +35,7 @@ class MoviesPaginatedGrid extends StatelessWidget {
               const SizedBox(height: kPadding / 2),
               ElevatedButton(
                 onPressed: pagingController.refresh,
-                child: Text('Try again'),
+                child: Text(AppLocalizations.of(context)!.try_again),
               ),
             ],
           );

@@ -1,5 +1,6 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 import 'favorites.dart';
 import 'now_playing.dart';
@@ -17,9 +18,9 @@ class _HomeScreenState extends State<HomeScreen> {
   int _currentIndex = 0;
   final List<Widget> _pages = <Widget>[
     Favorites(key: PageStorageKey('favoritesPage')),
-    Search(key: PageStorageKey('Page2')),
-    NowPlaying(key: PageStorageKey('Page3')),
-    TopRated(key: PageStorageKey('Page4')),
+    Search(key: PageStorageKey('searchPage')),
+    NowPlaying(key: PageStorageKey('newPage')),
+    TopRated(key: PageStorageKey('topPage')),
   ];
 
   @override
@@ -31,7 +32,7 @@ class _HomeScreenState extends State<HomeScreen> {
           IconButton(
             icon: Icon(Icons.exit_to_app),
             onPressed: _auth.signOut,
-          )
+          ),
         ],
       ),
       body: PageStorage(
@@ -48,19 +49,19 @@ class _HomeScreenState extends State<HomeScreen> {
         },
         items: [
           BottomNavigationBarItem(
-            label: 'To Watch',
+            label: AppLocalizations.of(context)!.to_watch,
             icon: Icon(Icons.favorite_border),
           ),
           BottomNavigationBarItem(
-            label: 'Search',
+            label: AppLocalizations.of(context)!.search,
             icon: Icon(Icons.search),
           ),
           BottomNavigationBarItem(
-            label: 'Now Playing',
+            label: AppLocalizations.of(context)!.now_playing,
             icon: Icon(Icons.fiber_new),
           ),
           BottomNavigationBarItem(
-            label: 'Top Rated',
+            label: AppLocalizations.of(context)!.top_rated,
             icon: Icon(Icons.sort),
           ),
         ],

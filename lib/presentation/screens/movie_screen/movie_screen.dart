@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:intl/intl.dart';
 import 'package:skeleton_text/skeleton_text.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 import '../../../business_logic/cubit/single_movie_cubit.dart';
 import '../../../constatns.dart';
@@ -119,22 +120,27 @@ class _MovieScreenState extends State<MovieScreen> {
                                 mainAxisSize: MainAxisSize.min,
                                 children: [
                                   InfoItem(
-                                    defenition: 'Rating:',
+                                    defenition:
+                                        AppLocalizations.of(context)!.rating,
                                     value: state.movie.rating.toString(),
                                   ),
                                   const SizedBox(height: 4.0),
-                                  Flexible(
-                                    child: InfoItem(
-                                      defenition: 'Release Date:',
-                                      value: state.movie.releaseDate,
-                                    ),
+                                  InfoItem(
+                                    defenition: AppLocalizations.of(context)!
+                                        .release_date,
+                                    value: state.movie.releaseDate,
                                   ),
                                   const SizedBox(height: 4.0),
                                   state.movie.budget == 0
                                       ? InfoItem(
-                                          defenition: 'Budget:', value: '-')
+                                          defenition:
+                                              AppLocalizations.of(context)!
+                                                  .budget,
+                                          value: '-')
                                       : InfoItem(
-                                          defenition: 'Budget:',
+                                          defenition:
+                                              AppLocalizations.of(context)!
+                                                  .budget,
                                           value: budgetFormat
                                               .format(state.movie.budget),
                                         ),

@@ -1,0 +1,23 @@
+{
+  "add_movies_to_your_watchlist": "Додай фільми в список перегляду",
+  "budget": "Бюджет:",
+  "confirm_password": "Повторіть пароль",
+  "create_new_account": "Реєстрація",
+  "email": "Email",
+  "have_account": "Маєш аккаунт?",
+  "invalid_email": "Невірний email",
+  "login": "Вхід",
+  "now_playing": "Новинки",
+  "or": "або",
+  "password": "Пароль",
+  "password_to_short": "Короткий пароль",
+  "paswords_do_not_match": "Паролі не співпадають",
+  "rating": "Рейтинг:",
+  "release_date": "Реліз:",
+  "search": "Пошук",
+  "sign_up": "Реєстрація",
+  "start_searching": "Почни пошук",
+  "to_watch": "Переглянути",
+  "top_rated": "Топ",
+  "try_again": "Спробуй ще раз"
+}

@@ -78,8 +78,7 @@ class FavoritesRepository {
       }
 
       final movies = querySnapshot.docs.map((doc) {
-        if (doc.data() == null) throw Failure('Bad response format.');
-        return Movie.fromMap(doc.data()!);
+        return Movie.fromMap(doc.data());
       }).toList();
 
       return FavoritesMoviesPage(

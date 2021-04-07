@@ -20,25 +20,19 @@ class AddToFavButton extends StatelessWidget {
     return BlocBuilder<AllFavoritesCubit, AllFavoritesState>(
       builder: (context, state) {
         final isFavorite = state.allFavoriteMovieIds.contains(movie.id);
-        return Ink(
-          decoration: ShapeDecoration(
-            color: color,
-            shape: CircleBorder(),
-          ),
-          child: IconButton(
-            onPressed: () {
-              if (isFavorite) {
-                context.read<FavoritesBloc>().add(FavoritesDelete(movie.id));
-                context.read<AllFavoritesCubit>().removeFavMovie(movie.id);
-              } else {
-                context.read<FavoritesBloc>().add(FavoritesAdd(movie));
-                context.read<AllFavoritesCubit>().addFavMovie(movie.id);
-              }
-            },
-            icon: Icon(
-              isFavorite ? Icons.favorite : Icons.favorite_border,
-              color: Colors.red,
-            ),
+        return IconButton(
+          onPressed: () {
+            if (isFavorite) {
+              context.read<FavoritesBloc>().add(FavoritesDelete(movie.id));
+              context.read<AllFavoritesCubit>().removeFavMovie(movie.id);
+            } else {
+              context.read<FavoritesBloc>().add(FavoritesAdd(movie));
+              context.read<AllFavoritesCubit>().addFavMovie(movie.id);
+            }
+          },
+          icon: Icon(
+            isFavorite ? Icons.favorite : Icons.favorite_border,
+            color: Colors.red,
           ),
         );
       },

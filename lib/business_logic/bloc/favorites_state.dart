@@ -22,7 +22,7 @@ class FavoritesState extends Equatable {
   factory FavoritesState.initial(String userId) => FavoritesState(
         status: FavoritesStatus.initial,
         loadedMovies: const <Movie>[],
-        nextPageKey: 1,
+        nextPageKey: null,
         userId: userId,
         lastDocumentSnapshot: null,
         error: '',

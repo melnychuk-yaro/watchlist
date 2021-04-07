@@ -17,14 +17,21 @@ class Favorites extends StatefulWidget {
 }
 
 class _FavoritesState extends State<Favorites> {
-  final _pagingController = PagingController<int, Movie>(firstPageKey: 1);
+  late PagingController<int, Movie> _pagingController;
   late FavoritesBloc _bloc;
 
   @override
   void initState() {
     super.initState();
     _bloc = context.read<FavoritesBloc>();
-    _setPaginationInitialState(_bloc.state);
+    _pagingController = PagingController<int, Movie>.fromValue(
+      PagingState(
+        itemList: _bloc.state.loadedMovies,
+        error: _bloc.state.error,
+        nextPageKey: _bloc.state.nextPageKey,
+      ),
+      firstPageKey: 1,
+    );
     _pagingController.addPageRequestListener((nextPageKey) {
       _bloc.add(FavoritesLoad());
     });
@@ -34,16 +41,6 @@ class _FavoritesState extends State<Favorites> {
   void dispose() {
     super.dispose();
     _pagingController.dispose();
-  }
-
-  void _setPaginationInitialState(state) {
-    if (state.status == FavoritesStatus.loaded) {
-      _pagingController.value = PagingState(
-        itemList: state.loadedMovies,
-        error: null,
-        nextPageKey: state.nextPageKey,
-      );
-    }
   }
 
 //

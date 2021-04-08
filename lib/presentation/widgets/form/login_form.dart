@@ -57,10 +57,7 @@ class _LoginFormState extends State<LoginForm> {
             const SizedBox(height: kPadding),
             _LoginButton(),
             const SizedBox(height: kPadding / 2),
-            SignInButton(
-              Buttons.GoogleDark,
-              onPressed: () => context.read<LoginCubit>().logInWithGoogle(),
-            ),
+            _GoogleLoginButton(),
             const SizedBox(height: kPadding),
             Row(
               children: <Widget>[
@@ -136,13 +133,33 @@ class _LoginButton extends StatelessWidget {
     return BlocBuilder<LoginCubit, LoginState>(
       buildWhen: (previous, current) => previous.status != current.status,
       builder: (context, state) {
+        return ElevatedButton(
+          onPressed:
+              state.status.isValidated && !state.status.isSubmissionInProgress
+                  ? () => context.read<LoginCubit>().logInWithCredentials()
+                  : null,
+          child: Text(AppLocalizations.of(context)!.login),
+        );
+      },
+    );
+  }
+}
+
+class _GoogleLoginButton extends StatelessWidget {
+  const _GoogleLoginButton({
+    Key? key,
+  }) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return BlocBuilder<LoginCubit, LoginState>(
+      buildWhen: (previous, current) => previous.status != current.status,
+      builder: (context, state) {
         return state.status.isSubmissionInProgress
             ? const ButtonLoadingIndicator()
-            : ElevatedButton(
-                onPressed: state.status.isValidated
-                    ? () => context.read<LoginCubit>().logInWithCredentials()
-                    : null,
-                child: Text(AppLocalizations.of(context)!.login),
+            : SignInButton(
+                Buttons.GoogleDark,
+                onPressed: () => context.read<LoginCubit>().logInWithGoogle(),
               );
       },
     );

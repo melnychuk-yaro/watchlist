@@ -3,11 +3,13 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:formz/formz.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
-import '../../business_logic/cubit/sign_up_cubit.dart';
-import '../../constatns.dart';
-import '../../data/models/confirmed_password.dart';
-import '../../data/models/password.dart';
+import '../../../business_logic/cubit/sign_up_cubit.dart';
+import '../../../constatns.dart';
+import '../../../data/models/confirmed_password.dart';
+import '../../../data/models/password.dart';
 import 'button_loading_indicator.dart';
+import 'email_form_field.dart';
+import 'password_form_field.dart';
 
 class SignUpForm extends StatefulWidget {
   final Function toggleIsLogin;
@@ -82,29 +84,6 @@ class _SignUpFormState extends State<SignUpForm> {
   }
 }
 
-class _SignUpButton extends StatelessWidget {
-  const _SignUpButton({
-    Key? key,
-  }) : super(key: key);
-
-  @override
-  Widget build(BuildContext context) {
-    return BlocBuilder<SignUpCubit, SignUpState>(
-      buildWhen: (previous, current) => previous.status != current.status,
-      builder: (context, state) {
-        return state.status.isSubmissionInProgress
-            ? ButtonLoadingIndicator()
-            : ElevatedButton(
-                onPressed: state.status.isValidated
-                    ? () => context.read<SignUpCubit>().signUpFormSubmitted()
-                    : null,
-                child: Text(AppLocalizations.of(context)!.sign_up),
-              );
-      },
-    );
-  }
-}
-
 class _EmailInput extends StatelessWidget {
   const _EmailInput({required this.nextFieldFocusNode});
 
@@ -115,21 +94,10 @@ class _EmailInput extends StatelessWidget {
     return BlocBuilder<SignUpCubit, SignUpState>(
       buildWhen: (previous, current) => previous.email != current.email,
       builder: (context, state) {
-        return TextFormField(
-          keyboardType: TextInputType.emailAddress,
-          onChanged: (email) => context.read<SignUpCubit>().emailChanged(email),
-          onFieldSubmitted: (_) =>
-              FocusScope.of(context).requestFocus(nextFieldFocusNode),
-          decoration: InputDecoration(
-            hintText: AppLocalizations.of(context)!.email,
-            prefixIcon: Padding(
-              child: Icon(Icons.email, color: Theme.of(context).hintColor),
-              padding: EdgeInsets.only(left: kPadding, right: 10),
-            ),
-            errorText: state.email.invalid
-                ? AppLocalizations.of(context)!.invalid_email
-                : null,
-          ),
+        return EmailFormField(
+          nextFieldFocusNode: nextFieldFocusNode,
+          onChange: (email) => context.read<SignUpCubit>().emailChanged(email),
+          isInvalid: state.email.invalid,
         );
       },
     );
@@ -149,25 +117,18 @@ class _PasswordInput extends StatelessWidget {
   Widget build(BuildContext context) {
     return BlocBuilder<SignUpCubit, SignUpState>(
       builder: (context, state) {
-        return TextFormField(
-          obscureText: true,
-          enableSuggestions: false,
-          autocorrect: false,
-          onChanged: (password) =>
-              context.read<SignUpCubit>().passwordChanged(password),
-          onFieldSubmitted: (_) =>
-              FocusScope.of(context).requestFocus(nextFieldFocusNode),
+        return PasswordFormField(
+          onChange: (password) {
+            context.read<SignUpCubit>().passwordChanged(password);
+          },
+          onFieldSubmitted: (_) {
+            FocusScope.of(context).requestFocus(nextFieldFocusNode);
+          },
           focusNode: focusNode,
-          decoration: InputDecoration(
-            hintText: AppLocalizations.of(context)!.password,
-            prefixIcon: Padding(
-              padding: const EdgeInsets.only(left: kPadding, right: 10),
-              child: Icon(Icons.vpn_key, color: Theme.of(context).hintColor),
-            ),
-            errorText: state.password.error == PasswordValidationError.short
-                ? AppLocalizations.of(context)!.password_to_short
-                : null,
-          ),
+          hintText: AppLocalizations.of(context)!.password,
+          errorText: state.password.error == PasswordValidationError.short
+              ? AppLocalizations.of(context)!.password_to_short
+              : null,
         );
       },
     );
@@ -183,27 +144,43 @@ class _PasswordConfirmInput extends StatelessWidget {
   Widget build(BuildContext context) {
     return BlocBuilder<SignUpCubit, SignUpState>(
       builder: (context, state) {
-        return TextFormField(
-          obscureText: true,
-          enableSuggestions: false,
-          autocorrect: false,
-          onChanged: (password) =>
-              context.read<SignUpCubit>().confirmedPasswordChanged(password),
-          onFieldSubmitted: (_) =>
-              context.read<SignUpCubit>().signUpFormSubmitted(),
+        return PasswordFormField(
+          onChange: (password) {
+            context.read<SignUpCubit>().confirmedPasswordChanged(password);
+          },
+          onFieldSubmitted: (_) {
+            return context.read<SignUpCubit>().signUpFormSubmitted();
+          },
           focusNode: focusNode,
-          decoration: InputDecoration(
-            hintText: AppLocalizations.of(context)!.confirm_password,
-            prefixIcon: Padding(
-              padding: const EdgeInsets.only(left: kPadding, right: 10),
-              child: Icon(Icons.vpn_key, color: Theme.of(context).hintColor),
-            ),
-            errorText: state.confirmedPassword.error ==
-                    ConfirmedPasswordValidationError.unmatch
-                ? AppLocalizations.of(context)!.paswords_do_not_match
-                : null,
-          ),
+          hintText: AppLocalizations.of(context)!.confirm_password,
+          errorText: state.confirmedPassword.error ==
+                  ConfirmedPasswordValidationError.unmatch
+              ? AppLocalizations.of(context)!.paswords_do_not_match
+              : null,
         );
+      },
+    );
+  }
+}
+
+class _SignUpButton extends StatelessWidget {
+  const _SignUpButton({
+    Key? key,
+  }) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return BlocBuilder<SignUpCubit, SignUpState>(
+      buildWhen: (previous, current) => previous.status != current.status,
+      builder: (context, state) {
+        return state.status.isSubmissionInProgress
+            ? const ButtonLoadingIndicator()
+            : ElevatedButton(
+                onPressed: state.status.isValidated
+                    ? () => context.read<SignUpCubit>().signUpFormSubmitted()
+                    : null,
+                child: Text(AppLocalizations.of(context)!.sign_up),
+              );
       },
     );
   }

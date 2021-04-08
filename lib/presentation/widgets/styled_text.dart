@@ -18,7 +18,7 @@ class StyledText extends StatelessWidget {
           const SizedBox(height: 8),
           Text(
             text,
-            style: TextStyle(
+            style: const TextStyle(
               fontWeight: FontWeight.bold,
               fontSize: 18,
             ),

@@ -4,13 +4,13 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
-import '../../business_logic/bloc/search_bloc.dart';
-import '../../constatns.dart';
-import '../widgets/search_grid.dart';
+import '../../../business_logic/bloc/search_bloc.dart';
+import '../../../constatns.dart';
+import '../../widgets/search_grid.dart';
 
 class Search extends StatefulWidget {
   final PageStorageKey key;
-  Search({required this.key});
+  const Search({required this.key});
 
   @override
   _SearchState createState() => _SearchState();
@@ -57,6 +57,10 @@ class _SearchState extends State<Search> {
           child: TextField(
             controller: _searchQuery,
             decoration: InputDecoration(
+              prefixIcon: Padding(
+                child: Icon(Icons.search, color: Theme.of(context).hintColor),
+                padding: const EdgeInsets.only(left: kPadding, right: 10),
+              ),
               hintText: AppLocalizations.of(context)!.search,
             ),
           ),

@@ -37,7 +37,6 @@ class MovieCard extends StatelessWidget {
         ),
       ),
       child: Card(
-        clipBehavior: Clip.antiAlias,
         shape: RoundedRectangleBorder(
           borderRadius: BorderRadius.circular(kBorderRadius),
         ),
@@ -69,7 +68,7 @@ class MovieCard extends StatelessWidget {
             child: Text(
               movie.title,
               textAlign: TextAlign.center,
-              style: TextStyle(fontSize: 16.0),
+              style: const TextStyle(fontSize: 16.0),
             ),
           ),
         ),

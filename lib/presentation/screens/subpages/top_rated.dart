@@ -1,27 +1,27 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:infinite_scroll_pagination/infinite_scroll_pagination.dart';
-import '../../business_logic/cubit/now_playing_cubit.dart';
-import '../../data/models/movie.dart';
-import '../widgets/movies_paginated_grid.dart';
+import '../../../business_logic/cubit/top_movies_cubit.dart';
+import '../../../data/models/movie.dart';
+import '../../widgets/movies_paginated_grid.dart';
 
-class NowPlaying extends StatefulWidget {
+class TopRated extends StatefulWidget {
+  const TopRated({required this.key});
   final PageStorageKey key;
-  NowPlaying({required this.key});
 
   @override
-  _NowPlayingState createState() => _NowPlayingState();
+  _TopRatedState createState() => _TopRatedState();
 }
 
-class _NowPlayingState extends State<NowPlaying> {
+class _TopRatedState extends State<TopRated> {
   final _pagingController = PagingController<int, Movie>(firstPageKey: 1);
-  late NowPlayingCubit _cubit;
+  late TopMoviesCubit _cubit;
 
   @override
   void initState() {
     super.initState();
-    _cubit = context.read<NowPlayingCubit>();
-    _setPaginationInitialState(_cubit);
+    _cubit = context.read<TopMoviesCubit>();
+    _setPaginationInitialState(_cubit.state);
     _pagingController.addPageRequestListener((pageKey) {
       _cubit.loadMovies(pageKey);
     });
@@ -33,27 +33,26 @@ class _NowPlayingState extends State<NowPlaying> {
     _pagingController.dispose();
   }
 
-  void _setPaginationInitialState(cubit) {
-    final NowPlayingState cubitState = cubit.state;
-    if (cubitState is NowPlayingLoaded) {
+  void _setPaginationInitialState(TopMoviesState cubitState) {
+    if (cubitState is TopMoviesLoaded) {
       _pagingController.value = PagingState(
         itemList: cubitState.movies,
         error: cubitState.error,
         nextPageKey: cubitState.nextPageKey,
       );
-    } else if (cubitState is NowPlayingError) {
+    } else if (cubitState is TopMoviesError) {
       _pagingController.error = cubitState.error;
     }
   }
 
   @override
   Widget build(BuildContext context) {
-    return BlocListener<NowPlayingCubit, NowPlayingState>(
+    return BlocListener<TopMoviesCubit, TopMoviesState>(
       listener: (context, state) {
-        if (state is NowPlayingError) {
+        if (state is TopMoviesError) {
           _pagingController.error = state.error;
         }
-        if (state is NowPlayingLoaded) {
+        if (state is TopMoviesLoaded) {
           _pagingController.value = PagingState(
             itemList: state.movies,
             error: null,

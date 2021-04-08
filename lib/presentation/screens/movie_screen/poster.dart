@@ -26,10 +26,7 @@ class SingleMoviePoster extends StatelessWidget {
         aspectRatio: 2 / 3,
         child: Hero(
           tag: posterPath,
-          child: ClipRRect(
-            borderRadius: BorderRadius.circular(kBorderRadius),
-            child: Poster(posterUrl: posterPath),
-          ),
+          child: Poster(posterUrl: posterPath),
         ),
       ),
     );

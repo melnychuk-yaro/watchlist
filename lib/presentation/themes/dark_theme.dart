@@ -16,7 +16,7 @@ class DarkTheme {
         ),
         bottomNavigationBarTheme: BottomNavigationBarThemeData().copyWith(
           selectedItemColor: color,
-          unselectedIconTheme: IconThemeData(color: Colors.white),
+          unselectedIconTheme: const IconThemeData(color: Colors.white),
           backgroundColor: darkColor,
         ),
         textSelectionTheme: TextSelectionThemeData().copyWith(
@@ -31,17 +31,17 @@ class DarkTheme {
               horizontal: kPadding * 1.5,
               vertical: kPadding / 2,
             ),
-            textStyle: TextStyle(fontSize: 16.0),
+            textStyle: const TextStyle(fontSize: 16.0),
           ),
         ),
         textButtonTheme: TextButtonThemeData(
           style: TextButton.styleFrom(
             primary: color,
-            textStyle: TextStyle(fontSize: 16.0),
+            textStyle: const TextStyle(fontSize: 16.0),
           ),
         ),
         inputDecorationTheme: InputDecorationTheme(
-          hintStyle: TextStyle(fontSize: 16),
+          hintStyle: const TextStyle(fontSize: 16),
           enabledBorder: OutlineInputBorder(
             borderRadius: BorderRadius.circular(8.0),
             borderSide: BorderSide(

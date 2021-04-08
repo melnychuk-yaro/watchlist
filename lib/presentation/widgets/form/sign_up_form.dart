@@ -177,7 +177,7 @@ class _SignUpButton extends StatelessWidget {
             ? const ButtonLoadingIndicator()
             : ElevatedButton(
                 onPressed: state.status.isValidated
-                    ? () => context.read<SignUpCubit>().signUpFormSubmitted()
+                    ? context.read<SignUpCubit>().signUpFormSubmitted
                     : null,
                 child: Text(AppLocalizations.of(context)!.sign_up),
               );

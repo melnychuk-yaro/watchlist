@@ -136,7 +136,7 @@ class _LoginButton extends StatelessWidget {
         return ElevatedButton(
           onPressed:
               state.status.isValidated && !state.status.isSubmissionInProgress
-                  ? () => context.read<LoginCubit>().logInWithCredentials()
+                  ? context.read<LoginCubit>().logInWithCredentials
                   : null,
           child: Text(AppLocalizations.of(context)!.login),
         );
@@ -159,7 +159,7 @@ class _GoogleLoginButton extends StatelessWidget {
             ? const ButtonLoadingIndicator()
             : SignInButton(
                 Buttons.GoogleDark,
-                onPressed: () => context.read<LoginCubit>().logInWithGoogle(),
+                onPressed: context.read<LoginCubit>().logInWithGoogle,
               );
       },
     );

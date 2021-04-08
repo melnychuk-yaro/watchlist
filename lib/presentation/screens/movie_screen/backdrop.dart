@@ -19,7 +19,7 @@ class Backdrop extends StatelessWidget {
       clipBehavior: Clip.antiAlias,
       height: backdropHeight,
       width: double.infinity,
-      decoration: BoxDecoration(
+      decoration: const BoxDecoration(
         boxShadow: kShadow,
         borderRadius: BorderRadius.only(
           bottomLeft: Radius.circular(kBorderRadius * 2),
@@ -28,16 +28,13 @@ class Backdrop extends StatelessWidget {
       child: Image.network(
         backdropPath,
         fit: BoxFit.cover,
-        errorBuilder: (context, exception, stackTrace) {
+        errorBuilder: (context, _, __) {
           return Container(color: Theme.of(context).cardColor);
         },
         frameBuilder: (_, child, frame, wasSynchronouslyLoaded) {
           return wasSynchronouslyLoaded || frame != null
               ? child
               : SkeletonAnimation(
-                  borderRadius: BorderRadius.only(
-                    bottomLeft: Radius.circular(kBorderRadius * 2),
-                  ),
                   child: Container(
                     color: MediaQuery.of(context).platformBrightness ==
                             Brightness.dark

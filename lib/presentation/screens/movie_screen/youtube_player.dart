@@ -4,7 +4,10 @@ import 'package:youtube_player_iframe/youtube_player_iframe.dart';
 import '../../../constatns.dart';
 
 class YouTubePlayer extends StatefulWidget {
-  YouTubePlayer({Key? key, required this.youtubeVideoId}) : super(key: key);
+  const YouTubePlayer({
+    Key? key,
+    required this.youtubeVideoId,
+  }) : super(key: key);
   final String youtubeVideoId;
 
   @override
@@ -14,7 +17,7 @@ class YouTubePlayer extends StatefulWidget {
 class _YouTubePlayerState extends State<YouTubePlayer> {
   late final YoutubePlayerController _controller = YoutubePlayerController(
     initialVideoId: widget.youtubeVideoId,
-    params: YoutubePlayerParams(
+    params: const YoutubePlayerParams(
       autoPlay: false,
     ),
   );

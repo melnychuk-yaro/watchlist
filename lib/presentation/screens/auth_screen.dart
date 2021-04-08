@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import '../../constatns.dart';
-import '../widgets/login_form.dart';
-import '../widgets/sign_up_form.dart';
+import '../widgets/form/login_form.dart';
+import '../widgets/form/sign_up_form.dart';
 
 class AuthScreen extends StatelessWidget {
   @override

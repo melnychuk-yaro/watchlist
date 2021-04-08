@@ -3,14 +3,14 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:infinite_scroll_pagination/infinite_scroll_pagination.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
-import '../../business_logic/bloc/favorites_bloc.dart';
-import '../../data/models/movie.dart';
-import '../widgets/movies_paginated_grid.dart';
-import '../widgets/styled_text.dart';
+import '../../../business_logic/bloc/favorites_bloc.dart';
+import '../../../data/models/movie.dart';
+import '../../widgets/movies_paginated_grid.dart';
+import '../../widgets/styled_text.dart';
 
 class Favorites extends StatefulWidget {
   final PageStorageKey key;
-  Favorites({required this.key}) : super(key: key);
+  const Favorites({required this.key}) : super(key: key);
 
   @override
   _FavoritesState createState() => _FavoritesState();

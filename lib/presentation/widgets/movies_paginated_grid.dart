@@ -19,7 +19,7 @@ class MoviesPaginatedGrid extends StatelessWidget {
     return PagedGridView<int, Movie>(
       pagingController: pagingController,
       padding: const EdgeInsets.all(4.0),
-      gridDelegate: SliverGridDelegateWithMaxCrossAxisExtent(
+      gridDelegate: const SliverGridDelegateWithMaxCrossAxisExtent(
         maxCrossAxisExtent: 300.0,
         childAspectRatio: 2 / 3,
       ),

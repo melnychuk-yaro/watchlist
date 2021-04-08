@@ -56,7 +56,7 @@ class _SearchGridState extends State<SearchGrid> {
           return StyledText(
               text: AppLocalizations.of(context)!.start_searching);
         } else if (state.status == SearchStatus.loading) {
-          return Center(child: CircularProgressIndicator());
+          return const Center(child: CircularProgressIndicator());
         }
         return MoviesPaginatedGrid(pagingController: _pagingController);
       },

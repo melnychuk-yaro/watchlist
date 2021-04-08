@@ -69,25 +69,8 @@ class _MovieScreenState extends State<MovieScreen> {
                             backdropPath: state.movie.fullBackgroundPath,
                             backdropHeight: backdropHeight,
                           )
-                        : SkeletonAnimation(
-                            borderRadius: BorderRadius.only(
-                              bottomLeft: Radius.circular(kBorderRadius * 2),
-                            ),
-                            child: Container(
-                              height: backdropHeight,
-                              decoration: BoxDecoration(
-                                color:
-                                    MediaQuery.of(context).platformBrightness ==
-                                            Brightness.dark
-                                        ? kSkeletonDarkBg
-                                        : kSkeletonLightBg,
-                                boxShadow: kShadow,
-                                borderRadius: BorderRadius.only(
-                                  bottomLeft:
-                                      Radius.circular(kBorderRadius * 2),
-                                ),
-                              ),
-                            ),
+                        : const _BackDropSkeleton(
+                            backdropHeight: backdropHeight,
                           ),
                     Positioned(
                       top: 143,
@@ -102,16 +85,16 @@ class _MovieScreenState extends State<MovieScreen> {
                       right: 0,
                       child: state is SingleMovieLoaded
                           ? ToolBar(movie: state.movie)
-                          : _ToolBarSkeleton(),
+                          : const _ToolBarSkeleton(),
                     ),
-                    CustomBackButton(),
+                    const CustomBackButton(),
                   ],
                 ),
                 Padding(
                   padding: const EdgeInsets.all(kPadding),
                   child: Row(
                     children: [
-                      Container(width: posterWidth),
+                      const SizedBox(width: posterWidth),
                       const SizedBox(width: kPadding),
                       Expanded(
                         child: state is SingleMovieLoaded
@@ -198,7 +181,7 @@ class _MovieScreenState extends State<MovieScreen> {
                                   padding: const EdgeInsets.only(top: kPadding),
                                   child: Text(
                                     state.movie.overview,
-                                    style: TextStyle(fontSize: 16),
+                                    style: const TextStyle(fontSize: 16),
                                   ),
                                 ),
                               ),
@@ -238,24 +221,29 @@ class _MovieScreenState extends State<MovieScreen> {
   }
 }
 
-class _YouTubeSkeleton extends StatelessWidget {
-  const _YouTubeSkeleton({
+class _BackDropSkeleton extends StatelessWidget {
+  const _BackDropSkeleton({
     Key? key,
+    required this.backdropHeight,
   }) : super(key: key);
+
+  final double backdropHeight;
 
   @override
   Widget build(BuildContext context) {
     return SkeletonAnimation(
-      borderRadius: BorderRadius.circular(kBorderRadius),
-      child: AspectRatio(
-        aspectRatio: 16 / 9,
-        child: Container(
-          decoration: BoxDecoration(
-            color: MediaQuery.of(context).platformBrightness == Brightness.dark
-                ? kSkeletonDarkBg
-                : kSkeletonLightBg,
-            boxShadow: kShadow,
-            borderRadius: BorderRadius.circular(kBorderRadius),
+      borderRadius: BorderRadius.only(
+        bottomLeft: Radius.circular(kBorderRadius * 2),
+      ),
+      child: Container(
+        height: backdropHeight,
+        decoration: BoxDecoration(
+          color: MediaQuery.of(context).platformBrightness == Brightness.dark
+              ? kSkeletonDarkBg
+              : kSkeletonLightBg,
+          boxShadow: kShadow,
+          borderRadius: const BorderRadius.only(
+            bottomLeft: Radius.circular(kBorderRadius * 2),
           ),
         ),
       ),
@@ -299,7 +287,7 @@ class _ToolBarSkeleton extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return SkeletonAnimation(
-      borderRadius: BorderRadius.only(
+      borderRadius: const BorderRadius.only(
         bottomLeft: Radius.circular(kBorderRadius),
         topLeft: Radius.circular(kBorderRadius),
       ),
@@ -311,9 +299,34 @@ class _ToolBarSkeleton extends StatelessWidget {
               ? kSkeletonDarkBg
               : kSkeletonLightBg,
           boxShadow: kShadow,
-          borderRadius: BorderRadius.only(
+          borderRadius: const BorderRadius.only(
             bottomLeft: Radius.circular(kBorderRadius),
             topLeft: Radius.circular(kBorderRadius),
+          ),
+        ),
+      ),
+    );
+  }
+}
+
+class _YouTubeSkeleton extends StatelessWidget {
+  const _YouTubeSkeleton({
+    Key? key,
+  }) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return SkeletonAnimation(
+      borderRadius: BorderRadius.circular(kBorderRadius),
+      child: AspectRatio(
+        aspectRatio: 16 / 9,
+        child: Container(
+          decoration: BoxDecoration(
+            color: MediaQuery.of(context).platformBrightness == Brightness.dark
+                ? kSkeletonDarkBg
+                : kSkeletonLightBg,
+            boxShadow: kShadow,
+            borderRadius: BorderRadius.circular(kBorderRadius),
           ),
         ),
       ),

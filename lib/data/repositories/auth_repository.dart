@@ -1,6 +1,7 @@
 import 'dart:async';
 
 import 'package:firebase_auth/firebase_auth.dart' as firebase_auth;
+import 'package:flutter/services.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 import '../../business_logic/helpers/failures/auth_failure.dart';
 import '../models/user.dart';
@@ -64,6 +65,8 @@ class AuthenticationRepository {
       await _firebaseAuth.signInWithCredential(credential);
     } on firebase_auth.FirebaseAuthException catch (e) {
       throw AuthFailure(e.message ?? _unknownErrorMessage);
+    } on PlatformException catch (e) {
+      throw AuthFailure(e.code);
     }
   }
 

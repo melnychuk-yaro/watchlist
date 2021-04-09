@@ -3,7 +3,6 @@ import 'dart:async';
 import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
 import 'package:flutter/foundation.dart';
-import 'package:pedantic/pedantic.dart';
 import '../../data/models/user.dart';
 import '../../data/repositories/auth_repository.dart';
 
@@ -29,7 +28,7 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
     if (event is AuthUserChanged) {
       yield _mapAuthenticationUserChangedToState(event);
     } else if (event is AuthLogoutRequested) {
-      unawaited(_authenticationRepository.logOut());
+      _authenticationRepository.logOut();
     }
   }
 

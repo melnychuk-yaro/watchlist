@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
+
 import '../../constatns.dart';
 import '../widgets/form/login_form.dart';
 import '../widgets/form/sign_up_form.dart';
+import '../widgets/logo_circle.dart';
 
 class AuthScreen extends StatelessWidget {
   @override
@@ -31,10 +33,11 @@ class __AuthFormSwicherState extends State<_AuthFormSwicher> {
   @override
   Widget build(BuildContext context) {
     return AnimatedSwitcher(
-      duration: const Duration(milliseconds: 300),
+      duration: const Duration(milliseconds: 500),
       transitionBuilder: (child, animation) {
         return ScaleTransition(child: child, scale: animation);
       },
+      switchInCurve: Curves.easeOut,
       child: _isLogin
           ? _LoginCard(
               key: ValueKey('login-form'),
@@ -52,6 +55,8 @@ class _LoginCard extends StatelessWidget {
   _LoginCard({required this.key, required this.child}) : super(key: key);
   final Widget child;
   final Key key;
+  static const double cardWidth = 300.0;
+  static const double logoSize = 37.0;
 
   @override
   Widget build(BuildContext context) {
@@ -59,15 +64,26 @@ class _LoginCard extends StatelessWidget {
       shape: RoundedRectangleBorder(
         borderRadius: BorderRadius.circular(24.0),
       ),
-      child: Container(
-        padding: const EdgeInsets.fromLTRB(
-          kPadding * 1.5,
-          kPadding * 2,
-          kPadding * 1.5,
-          kPadding,
-        ),
-        width: 300.0,
-        child: child,
+      child: Stack(
+        clipBehavior: Clip.none,
+        children: [
+          // const SizedBox(height: logoSize),
+          Container(
+            padding: const EdgeInsets.fromLTRB(
+              kPadding * 1.5,
+              kPadding * 2.5,
+              kPadding * 1.5,
+              kPadding,
+            ),
+            width: cardWidth,
+            child: child,
+          ),
+          Positioned(
+            top: -logoSize,
+            left: cardWidth / 2 - logoSize,
+            child: LogoCircle(),
+          ),
+        ],
       ),
     );
   }

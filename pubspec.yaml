@@ -40,6 +40,7 @@ dependencies:
   infinite_scroll_pagination: ^3.0.1
   intl: ^0.17.0
   skeleton_text: ^3.0.0
+  universal_io: ^2.0.4
   youtube_player_iframe: ^2.0.0
   
 

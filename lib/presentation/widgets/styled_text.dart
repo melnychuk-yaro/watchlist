@@ -18,6 +18,7 @@ class StyledText extends StatelessWidget {
           const SizedBox(height: 8),
           Text(
             text,
+            textAlign: TextAlign.center,
             style: const TextStyle(
               fontWeight: FontWeight.bold,
               fontSize: 18,

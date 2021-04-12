@@ -1,4 +1,3 @@
-// import 'dart:ffi';
 import 'package:firebase_auth/firebase_auth.dart' as firebase_auth;
 import 'package:flutter_test/flutter_test.dart';
 import 'package:mockito/annotations.dart';
@@ -18,9 +17,6 @@ import 'auth_repository_test.mocks.dart';
     MockSpec<firebase_auth.User>(as: #MockFirebaseUser),
   ],
 )
-
-// class MockFirebaseUser extends Mock implements firebase_auth.User {}
-
 void main() {
   final mockFirebaseAuth = MockFirebaseAuth();
   final authRepo = AuthenticationRepository(firebaseAuth: mockFirebaseAuth);

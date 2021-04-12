@@ -8,7 +8,10 @@ import '../models/favorites_movies_page.dart';
 import '../models/movie.dart';
 
 class FavoritesRepository {
-  final FirebaseFirestore _firestore = FirebaseFirestore.instance;
+  final FirebaseFirestore _firestore;
+
+  FavoritesRepository({FirebaseFirestore? firestore})
+      : _firestore = firestore ?? FirebaseFirestore.instance;
 
   Future<void> saveFavMovie(
       {required Movie movie, required String userId}) async {
@@ -104,7 +107,7 @@ class FavoritesRepository {
           .doc(userId)
           .collection('fav_movies')
           .get();
-      return snapshot.docs.map((doc) => doc['id'] as int).toList();
+      return snapshot.docs.map((doc) => doc.get('id') as int).toList();
     } on SocketException {
       throw Failure('No internet conneciton.');
     } on HttpException {

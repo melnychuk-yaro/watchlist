@@ -1,7 +1,8 @@
+import 'package:equatable/equatable.dart';
 import 'package:flutter/material.dart';
 
 @immutable
-class Movie {
+class Movie extends Equatable {
   final int id;
   final String title;
   final String releaseDate;
@@ -16,6 +17,9 @@ class Movie {
     required this.posterFileName,
     required this.rating,
   });
+
+  @override
+  List<Object> get props => [id, title, releaseDate, rating, posterFileName];
 
   String get fullPosterPath => posterPath + posterFileName;
 

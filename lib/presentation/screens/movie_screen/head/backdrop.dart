@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:skeleton_text/skeleton_text.dart';
 
-import '../../../constatns.dart';
+import '../../../../constatns.dart';
 
 class Backdrop extends StatelessWidget {
   const Backdrop({

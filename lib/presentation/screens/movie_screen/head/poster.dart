@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 
-import '../../../constatns.dart';
-import '../../widgets/poster.dart';
+import '../../../../constatns.dart';
+import '../../../widgets/poster.dart';
 
 class SingleMoviePoster extends StatelessWidget {
   const SingleMoviePoster({

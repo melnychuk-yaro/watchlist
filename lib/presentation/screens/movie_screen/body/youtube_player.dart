@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:youtube_player_iframe/youtube_player_iframe.dart';
 
-import '../../../constatns.dart';
+import '../../../../constatns.dart';
 
 class YouTubePlayer extends StatefulWidget {
   const YouTubePlayer({

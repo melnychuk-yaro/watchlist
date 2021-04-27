@@ -4,6 +4,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart' as dot_env;
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import 'package:google_mobile_ads/google_mobile_ads.dart';
 
 import 'business_logic/bloc/auth_bloc.dart';
 import 'business_logic/bloc/favorites_bloc.dart';
@@ -23,8 +24,11 @@ import 'presentation/themes/app_theme.dart';
 
 Future<void> main() async {
   await dot_env.load(fileName: ".env");
+
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp();
+  MobileAds.instance.initialize();
+
   runApp(App());
 }
 

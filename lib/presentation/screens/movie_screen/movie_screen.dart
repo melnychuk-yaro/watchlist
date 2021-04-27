@@ -1,11 +1,14 @@
+import 'dart:io';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:intl/intl.dart';
 import 'package:skeleton_text/skeleton_text.dart';
-import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 import '../../../business_logic/cubit/single_movie_cubit.dart';
 import '../../../constatns.dart';
+import '../../widgets/app_banner_ad.dart';
 import '../../widgets/styled_text.dart';
 import 'backdrop.dart';
 import 'custom_back_button.dart';
@@ -185,11 +188,15 @@ class _MovieScreenState extends State<MovieScreen> {
                                   ),
                                 ),
                               ),
+                              if (Platform.isIOS || Platform.isAndroid)
+                                const SizedBox(height: kPadding),
+                              if (Platform.isIOS || Platform.isAndroid)
+                                AppBannerAd(),
                               if (state.movie.youtubeVideoId != '')
                                 const SizedBox(height: kPadding),
                               if (state.movie.youtubeVideoId != '')
                                 YouTubePlayer(
-                                    youtubeVideoId: state.movie.youtubeVideoId)
+                                    youtubeVideoId: state.movie.youtubeVideoId),
                             ],
                           )
                         : Column(

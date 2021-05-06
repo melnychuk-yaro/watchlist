@@ -56,7 +56,7 @@ class FavoritesRepository {
     required String userId,
     DocumentSnapshot? lastDocument,
   }) async {
-    QuerySnapshot querySnapshot;
+    QuerySnapshot<Map<String, dynamic>> querySnapshot;
     const limit = 10;
     try {
       querySnapshot = lastDocument == null

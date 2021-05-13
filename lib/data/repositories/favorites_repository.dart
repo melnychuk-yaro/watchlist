@@ -56,22 +56,19 @@ class FavoritesRepository {
     required String userId,
     DocumentSnapshot? lastDocument,
   }) async {
-    QuerySnapshot<Map<String, dynamic>> querySnapshot;
+    final querySnapshot;
+    final orderedQuery;
     const limit = 10;
     try {
+      orderedQuery = _firestore
+          .collection('users')
+          .doc(userId)
+          .collection('fav_movies')
+          .orderBy('date_added_to_favorite', descending: true);
+
       querySnapshot = lastDocument == null
-          ? await _firestore
-              .collection('users')
-              .doc(userId)
-              .collection('fav_movies')
-              .orderBy('date_added_to_favorite', descending: true)
-              .limit(limit)
-              .get()
-          : await _firestore
-              .collection('users')
-              .doc(userId)
-              .collection('fav_movies')
-              .orderBy('date_added_to_favorite', descending: true)
+          ? await orderedQuery.limit(limit).get()
+          : await orderedQuery
               .startAfterDocument(lastDocument)
               .limit(limit)
               .get();
@@ -81,7 +78,7 @@ class FavoritesRepository {
         lastDocument = querySnapshot.docs[querySnapshot.docs.length - 1];
       }
 
-      final movies = querySnapshot.docs.map((doc) {
+      final movies = querySnapshot.docs.map<Movie>((doc) {
         return Movie.fromMap(doc.data());
       }).toList();
 

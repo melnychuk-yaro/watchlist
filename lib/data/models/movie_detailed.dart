@@ -9,6 +9,7 @@ class MovieDetailed extends Movie {
   final String backgroundFileName;
   final String overview;
   final String tagline;
+  final List<String> directors;
   final List<Map<String, dynamic>> genres;
   final int budget;
   final String youtubeVideoId;
@@ -22,6 +23,7 @@ class MovieDetailed extends Movie {
     required this.overview,
     required this.backgroundFileName,
     required this.tagline,
+    required this.directors,
     required this.genres,
     required this.budget,
     required this.youtubeVideoId,
@@ -36,17 +38,6 @@ class MovieDetailed extends Movie {
   String get fullBackgroundPath => Movie.posterPath + backgroundFileName;
 
   factory MovieDetailed.fromMap(Map<String, dynamic> movieMap) {
-    String getVideoId(Map<String, dynamic> movieMap) {
-      var videoId = '';
-      for (Map<String, dynamic> video in movieMap['videos']['results']) {
-        if (video['site'] == 'YouTube' && video['type'] == 'Trailer') {
-          videoId = video['key'];
-          break;
-        }
-      }
-      return videoId;
-    }
-
     bool isNull(val) => val == null || val == 'null' ? true : false;
 
     return MovieDetailed(
@@ -62,6 +53,7 @@ class MovieDetailed extends Movie {
           : movieMap['vote_average'].toDouble(),
       overview: isNull(movieMap['overview']) ? '' : movieMap['overview'],
       tagline: isNull(movieMap['tagline']) ? '' : movieMap['tagline'],
+      directors: movieMap['directors'],
       genres: isNull(movieMap['genres'])
           ? []
           : movieMap['genres']
@@ -69,7 +61,7 @@ class MovieDetailed extends Movie {
                   (genre) => {'id': genre['id'], 'name': genre['name']})
               .toList(),
       budget: isNull(movieMap['budget']) ? 0 : movieMap['budget'],
-      youtubeVideoId: getVideoId(movieMap),
+      youtubeVideoId: movieMap['videoId'],
     );
   }
 }

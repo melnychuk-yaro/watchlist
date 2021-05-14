@@ -8,10 +8,14 @@
   "@release_date": {
     "description": "Followed by value"
   },
+  "@director": {
+    "description": "Followed by value"
+  },
   "add_movies_to_your_watchlist": "Add Movies To Your Watchlist",
   "budget": "Budget:",
   "confirm_password": "Confirm Password",
   "create_new_account": "Create New Account",
+  "director": "Director:",
   "email": "Email",
   "have_account": "Already have an account?",
   "invalid_email": "Invalid email",

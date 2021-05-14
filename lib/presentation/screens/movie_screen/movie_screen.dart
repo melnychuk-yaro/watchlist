@@ -1,19 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:intl/intl.dart';
-import 'package:skeleton_text/skeleton_text.dart';
-import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 import '../../../business_logic/cubit/single_movie_cubit.dart';
 import '../../../constatns.dart';
 import '../../widgets/styled_text.dart';
-import 'backdrop.dart';
-import 'custom_back_button.dart';
+import 'body/body.dart';
 import 'genres.dart';
-import 'info_item.dart';
-import 'poster.dart';
-import 'toolbar.dart';
-import 'youtube_player.dart';
+import 'head/head.dart';
+import 'placeholders/text_skeleton.dart';
+import 'placeholders/youtube_skeleton.dart';
 
 class MovieScreen extends StatefulWidget {
   const MovieScreen({
@@ -30,14 +25,6 @@ class MovieScreen extends StatefulWidget {
 }
 
 class _MovieScreenState extends State<MovieScreen> {
-  static const double posterWidth = 120.0;
-  static const double backdropHeight = 250.0;
-  final budgetFormat = NumberFormat.currency(
-    locale: 'en_US',
-    symbol: '\$',
-    decimalDigits: 0,
-  );
-
   @override
   void initState() {
     super.initState();
@@ -49,7 +36,7 @@ class _MovieScreenState extends State<MovieScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       body: BlocBuilder<SingleMovieCubit, SingleMovieState>(
-        builder: (context, state) {
+        builder: (_, state) {
           if (state is SingleMovieError) {
             return StyledText(
               text: state.error,
@@ -61,137 +48,18 @@ class _MovieScreenState extends State<MovieScreen> {
               crossAxisAlignment: CrossAxisAlignment.start,
               mainAxisSize: MainAxisSize.min,
               children: [
-                Stack(
-                  clipBehavior: Clip.none,
-                  children: [
-                    state is SingleMovieLoaded
-                        ? Backdrop(
-                            backdropPath: state.movie.fullBackgroundPath,
-                            backdropHeight: backdropHeight,
-                          )
-                        : const _BackDropSkeleton(
-                            backdropHeight: backdropHeight,
-                          ),
-                    Positioned(
-                      top: 143,
-                      left: 16,
-                      child: SingleMoviePoster(
-                        posterPath: widget.posterPath,
-                        posterWidth: posterWidth,
-                      ),
-                    ),
-                    Positioned(
-                      top: 215,
-                      right: 0,
-                      child: state is SingleMovieLoaded
-                          ? ToolBar(movie: state.movie)
-                          : const _ToolBarSkeleton(),
-                    ),
-                    const CustomBackButton(),
-                  ],
-                ),
-                Padding(
-                  padding: const EdgeInsets.all(kPadding),
-                  child: Row(
-                    children: [
-                      const SizedBox(width: posterWidth),
-                      const SizedBox(width: kPadding),
-                      Expanded(
-                        child: state is SingleMovieLoaded
-                            ? Column(
-                                crossAxisAlignment: CrossAxisAlignment.start,
-                                mainAxisSize: MainAxisSize.min,
-                                children: [
-                                  InfoItem(
-                                    defenition:
-                                        AppLocalizations.of(context)!.rating,
-                                    value: state.movie.rating.toString(),
-                                  ),
-                                  const SizedBox(height: 4.0),
-                                  InfoItem(
-                                    defenition: AppLocalizations.of(context)!
-                                        .release_date,
-                                    value: state.movie.releaseDate,
-                                  ),
-                                  const SizedBox(height: 4.0),
-                                  state.movie.budget == 0
-                                      ? InfoItem(
-                                          defenition:
-                                              AppLocalizations.of(context)!
-                                                  .budget,
-                                          value: '-')
-                                      : InfoItem(
-                                          defenition:
-                                              AppLocalizations.of(context)!
-                                                  .budget,
-                                          value: budgetFormat
-                                              .format(state.movie.budget),
-                                        ),
-                                ],
-                              )
-                            : Wrap(
-                                direction: Axis.vertical,
-                                spacing: 4.0,
-                                children: [
-                                  const _TextSceleton(width: 120),
-                                  const _TextSceleton(width: 120),
-                                  const _TextSceleton(width: 120),
-                                ],
-                              ),
-                      )
-                    ],
-                  ),
-                ),
+                Head(title: widget.title, posterPath: widget.posterPath),
                 state is SingleMovieLoaded
                     ? Genres(genres: state.movie.genres)
                     : const Padding(
                         padding: EdgeInsets.symmetric(horizontal: kPadding),
-                        child: _TextSceleton(width: 120, height: 32),
+                        child: TextSkeleton(width: 120, height: 32),
                       ),
                 Flexible(
                   child: Padding(
                     padding: const EdgeInsets.all(kPadding),
                     child: state is SingleMovieLoaded
-                        ? Column(
-                            mainAxisSize: MainAxisSize.min,
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              Flexible(
-                                child: Text(
-                                  widget.title,
-                                  style: Theme.of(context).textTheme.headline5,
-                                ),
-                              ),
-                              if (state.movie.tagline != '')
-                                const SizedBox(height: kPadding / 2),
-                              if (state.movie.tagline != '')
-                                Flexible(
-                                  child: Padding(
-                                    padding: const EdgeInsets.only(
-                                        top: kPadding / 2),
-                                    child: Text(
-                                      state.movie.tagline,
-                                      style:
-                                          Theme.of(context).textTheme.bodyText2,
-                                    ),
-                                  ),
-                                ),
-                              Flexible(
-                                child: Padding(
-                                  padding: const EdgeInsets.only(top: kPadding),
-                                  child: Text(
-                                    state.movie.overview,
-                                    style: const TextStyle(fontSize: 16),
-                                  ),
-                                ),
-                              ),
-                              if (state.movie.youtubeVideoId != '')
-                                const SizedBox(height: kPadding),
-                              if (state.movie.youtubeVideoId != '')
-                                YouTubePlayer(
-                                    youtubeVideoId: state.movie.youtubeVideoId)
-                            ],
-                          )
+                        ? Body(movie: state.movie)
                         : Column(
                             mainAxisSize: MainAxisSize.min,
                             crossAxisAlignment: CrossAxisAlignment.start,
@@ -203,11 +71,11 @@ class _MovieScreenState extends State<MovieScreen> {
                                 ),
                               ),
                               const SizedBox(height: kPadding / 2),
-                              const _TextSceleton(height: 14, width: 120),
+                              const TextSkeleton(height: 14, width: 120),
                               const SizedBox(height: kPadding / 2),
-                              const _TextSceleton(height: 120),
+                              const TextSkeleton(height: 120),
                               const SizedBox(height: kPadding),
-                              const _YouTubeSkeleton(),
+                              const YouTubeSkeleton(),
                             ],
                           ),
                   ),
@@ -216,119 +84,6 @@ class _MovieScreenState extends State<MovieScreen> {
             ),
           );
         },
-      ),
-    );
-  }
-}
-
-class _BackDropSkeleton extends StatelessWidget {
-  const _BackDropSkeleton({
-    Key? key,
-    required this.backdropHeight,
-  }) : super(key: key);
-
-  final double backdropHeight;
-
-  @override
-  Widget build(BuildContext context) {
-    return SkeletonAnimation(
-      borderRadius: BorderRadius.only(
-        bottomLeft: Radius.circular(kBorderRadius * 2),
-      ),
-      child: Container(
-        height: backdropHeight,
-        decoration: BoxDecoration(
-          color: MediaQuery.of(context).platformBrightness == Brightness.dark
-              ? kSkeletonDarkBg
-              : kSkeletonLightBg,
-          boxShadow: kShadow,
-          borderRadius: const BorderRadius.only(
-            bottomLeft: Radius.circular(kBorderRadius * 2),
-          ),
-        ),
-      ),
-    );
-  }
-}
-
-class _TextSceleton extends StatelessWidget {
-  const _TextSceleton({
-    Key? key,
-    this.height = 16.0,
-    this.width = double.infinity,
-  }) : super(key: key);
-
-  final double height;
-  final double width;
-
-  @override
-  Widget build(BuildContext context) {
-    return SkeletonAnimation(
-      borderRadius: BorderRadius.circular(kBorderRadius),
-      child: Container(
-        height: height,
-        width: width,
-        decoration: BoxDecoration(
-          color: MediaQuery.of(context).platformBrightness == Brightness.dark
-              ? kSkeletonDarkBg
-              : kSkeletonLightBg,
-          borderRadius: BorderRadius.circular(kBorderRadius),
-        ),
-      ),
-    );
-  }
-}
-
-class _ToolBarSkeleton extends StatelessWidget {
-  const _ToolBarSkeleton({
-    Key? key,
-  }) : super(key: key);
-
-  @override
-  Widget build(BuildContext context) {
-    return SkeletonAnimation(
-      borderRadius: const BorderRadius.only(
-        bottomLeft: Radius.circular(kBorderRadius),
-        topLeft: Radius.circular(kBorderRadius),
-      ),
-      child: Container(
-        height: 64.0,
-        width: 64.0,
-        decoration: BoxDecoration(
-          color: MediaQuery.of(context).platformBrightness == Brightness.dark
-              ? kSkeletonDarkBg
-              : kSkeletonLightBg,
-          boxShadow: kShadow,
-          borderRadius: const BorderRadius.only(
-            bottomLeft: Radius.circular(kBorderRadius),
-            topLeft: Radius.circular(kBorderRadius),
-          ),
-        ),
-      ),
-    );
-  }
-}
-
-class _YouTubeSkeleton extends StatelessWidget {
-  const _YouTubeSkeleton({
-    Key? key,
-  }) : super(key: key);
-
-  @override
-  Widget build(BuildContext context) {
-    return SkeletonAnimation(
-      borderRadius: BorderRadius.circular(kBorderRadius),
-      child: AspectRatio(
-        aspectRatio: 16 / 9,
-        child: Container(
-          decoration: BoxDecoration(
-            color: MediaQuery.of(context).platformBrightness == Brightness.dark
-                ? kSkeletonDarkBg
-                : kSkeletonLightBg,
-            boxShadow: kShadow,
-            borderRadius: BorderRadius.circular(kBorderRadius),
-          ),
-        ),
       ),
     );
   }

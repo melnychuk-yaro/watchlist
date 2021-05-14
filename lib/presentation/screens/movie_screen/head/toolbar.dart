@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 
-import '../../../constatns.dart';
-import '../../../data/models/movie_detailed.dart';
-import '../../widgets/add_to_fav_button.dart';
+import '../../../../constatns.dart';
+import '../../../../data/models/movie_detailed.dart';
+import '../../../widgets/add_to_fav_button.dart';
 
 class ToolBar extends StatelessWidget {
   const ToolBar({Key? key, required this.movie}) : super(key: key);

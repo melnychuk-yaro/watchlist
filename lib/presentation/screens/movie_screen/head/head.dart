@@ -44,7 +44,7 @@ class Head extends StatelessWidget {
                         backdropHeight: backdropHeight,
                       ),
                 Positioned(
-                  top: 143,
+                  top: 163,
                   left: 16,
                   child: SingleMoviePoster(
                     posterPath: posterPath,

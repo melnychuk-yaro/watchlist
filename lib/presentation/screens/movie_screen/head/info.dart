@@ -38,6 +38,11 @@ class Info extends StatelessWidget {
                 defenition: AppLocalizations.of(context)!.budget,
                 value: budgetFormat.format(movie.budget),
               ),
+        const SizedBox(height: 4.0),
+        InfoItem(
+          defenition: AppLocalizations.of(context)!.director,
+          value: movie.directors.join(', '),
+        ),
       ],
     );
   }

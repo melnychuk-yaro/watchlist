@@ -12,14 +12,14 @@ import 'package:watchlist/data/repositories/favorites_repository.dart';
 // the issue https://github.com/dart-lang/mockito/issues/342
 // maybe switch to https://pub.dev/packages/mocktail
 
-@GenerateMocks([
-  FirebaseFirestore,
-  CollectionReference,
-  DocumentReference,
-  Query,
-  QuerySnapshot,
-  QueryDocumentSnapshot,
-])
+// @GenerateMocks([
+//   FirebaseFirestore,
+//   CollectionReference,
+//   DocumentReference,
+//   Query,
+//   QuerySnapshot,
+//   QueryDocumentSnapshot,
+// ])
 void main() {
   // final mockFirestore = MockFirebaseFirestore();
   // final mockCollectionReference = MockCollectionReference();

@@ -74,11 +74,18 @@ class MoviesRepository {
 
   Future<MovieDetailed> getSingleMovie({required int id}) async {
     final uri = _buildUri(
-        path: '/movie/$id', queryParameters: {'append_to_response': 'videos'});
+      path: '/movie/$id',
+      queryParameters: {'append_to_response': 'videos,credits'},
+    );
     try {
       final response = await http.get(uri);
       if (response.statusCode == 200) {
         Map<String, dynamic> body = json.decode(response.body);
+        final crew = List<Map<String, dynamic>>.from(body['credits']['crew']);
+        final videos =
+            List<Map<String, dynamic>>.from(body['videos']['results']);
+        body['directors'] = _getDirectors(crew);
+        body['videoId'] = _getVideoId(videos);
         return MovieDetailed.fromMap(body);
       } else {
         throw Failure('Error fetching movie. Id: $id');
@@ -90,6 +97,27 @@ class MoviesRepository {
     } on FormatException {
       throw Failure('Bad response format.');
     }
+  }
+
+  List<String> _getDirectors(List<Map<String, dynamic>> crew) {
+    final directors = <String>[];
+    for (final crewMember in crew) {
+      if (crewMember['job'] == 'Director') {
+        directors.add(crewMember['name']);
+      }
+    }
+    return directors;
+  }
+
+  String _getVideoId(List<Map<String, dynamic>> videos) {
+    var videoId = '';
+    for (final video in videos) {
+      if (video['site'] == 'YouTube' && video['type'] == 'Trailer') {
+        videoId = video['key'];
+        break;
+      }
+    }
+    return videoId;
   }
 
   Future<MoviesPage> _getMoviesPage(http.Response response) async {

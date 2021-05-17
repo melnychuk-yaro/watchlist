@@ -4,7 +4,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import '../../../../business_logic/cubit/single_movie_cubit.dart';
 import '../../../../constatns.dart';
 import '../placeholders/backdrop_skeleton.dart';
-import '../placeholders/text_skeleton.dart';
+import '../placeholders/info_skeleton.dart';
 import '../placeholders/toolbar_skeleton.dart';
 import 'backdrop.dart';
 import 'custom_back_button.dart';
@@ -70,15 +70,7 @@ class Head extends StatelessWidget {
                   Expanded(
                     child: state is SingleMovieLoaded
                         ? Info(movie: state.movie)
-                        : Wrap(
-                            direction: Axis.vertical,
-                            spacing: 4.0,
-                            children: [
-                              const TextSkeleton(width: 120),
-                              const TextSkeleton(width: 120),
-                              const TextSkeleton(width: 120),
-                            ],
-                          ),
+                        : InfoSkeleton(),
                   )
                 ],
               ),

@@ -13,7 +13,7 @@ class MoviesRepository {
   static const String pathPrefix = '/3';
   static const String includeAdult = 'false';
   final String language = Platform.localeName.replaceFirst('_', '-');
-  final String? _apiKey = env['TMDB_API_KEY'];
+  final String? _apiKey = dotenv.env['TMDB_API_KEY'];
 
   Future<MoviesPage> getTopRatedMovies({int? page = 1}) async {
     final uri = _buildUri(path: '/movie/top_rated', page: page);
